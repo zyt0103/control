@@ -1,0 +1,11 @@
+.idea
+.idea/*
+db.sqlite3
+.DS_Store
+apps/*/migrations/*
+*.swp
+*.pyc
+node_modules/*
+dist
+statics/.DS_Store
+statics/node_modules
