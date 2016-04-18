@@ -189,6 +189,7 @@ class DistriModel(BaseModel):
         except Exception as exp:
             return False
 
+
 class PartableModel(BaseModel):
     class Meta:
         db_table="partable"
@@ -197,12 +198,12 @@ class PartableModel(BaseModel):
     distri = models.ForeignKey(DistriModel,
                                on_delete=models.PROTECT)
 
-    # partabe id
-    # partable_id = models.CharField(
-    #     max_length=20,
-    #     null=False,
-    #     unique=True
-    # )
+    # partable id
+    partable_id = models.CharField(
+        max_length=30,
+        null=False,
+        unique=True
+    )
 
 
     # antenna 偏移的俯仰角
@@ -233,6 +234,7 @@ class PartableModel(BaseModel):
         except Exception as exp:
             return False
 
+
 class TimetableModel(BaseModel):
     class Meta:
         db_table="timetable"
@@ -243,11 +245,11 @@ class TimetableModel(BaseModel):
     partable = models.ForeignKey(PartableModel,
                                  on_delete=models.PROTECT)
 
-    # timetable_id = models.CharField(
-    #     max_length=20,
-    #     null=False,
-    #     unique=True
-    # )
+    timetable_id = models.CharField(
+        max_length=20,
+        null=False,
+        unique=True
+    )
 
     obtime = models.FloatField(null=False,
                                default=0)
@@ -274,9 +276,9 @@ class SignalModel(BaseModel):
                                   on_delete=models.PROTECT)
 
     # signal id
-    # signal_id = models.CharField(
-    #     max_length=20,
-    #     null=False,
-    #     unique=True
-    # )
+    signal_id = models.CharField(
+        max_length=20,
+        null=False,
+        unique=True
+    )
     snr = models.IntegerField(null=False)
