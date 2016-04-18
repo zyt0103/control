@@ -16,3 +16,21 @@ class Index(View):
         # return render_to_response("index/index.html",
         #                           context_instance=RequestContext(request, locals()))
         return render(request, "index/index.html")
+
+class test(View):
+    def get(self, request, *args, **kwargs):
+        # return render_to_response("index/index.html",
+        #                           context_instance=RequestContext(request, locals()))
+        return render(request, "index/test.html")
+
+class plot(View):
+    def get(self, request, *args, **kwargs):
+        # return render_to_response("index/index.html",
+        #                           context_instance=RequestContext(request, locals()))
+        return render(request, "index/plot.html")
+
+class drag(View):
+    def get(self, request, *args, **kwargs):
+        # return render_to_response("index/index.html",
+        #                           context_instance=RequestContext(request, locals()))
+        return render(request, "index/drag.html")
