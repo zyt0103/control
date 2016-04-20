@@ -189,6 +189,13 @@ class DistriModel(BaseModel):
         except Exception as exp:
             return False
 
+    @classmethod
+    def distri_exist_by_id(cls, distri_id, deleted=False):
+        try:
+            return DistriModel.objects.filter(deleted=deleted).filter(distri_id=distri_id).exists()
+        except Exception as exp:
+            return False
+
 
 class PartableModel(BaseModel):
     class Meta:

@@ -1,7 +1,8 @@
-# coding = urf-8
+# coding=utf-8
 import matlab.engine
 import os
 from gen_id import getId # 导入产生ID的函数
+
 """
 创建matlab引擎， 调用matlab函数
 """
@@ -20,7 +21,8 @@ def matlab_create_ves_distri(payload):
     vesNum = payload.get("VesNum", None)
     mode = payload.get("Mode", None)
     uid = payload.get("uid", None)
-    distri_id = getId.get("distri_id")# 此处需要调用getid函数获取用户id以及信号id
+    # 此处需要调用getid函数获取用户id以及信号id
+    distri_id = getId.get("distri_id")
     os.chdir('../AIS')
     eng = matlab.engine.start_matlab() 
     error = eng.F_genParameter(action, lon, lat, height, vesNum, mode, distri_id)
