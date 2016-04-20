@@ -22,3 +22,10 @@ PARAMETER_MSG = {
     10005: _(u"参数distri_ves_num不合法"),
     10006: _(u"参数distri_mode不合法")
 }
+
+class ModuErrorCode(object):
+    DISTRI_SAVED_FAILED = 20001
+
+DISTRI_MSG = {
+    20001: _(u"保存Distri数据异常")
+}

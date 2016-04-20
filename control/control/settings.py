@@ -158,3 +158,7 @@ STATICFILES_DIRS = (
 )
 
 STATIC_ROOT = config.get("statics", "static_root")
+
+########################NAMED_RULE##################
+DISTRI_PREFIX = "distri"
+NAME_ID_LENGTH = 8

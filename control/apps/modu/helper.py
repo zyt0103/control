@@ -1,9 +1,25 @@
 # coding=utf-8
 from copy import deepcopy
 import os
+from django.conf import settings
+
+from .models import DistriModel
+from control.control.err_msg import ModuErrorCode
 
 from control.control.base import control_response
-from engine import *
+from control.control.base import randomname_maker
+from control.control.logger import getLogger
+
+logger = getLogger(__name__)
+
+from .tasks import *
+
+
+def make_distri_id():
+    while True:
+        distri_id = "%s-%s" % (settings.DISTRI_PREFIX, randomname_maker())
+        if not DistriModel.distri_exist_by_id(distri_id):
+            return distri_id
 
 def create_ves_distri(payload):
     """
@@ -11,12 +27,13 @@ def create_ves_distri(payload):
     :param payload:包含需要产生船舶分布信息的参数
     :return: distri_id 存储船舶分布矩阵的路径
     """
-    lon = payload.get("Lon", None)
-    lat = payload.get("Lat", None)
-    height = payload.get("Height", None)
-    vesNum = payload.get("VesNum", None)
-    mode = payload.get("Mode", None)
-    uid = payload.get("uid")
+    lon = payload.get("distri_lon", None)
+    lat = payload.get("distri_lat", None)
+    height = payload.get("distri_height", None)
+    vesNum = payload.get("distri_ves_num", None)
+    mode = payload.get("distri_mode", None)
+    username = payload.get("owner")
+    distri_id = make_distri_id()
 
     sub_payload = {
         "action": "create_ves_distri",
@@ -25,15 +42,24 @@ def create_ves_distri(payload):
         "Height": height,
         "VesNum": vesNum,
         "Mode": mode,
-        "uid": uid
-       
+        "owner": username
     }
 
-    distri_id, error = matlab_create_ves_distri(sub_payload)
-    if error:
-        return Response()
+    distri_model, error = DistriModel.objects.create(user=username,
+                                                       distri_id=distri_id,
+                                                       distri_lon=lon,
+                                                       distri_lat=lat,
+                                                       distri_height=height,
+                                                       distri_ves_num=vesNum,
+                                                       distri_mode=mode
+                                                       )
+    if not distri_model:
+        logger.error("Save distri Failed: %s" % str(error))
+        return control_response(code=ModuErrorCode.DISTRI_SAVED_FAILED,
+                                msg=error)
 
-    return Response()
+    matlab_create_ves_distri(sub_payload)
+    return control_response(code=0, msg="distri running",ret_set=[distri_id])
 #
 # def create_ves_parTalb(payload):
 #      """

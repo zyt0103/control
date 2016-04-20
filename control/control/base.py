@@ -1,6 +1,24 @@
 # coding=utf-8
+
+import string
+import random
+import time
+from django.conf import settings
 from django.utils.translation import ugettext as _
 from control.control.err_msg import PARAMETER_CODE
+
+def username_temp():
+    return "user-uio9m8on"
+
+
+def randomname_maker(num=settings.NAME_ID_LENGTH):
+    words = string.digits + string.lowercase
+    # number:zero,one; lower case: ok,lucky
+    exclude_words = ['0', 'o', 'l', '1']
+    words = ''.join(set(words) - set(exclude_words))
+    random.seed(time.time())
+    return ''.join(random.sample(words, num))
+
 
 
 def convert_to_string(data):
