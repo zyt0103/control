@@ -25,7 +25,15 @@ PARAMETER_MSG = {
 
 class ModuErrorCode(object):
     DISTRI_SAVED_FAILED = 20001
+    PARTABLE_SAVED_FAILED = 20002
+    TIMETABLE_SAVED_FAILED = 20003
+    AISDATA_SAVED_FAILED = 20004
+    SIGNAL_SAVED_FAILED = 20005
 
 DISTRI_MSG = {
-    20001: _(u"保存Distri数据异常")
+    20001: _(u"保存Distri数据异常"),
+    20002: _(u"保存Partable数据异常"),
+    20003: _(u"保存Timetable数据异常"),
+    20004:_(u"保存Aisdata数据异常"),
+    20005:_(u"保存Signal数据异常")
 }
