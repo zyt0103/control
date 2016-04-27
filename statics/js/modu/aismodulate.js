@@ -1,7 +1,3 @@
-/*
- *  ais modulate 模拟源入口页面
- */
-
 var React = require('react');
 var controlAjax = require("../common/labAjax");
 var operation = require("../common/operation");

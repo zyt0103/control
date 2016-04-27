@@ -42,7 +42,7 @@ var index = {
         // localStorage.removeItem("statusMonitor");
         popUpMsg.initMsgBox();
         // 设置默认区域与页面的title
-        document.title = "控制台-" + this.region.name;
+        document.title = "星仔AIS仿真平台";
         // 拖动条原型链
         scale = function (btn, bar, title, obj) {
             var $this = this;
