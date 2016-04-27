@@ -9,3 +9,4 @@ node_modules/*
 dist
 statics/.DS_Store
 statics/node_modules
+config/config.ini
