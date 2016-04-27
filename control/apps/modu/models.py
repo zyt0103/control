@@ -26,6 +26,7 @@ SLOT_SELECT_CHOICE = (
     ("SOTDMA", _("SOTDMA"))
 )
 
+
 class BaseModel(models.Model):
     class Meta:
         abstract = True
@@ -49,6 +50,7 @@ class BaseModel(models.Model):
         null=True,
         blank=True
     )
+
 
 class DistriManager(models.Manager):
     def create(self,
@@ -96,6 +98,7 @@ class PartableModelManager(models.Manager):
         except Exception as exp:
             return None, exp
 
+
 class TimetableModelManager(models.Manager):
     def create(self,
                distri_id,
@@ -117,14 +120,39 @@ class TimetableModelManager(models.Manager):
         except Exception as exp:
             return None, exp
 
+
+class AisdataModelManager(models.Manager):
+    def create(self,
+                distri_id,
+                timetable_id,
+                aisdata_id
+                ):
+        try:
+            distri = DistriModel.get_distri_by_id(distri_id)
+            timetable = TimetableModel.get_timetable_by_id(timetable_id)
+            aisdata_model = AisdataModel(distri=distri,
+                                         timetable=timetable,
+                                         aisdata_id=aisdata_id)
+            aisdata_model.save()
+            return aisdata_model, None
+        except Exception as exp:
+            return None, exp
+
+
 class SignalModelManager(models.Manager):
     def create(self,
+               partable_id,
                timetable_id,
+               aisdata_id,
                signal_id,
                snr):
         try:
+            partable = PartableModel.get_partbale_by_id(partable_id)
             timetable = TimetableModel.get_timetable_by_id(timetable_id)
-            signal_model = SignalModel(timetable=timetable,
+            aisdata = AisdataModel.get_aisdata_by_id(aisdata_id)
+            signal_model = SignalModel(partable=partable,
+                                       timetable=timetable,
+                                       aisdata=aisdata,
                                        signal_id=signal_id,
                                        snr=snr
                                        )
@@ -132,6 +160,7 @@ class SignalModelManager(models.Manager):
             return signal_model, None
         except Exception as exp:
             return None, exp
+
 
 class DistriModel(BaseModel):
     class Meta:
@@ -196,6 +225,13 @@ class DistriModel(BaseModel):
         except Exception as exp:
             return False
 
+    @classmethod
+    def distri_par_check_by_id(cls, distri_id, deleted=False):
+        try:
+            return DistriModel.objects.get(distri_id = distri_id)
+        except Exception as exp:
+            return exp
+
 
 class PartableModel(BaseModel):
     class Meta:
@@ -234,6 +270,8 @@ class PartableModel(BaseModel):
         choices=CHANNEL_CHOICE
     )
 
+    objects = PartableModelManager()
+
     @classmethod
     def get_partbale_by_id(cls, partable_id, deleted=False):
         try:
@@ -241,10 +279,24 @@ class PartableModel(BaseModel):
         except Exception as exp:
             return False
 
+    @classmethod
+    def partable_exist_by_id(cls, partable_id, deleted=False):
+        try:
+            return PartableModel.objects.filter(deleted=deleted).filter(partable_id=partable_id).exists()
+        except Exception as exp:
+            return False
+
+    @classmethod
+    def partable_par_check_by_id(cls, partable_id, deleted=False):
+        try:
+            return PartableModel.objects.get(partable_id = partable_id)
+        except Exception as exp:
+            return exp
+
 
 class TimetableModel(BaseModel):
     class Meta:
-        db_table="timetable"
+        db_table = "timetable"
 
     distri = models.ForeignKey(DistriModel,
                                on_delete=models.PROTECT)
@@ -268,6 +320,8 @@ class TimetableModel(BaseModel):
         choices=SLOT_SELECT_CHOICE
     )
 
+    objects = TimetableModelManager()
+
     @classmethod
     def get_timetable_by_id(cls, timetable_id, deleted=False):
         try:
@@ -275,12 +329,69 @@ class TimetableModel(BaseModel):
         except Exception as exp:
             return False
 
+    @classmethod
+    def timetable_exist_by_id(cls, timetable_id, deleted=False):
+        try:
+            return TimetableModel.objects.filter(deleted=deleted).filter(timetable_id=timetable_id).exists()
+        except Exception as exp:
+            return False
+
+    @classmethod
+    def timetable_par_check_by_id(cls, timetable_id, deleted=False):
+        try:
+            return TimetableModel.objects.get(timetable_id = timetable_id)
+        except Exception as exp:
+            return exp
+
+
+class AisdataModel(BaseModel):
+    class Meta:
+        db_table="aisdata"
+    distri = models.ForeignKey(DistriModel,
+                               on_delete=models.PROTECT)
+    timetable = models.ForeignKey(TimetableModel,
+                                  on_delete=models.PROTECT)
+    # aisdata id
+    aisdata_id = models.CharField(
+        max_length=20,
+        null=False,
+        unique=True
+    )
+    # manager
+
+    objects = AisdataModelManager()
+
+    @classmethod
+    def get_aisdata_by_id(cls, aisdata_id, deleted=False):
+        try:
+            return AisdataModel.objects.filter(deleted=deleted).get(aisdata_id=aisdata_id)
+        except Exception as exp:
+            return False
+
+    @classmethod
+    def aisdata_exist_by_id(cls, aisdata_id, deleted=False):
+        try:
+            return AisdataModel.objects.filter(deleted=deleted).filter(aisdata_id=aisdata_id).exists()
+        except Exception as exp:
+            return False
+
+    @classmethod
+    def aisdata_par_check_by_id(cls, aisdata_id, deleted=False):
+        try:
+            return AisdataModel.objects.get(aistdata_id = aisdata_id)
+        except Exception as exp:
+            return exp
+
+
 class SignalModel(BaseModel):
     class Meta:
         db_table="signal"
-
+    partable = models.ForeignKey(PartableModel,
+                                 on_delete=models.PROTECT)
     timetable = models.ForeignKey(TimetableModel,
-                                  on_delete=models.PROTECT)
+                                 on_delete=models.PROTECT)
+    aisdata = models.ForeignKey(AisdataModel,
+                                 on_delete=models.PROTECT)
 
     # signal id
     signal_id = models.CharField(
@@ -289,3 +400,26 @@ class SignalModel(BaseModel):
         unique=True
     )
     snr = models.IntegerField(null=False)
+
+    objects = SignalModelManager()
+
+    @classmethod
+    def get_signal_by_id(cls, signal_id, deleted=False):
+        try:
+            return SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id)
+        except Exception as exp:
+            return False
+
+    @classmethod
+    def signal_exist_by_id(cls, signal_id, deleted=False):
+        try:
+            return SignalModel.objects.filter(deleted=deleted).filter(signal_id=signal_id).exists()
+        except Exception as exp:
+            return False
+
+    @classmethod
+    def signal_par_check_by_id(cls, signal_id, deleted=False):
+        try:
+            return SignalModel.objects.get(signal_id=signal_id)
+        except Exception as exp:
+            return exp

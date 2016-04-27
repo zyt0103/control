@@ -3,6 +3,7 @@ from .models import DistriModel
 from .models import PartableModel
 from .models import TimetableModel
 from .models import SignalModel
+from .models import AisdataModel
 # Register your models here.
 
 # admin.site.register([DistriModel])
@@ -48,9 +49,19 @@ class TimetableModelAdmin(admin.ModelAdmin):
                     "deleted_at"
     )
 
+@admin.register(AisdataModel)
+class AisdataModelAdmin(admin.ModelAdmin):
+    list_display = ("id",
+                    "distri",
+                    "timetable",
+                    "create_datetime",
+                    "deleted",
+                    "deleted_at"
+                    )
 @admin.register(SignalModel)
 class SignalModelAdmin(admin.ModelAdmin):
     list_display = ("id",
+                    "partable",
                     "timetable",
                     "snr",
                     "create_datetime",

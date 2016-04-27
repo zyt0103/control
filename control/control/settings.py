@@ -161,4 +161,8 @@ STATIC_ROOT = config.get("statics", "static_root")
 
 ########################NAMED_RULE##################
 DISTRI_PREFIX = "distri"
+PARTABLE_PREFIX = "partable"
+TIMETABLE_PREFIX = "timetable"
+AISDATA_PREFIX = "aisdata"
+SIGNAL = "signal"
 NAME_ID_LENGTH = 8
