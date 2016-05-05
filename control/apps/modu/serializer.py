@@ -19,23 +19,23 @@ class CreateDistriSerializer(serializers.Serializer):
         validators=[distri_id_validator]
     )
 
-    distri_lon = serializers.FloatField(
+    distri_lon = serializers.IntegerField(
         required=True,
-        validators=[]
+        # validators=[]
     )
 
-    distri_lat = serializers.FloatField(
-        required=True,
-        validators=[]
-    )
-
-    distri_height = serializers.IntegerField(
-        required=True,
-        validators=[]
-    )
-
-    distri_mode = serializers.CharField(
-        required=True,
-        validators=[distri_mode_validator]
-    )
+    # distri_lat = serializers.FloatField(
+    #     required=True,
+    #     validators=[]
+    # )
+    #
+    # distri_height = serializers.IntegerField(
+    #     required=True,
+    #     validators=[]
+    # )
+    #
+    # distri_mode = serializers.CharField(
+    #     required=True,
+    #     validators=[distri_mode_validator]
+    # )
 
