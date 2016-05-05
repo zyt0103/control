@@ -11,6 +11,10 @@ from rest_framework import status
 
 from .serializer import CreateDistriSerializer
 from .helper import create_ves_distri
+from control.control.logger import getLogger
+
+logger = getLogger(__name__)
+
 # Create your views here.
 
 
@@ -22,10 +26,14 @@ class CreateSignal(APIView):
 
     def post(self, request, *args, **kwargs):
         req_data = request.data
+        logger.info(req_data)
         validator = CreateDistriSerializer(data=req_data)
+        logger.error("validator is valid: %s" % validator.is_valid())
         if not validator.is_valid():
             code, msg = control_code(validator)
+            # logger.info("validator is invalide")
             return Response(control_response(code=code, msg=msg),
+            # return Response(control_response(code=code, msg='validator error'),
                             status=status.HTTP_200_OK)
         distri_id = validator.validated_data.get("distri_id", None)
         distri_lon = validator.validated_data.get("distri_lon")
@@ -39,10 +47,10 @@ class CreateSignal(APIView):
             "action": self.action,
             "owner": owner,
             "distri_id": distri_id,
-            "distri_lon": distri_lon,
-            "distri_lat": distri_lat,
-            "distri_height": distri_height,
-            "distri_ves_num": distri_ves_num,
+            "lon": distri_lon,
+            "lat": distri_lat,
+            "height": distri_height,
+            "vesnum": distri_ves_num,
             "distri_mode": distri_mode
         }
         resp = create_ves_distri(payload=payload)

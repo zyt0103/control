@@ -226,12 +226,18 @@ class DistriModel(BaseModel):
             return False
 
     @classmethod
-    def distri_par_check_by_id(cls, distri_id, deleted=False):
+    def distri_par_describe_by_id(cls, distri_id, deleted=False):
         try:
-            return DistriModel.objects.get(distri_id = distri_id)
+            return DistriModel.objects.get(distri_id=distri_id)
         except Exception as exp:
-            return exp
+            return False
 
+    @classmethod
+    def distri_par_delete_by_id(cls, distri_id, deleted = False):
+        try:
+            return DistriModel.objects.get(distri_id=distri_id).delete()
+        except Exception as exp:
+            return False
 
 class PartableModel(BaseModel):
     class Meta:
@@ -287,12 +293,18 @@ class PartableModel(BaseModel):
             return False
 
     @classmethod
-    def partable_par_check_by_id(cls, partable_id, deleted=False):
+    def partable_par_describe_by_id(cls, partable_id, deleted=False):
         try:
             return PartableModel.objects.get(partable_id = partable_id)
         except Exception as exp:
-            return exp
+            return False
 
+    @classmethod
+    def partable_par_delete_by_id(cls, partable_id, deleted = False):
+        try:
+            return PartableModel.objects.get(partable_id=partable_id).delete()
+        except Exception as exp:
+            return False
 
 class TimetableModel(BaseModel):
     class Meta:
@@ -337,11 +349,18 @@ class TimetableModel(BaseModel):
             return False
 
     @classmethod
-    def timetable_par_check_by_id(cls, timetable_id, deleted=False):
+    def timetable_par_describe_by_id(cls, timetable_id, deleted=False):
         try:
             return TimetableModel.objects.get(timetable_id = timetable_id)
         except Exception as exp:
-            return exp
+            return False
+
+    @classmethod
+    def timetable_par_delete_by_id(cls, timetable_id, deleted = False):
+        try:
+            return TimetableModel.objects.get(timetable_id=timetable_id).delete()
+        except Exception as exp:
+            return False
 
 
 class AisdataModel(BaseModel):
@@ -376,12 +395,18 @@ class AisdataModel(BaseModel):
             return False
 
     @classmethod
-    def aisdata_par_check_by_id(cls, aisdata_id, deleted=False):
+    def aisdata_par_describe_by_id(cls, aisdata_id, deleted=False):
         try:
             return AisdataModel.objects.get(aistdata_id = aisdata_id)
         except Exception as exp:
-            return exp
+            return False
 
+    @classmethod
+    def aisdata_par_delete_by_id(cls, aisdata_id, deleted = False):
+        try:
+            return AisdataModel.objects.get(aisdata_id=aisdata_id).delete()
+        except Exception as exp:
+            return False
 
 class SignalModel(BaseModel):
     class Meta:
@@ -418,8 +443,15 @@ class SignalModel(BaseModel):
             return False
 
     @classmethod
-    def signal_par_check_by_id(cls, signal_id, deleted=False):
+    def signal_par_describe_by_id(cls, signal_id, deleted=False):
         try:
             return SignalModel.objects.get(signal_id=signal_id)
         except Exception as exp:
-            return exp
+            return False
+
+    @classmethod
+    def signal_par_delete_by_id(cls, signal_id, deleted = False):
+        try:
+            return SignalModel.objects.get(signal_id=signal_id).delete()
+        except Exception as exp:
+            return False

@@ -5,8 +5,8 @@ from django.conf import settings
 
 # from .models import DistriModel, PartableModel, TimetableModel, SignalModel
 from .models import *
-from control.control.err_msg import ModuErrorCode
 
+from control.control.err_msg import ModuErrorCode
 from control.control.base import control_response
 from control.control.base import randomname_maker
 from control.control.logger import getLogger
@@ -21,11 +21,15 @@ def make_distri_id():
         distri_id = "%s-%s" % (settings.DISTRI_PREFIX, randomname_maker())
         if not DistriModel.distri_exist_by_id(distri_id):
             return distri_id
+
+
 def make_partable_id():
     while True:
         partable_id = "%s-%s" % (settings.PARTABLE_PREFIX, randomname_maker())
         if not DistriModel.partable_exist_by_id(partable_id):
             return partable_id
+
+
 def make_timetable_id():
     while True:
         timetable_id = "%s-%s" % (settings.TIMETABLE_PREFIX, randomname_maker())
@@ -36,11 +40,14 @@ def make_aisdata_id():
         aisdata_id = "%s-%s" % (settings.AISDATA_PREFIX, randomname_maker())
         if not DistriModel.aisdata_exist_by_id(aisdata_id):
             return aisdata_id
+
+
 def make_signal_id():
     while True:
         signal_id = "%s-%s" % (settings.SIGNAL_PREFIX, randomname_maker())
         if not DistriModel.signal_exist_by_id(signal_id):
             return signal_id
+
 
 def create_ves_distri(payload):
     """
@@ -48,21 +55,21 @@ def create_ves_distri(payload):
     :param payload:包含需要产生船舶分布信息的参数
     :return: distri_id 存储船舶分布矩阵的路径
     """
-    lon = payload.get("distri_lon", None)
-    lat = payload.get("distri_lat", None)
-    height = payload.get("distri_height", None)
-    vesNum = payload.get("distri_ves_num", None)
-    mode = payload.get("distri_mode", None)
+    lon = payload.get("lon", None)
+    lat = payload.get("lat", None)
+    height = payload.get("height", None)
+    vesNum = payload.get("vesnum", None)
+    distri_mode = payload.get("distri_mode", None)
     username = payload.get("owner")
     distri_id = make_distri_id()
 
     sub_payload = {
         "action": "create_ves_distri",
-        "Lon": lon,
-        "Lat": lat,
-        "Height": height,
-        "VesNum": vesNum,
-        "Mode": mode,
+        "lon": lon,
+        "lat": lat,
+        "height": height,
+        "vesNum": vesNum,
+        "distri_mode": distri_mode,
         "distri_id": distri_id,
         "owner": username
     }
@@ -73,7 +80,7 @@ def create_ves_distri(payload):
                                                        distri_lat=lat,
                                                        distri_height=height,
                                                        distri_ves_num=vesNum,
-                                                       distri_mode=mode
+                                                       distri_mode=distri_mode
                                                        )
     if not distri_model:
         logger.error("Save distri Failed: %s" % str(error))
@@ -83,15 +90,18 @@ def create_ves_distri(payload):
     matlab_create_ves_distri(sub_payload)
     return control_response(code=0, msg="distri running", ret_set=[distri_id])
 
+
 def create_ves_parTalb(payload):
     """
     产生船舶功率频偏时延DOA参数
     :param payload:包含需要产生船舶分布信息的参数
     :return: parTable_id 船舶参数矩阵的id
     """
-    pitch = payload.get("pitch", None)
-    azimuth = payload.get("azimuth", None)
-    height = payload.get("Height", None)
+    height = payload.get("height", None)
+    vesnum = payload.get("vesnum", None)
+    ant_pitch = payload.get("ant_pitch", None)
+    ant_azimuth = payload.get("ant_azimuth", None)
+    distri_mode = payload.get("distri_mode", None)
     antenna_type = payload.get("antenna_type", None)
     channel_type = payload.get("channel_type", None)
     distri_id = payload.get("distri_id", None)
@@ -100,10 +110,12 @@ def create_ves_parTalb(payload):
     sub_payload = {
         "action": create_ves_parTalb,
         "height": height,
-        "pitch": pitch,
-        "azimuth": azimuth,
+        "vesnum": vesnum,
+        "ant_pitch": ant_pitch,
+        "ant_azimuth": ant_azimuth,
         "antenna_type": antenna_type,
         "channel_type": channel_type,
+        "distri_mode": distri_mode,
         "distri_id": distri_id,
         "partable_id": partable_id
     }
@@ -111,8 +123,8 @@ def create_ves_parTalb(payload):
 
     parTable_model, error = PartableModel.objects.create(distri_id=distri_id,
                                                          partable_id=partable_id,
-                                                         pitch=pitch,
-                                                         azimuth=azimuth,
+                                                         pitch=ant_pitch,
+                                                         azimuth=ant_azimuth,
                                                          antenna_type=antenna_type,
                                                          channel_type=channel_type
                                                          )
@@ -133,6 +145,7 @@ def create_time_table(payload):
     """
 
     obtime = payload.get("obtime", None)
+    height = payload.get("height", None)
     protocol = payload.get("protocol", None)
     distri_id = payload.get("distri_id", None)
     partable_id = payload.get("partable_id", None)
@@ -141,6 +154,7 @@ def create_time_table(payload):
     sub_payload = {
         "action": "create_time_table",
         "obtime": obtime,
+        "height": height,
         "protocol": protocol,
         "distri_id": distri_id,
         "partalbe_id": partable_id,
@@ -196,15 +210,18 @@ def create_aissig(payload):
     :param payload: 包含必要的关于产生timetable的参数
     :return: aisSig_Path 存储AISSig的路径
     """
+    obtime = payload.get("obtime", None)
+    vesnum = payload.get("vesnum", None)
     partable_id = payload.get("partable_id", None)
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
     snr = payload.get("snr")
     signal_id = make_signal_id()
-#    zeroNum = payload.get("zeroNum", None)
 
     sub_payload = {
         "action": "create_aissig",
+        "obtime": obtime,
+        "vesnum": vesnum,
         "partable_id": partable_id,
         "timetable_id": timetable_id,
         "aisdata_id": aisdata_id,
@@ -224,3 +241,4 @@ def create_aissig(payload):
                                  msg=error)
     matlab_create_aisSig(sub_payload)
     return control_response(code=0, msg="signal running", ret_set=[signal_id])
+

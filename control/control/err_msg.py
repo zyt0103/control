@@ -25,15 +25,41 @@ PARAMETER_MSG = {
 
 class ModuErrorCode(object):
     DISTRI_SAVED_FAILED = 20001
-    PARTABLE_SAVED_FAILED = 20002
-    TIMETABLE_SAVED_FAILED = 20003
-    AISDATA_SAVED_FAILED = 20004
-    SIGNAL_SAVED_FAILED = 20005
+    DISTRI_RUNNING_FAILED = 20002
+
+    PARTABLE_SAVED_FAILED = 20011
+    PARTABLE_RUNNING_FAILED = 20012
+
+    TIMETABLE_SAVED_FAILED = 20021
+    TIMETABLE_RUNNING_FAILED = 20022
+
+    AISDATA_SAVED_FAILED = 20031
+    AISDATA_RUNNING_FAILED = 20032
+
+    SIGNAL_SAVED_FAILED = 20041
+    SIGNAL_RUNNING_FAILED = 20042
 
 DISTRI_MSG = {
     20001: _(u"保存Distri数据异常"),
-    20002: _(u"保存Partable数据异常"),
-    20003: _(u"保存Timetable数据异常"),
-    20004:_(u"保存Aisdata数据异常"),
-    20005:_(u"保存Signal数据异常")
+    20002: _(u"Distri数据运行异常"),
+}
+
+PARTABLE_MSG = {
+    20011: _(u"保存Partable数据异常"),
+    20012:_(u"Partable数据运行异常")
+}
+
+TIMETABLE_MSG = {
+    20021: _(u"保存Timetable数据异常"),
+    20022: _(u"Timetable数据运行异常")
+}
+
+AISDATA_MSG = {
+    20031: _(u"保存Aisdata数据异常"),
+    20032: _(u"Aisdata数据运行异常")
+}
+
+SIGNAL_MSG = {
+    20041: _(u"保存Singnal数据异常"),
+    20042: _(u"Signal数据运行异常")
 }
