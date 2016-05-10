@@ -1,0 +1,207 @@
+# coding=utf-8
+
+from .helper import create_ves_distri
+from .helper import create_ves_parTalb
+from .helper import create_time_table
+from .helper import create_ves_data
+from .helper import create_aissig
+from control.control.err_msg import ModuErrorCode
+from control.control.base import control_response
+from .models import DistriModel
+
+from control.control.logger import getLogger
+
+logger = getLogger(__name__)
+
+
+# class Createsignals(object):
+#
+#     # def __init__(self, payload):
+#     #     self.payload = payload
+#     def __init__(self, payload):
+#         self.payload = payload
+
+def Createdistri(payload):
+    """
+    :param payload:  创建信号所需数据
+    :return:
+    """
+
+    # payload = self.payload
+    # logger.info("payload is %s", payload)
+    action = payload.get("action", None)
+    lon = payload.get("lon", None)
+    lat = payload.get("lat", None)
+    height = payload.get("height", None)
+    vesnum = payload.get("vesnum", None)
+    distri_mode = payload.get("distri_mode", None)
+    username = payload.get("owner")
+    sub_payload = {
+        "action": action,
+        "lon": lon,
+        "lat": lat,
+        "height": height,
+        "vesnum": vesnum,
+        "distri_mode": distri_mode,
+        "owner": username
+    }
+    # logger.info(payload)
+    ret_message = create_ves_distri(sub_payload)
+    return ret_message
+
+def Createpartable(payload):
+    """
+    :payload: 创建信号所需数据
+    :return:
+    """
+
+    # payload = self.payload
+    action = payload.get("action", None)
+    # action_all = payload.get("action_all", None)
+    height = payload.get("height", None)
+    vesnum = payload.get("vesnum", None)
+    ant_pitch = payload.get("ant_pitch", None)
+    ant_azimuth = payload.get("ant_azimuth", None)
+    distri_mode = payload.get("distri_mode", None)
+    antenna_type = payload.get("ant_type", None)
+    channel_type = payload.get("channel_type", None)
+    distri_id = payload.get("distri_id", None)
+
+    sub_payload = {
+        "action": action,
+        "height": height,
+        "vesnum": vesnum,
+        "ant_pitch": ant_pitch,
+        "ant_azimuth": ant_azimuth,
+        "antenna_type": antenna_type,
+        "channel_type": channel_type,
+        "distri_mode": distri_mode,
+        "distri_id": distri_id,
+    }
+    logger.info("partable_payload is %s" % sub_payload)
+    ret_message = create_ves_parTalb(sub_payload)
+    return ret_message
+
+def Createtimetable(payload):
+    """
+    :return:
+    """
+
+    # payload = self.payload
+    action = payload.get("action", None)
+    obtime = payload.get("obtime", None)
+    height = payload.get("height", None)
+    protocol = payload.get("protocol", None)
+    distri_id = payload.get("distri_id", None)
+    partable_id = payload.get("partable_id", None)
+
+    sub_payload = {
+        "action": action ,
+        "obtime": obtime,
+        "height": height,
+        "protocol": protocol,
+        "distri_id": distri_id,
+        "partable_id": partable_id,
+    }
+    logger.info("partable_id is %s"%partable_id)
+    ret_message = create_time_table(sub_payload)
+    return ret_message
+
+def Createaisdata(payload):
+    """
+    :param payload: 创建所需信号
+    :return:
+    """
+
+    # payload = self.payload
+    action = payload.get("action", None)
+    distri_id = payload.get("distri_id", None)
+    timetable_id = payload.get("timetable_id", None)
+
+    sub_payload = {
+        "action": action,
+        "distri_id": distri_id,
+        "timetable_id": timetable_id,
+    }
+    ret_message = create_ves_data(sub_payload)
+    return ret_message
+
+def Createsignal(payload):
+    """
+    产生AIS信号
+    :param payload: 包含必要的关于产生timetable的参数
+    :return: aisSig_Path 存储AISSig的路径
+    """
+
+    # payload = self.payload
+    action = payload.get("action", None)
+    obtime = payload.get("obtime", None)
+    vesnum = payload.get("vesnum", None)
+    height = payload.get("height", None)
+    partable_id = payload.get("partable_id", None)
+    timetable_id = payload.get("timetable_id", None)
+    aisdata_id = payload.get("aisdata_id", None)
+    snr = payload.get("snr")
+
+    sub_payload = {
+        "action": action,
+        "obtime": obtime,
+        "vesnum": vesnum,
+        "height": height,
+        "partable_id": partable_id,
+        "timetable_id": timetable_id,
+        "aisdata_id": aisdata_id,
+        "snr": snr
+    }
+    logger.info("signal_payload is %s"%sub_payload)
+    ret_message = create_aissig(sub_payload)
+    return ret_message
+
+class Router():
+
+    payload = {}
+    ACTION = {"distri": Createdistri,
+          "partable": Createpartable,
+          "timetable": Createtimetable,
+          "aisdata": Createaisdata,
+          "signal": Createsignal
+           }
+    ACTION_LIST = ["distri", "partable", "timetable", "aisdata", "signal"]
+
+    def __init__(self, payload):
+        self.payload = payload
+
+    def Actionrouter(self):
+        """
+        :param payload: 获取action
+        :return:
+        """
+
+        payload = self.payload
+        action = payload.get("action", None)
+        if action is not None:
+            logger.info("action is :%s"% action)
+            ret_message = self.ACTION[action](payload)
+            # action_instance = Createsignals(payload)
+            return ret_message
+
+        action_all = payload.get("action_all", None)
+        if action_all is True:
+            ret = {}
+            for action in self.ACTION_LIST:
+                # logger.info("The action is : %s" % action)
+                # logger.info(payload)
+                # logger.error("ret is : %s" % ret)
+                payload.update({"action": action})
+                if action is not None:
+                    # logger.info(self.ACTION[action](payload))
+                    # action_instance = CreatSignal(payload)
+                    # logger.info("payload is %s"%payload)
+                    ret_message = self.ACTION[action](payload)
+                    logger.info("ret_message is %s" % ret_message)
+                    payload.update({ret_message["ret_name_id"]: ret_message["ret_set"][0]})
+                    ret.update(ret_message)
+
+            return ret
+        return control_response(code=ModuErrorCode.ACTION_GET_FAILED)
+

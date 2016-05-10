@@ -166,5 +166,5 @@ DISTRI_PREFIX = "distri"
 PARTABLE_PREFIX = "partable"
 TIMETABLE_PREFIX = "timetable"
 AISDATA_PREFIX = "aisdata"
-SIGNAL = "signal"
+SIGNAL_PREFIX = "signal"
 NAME_ID_LENGTH = 8

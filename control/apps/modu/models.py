@@ -3,12 +3,16 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from django.utils.timezone import now
 from django.contrib.auth.admin import User
+
+from control.control.logger import getLogger
+logger = getLogger(__name__)
+
 # Create your models here.
 
 DISTRI_MODEL_CHOICE = (
     ("default", _("default")),
-    ("random", _("infact")),
-    ("uniform", _("uniform"))
+    ("random", _("random")),
+    ("fact", _("fact"))
 )
 
 ANTENNA_CHOICE = (
@@ -61,8 +65,16 @@ class DistriManager(models.Manager):
                distri_height,
                distri_ves_num,
                distri_mode):
+        logger.info([user,
+               distri_id,
+               distri_lon,
+               distri_lat,
+               distri_height,
+               distri_ves_num,
+               distri_mode])
         try:
-            user = User.objects.get(username=user)
+            # logger.info("user is :%s"% User.objects.get(username=user))
+            # user = User.objects.get(username=user)
             distri_model = DistriModel(user=user,
                                        distri_id=distri_id,
                                        distri_lon=distri_lon,
@@ -70,9 +82,12 @@ class DistriManager(models.Manager):
                                        distri_height=distri_height,
                                        distri_ves_num=distri_ves_num,
                                        distri_mode=distri_mode)
+            logger.info(distri_model.user)
             distri_model.save()
+            logger.info("distri_model is :%s"%distri_model)
             return distri_model, None
         except Exception as e:
+            logger.info(str(e))
             return None, e
 
 
@@ -109,6 +124,7 @@ class TimetableModelManager(models.Manager):
         try:
             distri = DistriModel.get_distri_by_id(distri_id)
             partable = PartableModel.get_partbale_by_id(partable_id)
+            logger.info("partable is %s"%partable)
             timetable_model = TimetableModel(distri=distri,
                                              partable=partable,
                                              timetable_id=timetable_id,
@@ -130,6 +146,7 @@ class AisdataModelManager(models.Manager):
         try:
             distri = DistriModel.get_distri_by_id(distri_id)
             timetable = TimetableModel.get_timetable_by_id(timetable_id)
+            logger.info(timetable_id)
             aisdata_model = AisdataModel(distri=distri,
                                          timetable=timetable,
                                          aisdata_id=aisdata_id)
@@ -165,18 +182,21 @@ class SignalModelManager(models.Manager):
 class DistriModel(BaseModel):
     class Meta:
         db_table = "distri"
-
     # distri owner
-    user = models.ForeignKey(User,
-                             on_delete=models.PROTECT)
+    # user = models.ForeignKey(User,
+    #                          on_delete=models.PROTECT)
+    logger.info("start distriModel")
 
+    user = models.CharField(
+        max_length=20,
+        null=False,
+        unique=False)
     # distri id
     distri_id = models.CharField(
         max_length=20,
         null=False,
         unique=True
     )
-
     # distri lon
     distri_lon = models.FloatField(
         null=False,
@@ -281,6 +301,7 @@ class PartableModel(BaseModel):
     @classmethod
     def get_partbale_by_id(cls, partable_id, deleted=False):
         try:
+            logger.info("partable_id is %s"%partable_id)
             return PartableModel.objects.filter(deleted=deleted).get(partable_id=partable_id)
         except Exception as exp:
             return False
@@ -337,8 +358,10 @@ class TimetableModel(BaseModel):
     @classmethod
     def get_timetable_by_id(cls, timetable_id, deleted=False):
         try:
+            logger.info("timetable_id is %s"% timetable_id)
             return TimetableModel.objects.filter(deleted=deleted).get(timetable_id=timetable_id)
         except Exception as exp:
+            logger.error(exp)
             return False
 
     @classmethod

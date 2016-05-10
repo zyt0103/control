@@ -68,7 +68,8 @@ def control_response(code=0,
                      msg=_(u"服务器响应成功"),
                      total_count=0,
                      ret_set=None,
-                     action_record=None, **kwargs):
+                     action_record=None,
+                     ret_name_id="distri_id", **kwargs):
     msg = convert_to_string(msg)
 
     if code == 0:
@@ -82,6 +83,8 @@ def control_response(code=0,
     if code == 0 or total_count != 0:
         ret["total_count"] = total_count
         ret["ret_set"] = ret_set or []
+
+    ret["ret_name_id"] = ret_name_id
 
     if action_record is not None:
         if is_simple_string_list(action_record):

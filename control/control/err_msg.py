@@ -24,6 +24,8 @@ PARAMETER_MSG = {
 }
 
 class ModuErrorCode(object):
+    ACTION_GET_FAILED = 20000
+
     DISTRI_SAVED_FAILED = 20001
     DISTRI_RUNNING_FAILED = 20002
 
@@ -38,6 +40,11 @@ class ModuErrorCode(object):
 
     SIGNAL_SAVED_FAILED = 20041
     SIGNAL_RUNNING_FAILED = 20042
+
+
+ACTIN_MSG = {
+    20000: _(u"action 丢失")
+}
 
 DISTRI_MSG = {
     20001: _(u"保存Distri数据异常"),
