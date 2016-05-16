@@ -9,6 +9,7 @@ class CreateSignalSerializer(serializers.Serializer):
     创建信号
     """
     action = serializers.CharField(
+        max_length=20,
         required=False,
         validators=[action_validator]
     )
@@ -17,14 +18,18 @@ class CreateSignalSerializer(serializers.Serializer):
         required=False,
         validators=[action_all_validator]
     )
+
+    username = serializers.CharField(
+        max_length=30,
+        required=False,
+        validators=[username_validator]
+    )
+
     distri_id = serializers.CharField(
         required=False,
         max_length=20,
         validators=[distri_id_validator]
     )
-
-    # logger.error("distri_id is: %s" % distri_id)
-
 
     partable_id = serializers.CharField(
         required=False,
@@ -43,7 +48,7 @@ class CreateSignalSerializer(serializers.Serializer):
         max_length=20,
         validators=[aisdata_id_validator]
     )
-
+    # logger.info("aisdata_id is %s"% aisdata_id)
     singal_id = serializers.CharField(
         required=False,
         max_length=20,

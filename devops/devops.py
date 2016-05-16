@@ -1,4 +1,4 @@
-# coding = utf-8
+# coding=utf-8
 import os
 import re
 
@@ -18,7 +18,7 @@ class AISSig():
         os.chdir('../ais_testmodule/')
         eng = matlab.engine.start_matlab()
         for powdiff in range(0, 15):
-            for EbN0 in range(10, 11):
+            for EbN0 in range(1, 2):
                 try:
                     # print 'success'
                     #sig.create(float(powdiff), float(signum), float(conflictNum), float(totalratio), float(channelnum), float(EbN0), path)

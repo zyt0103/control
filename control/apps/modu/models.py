@@ -1,8 +1,7 @@
 # coding=utf-8
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
-from django.utils.timezone import now
-from django.contrib.auth.admin import User
 
 from control.control.logger import getLogger
 logger = getLogger(__name__)
@@ -73,7 +72,6 @@ class DistriManager(models.Manager):
                distri_ves_num,
                distri_mode])
         try:
-            # logger.info("user is :%s"% User.objects.get(username=user))
             # user = User.objects.get(username=user)
             distri_model = DistriModel(user=user,
                                        distri_id=distri_id,
@@ -82,13 +80,12 @@ class DistriManager(models.Manager):
                                        distri_height=distri_height,
                                        distri_ves_num=distri_ves_num,
                                        distri_mode=distri_mode)
-            logger.info(distri_model.user)
             distri_model.save()
-            logger.info("distri_model is :%s"%distri_model)
+            logger.info("distri_model is :%s" % distri_model)
             return distri_model, None
-        except Exception as e:
-            logger.info(str(e))
-            return None, e
+        except Exception as exp:
+            logger.error("save distri error: %s" % str(exp))
+            return None, exp
 
 
 class PartableModelManager(models.Manager):
@@ -101,6 +98,7 @@ class PartableModelManager(models.Manager):
                channel_type):
         try:
             distri = DistriModel.get_distri_by_id(distri_id)
+            logger.info("Partable_distri is %s" % distri)
             partable_model = PartableModel(distri=distri,
                                            partable_id=partable_id,
                                            pitch=pitch,
@@ -109,8 +107,10 @@ class PartableModelManager(models.Manager):
                                            channel_type=channel_type
                                            )
             partable_model.save()
+            logger.info("partable_model is %s" % partable_model)
             return partable_model, None
         except Exception as exp:
+            logger.error("save partable error: %s" % str(exp))
             return None, exp
 
 
@@ -132,8 +132,10 @@ class TimetableModelManager(models.Manager):
                                              protocol=protocol
                                              )
             timetable_model.save()
+            logger.info("timetable_model is %s" % timetable_model)
             return timetable_model, None
         except Exception as exp:
+            logger.error("save timetable error: %s" % str(exp))
             return None, exp
 
 
@@ -144,6 +146,7 @@ class AisdataModelManager(models.Manager):
                 aisdata_id
                 ):
         try:
+            logger.info("aisdata_distri_id is %s" % distri_id)
             distri = DistriModel.get_distri_by_id(distri_id)
             timetable = TimetableModel.get_timetable_by_id(timetable_id)
             logger.info(timetable_id)
@@ -151,8 +154,10 @@ class AisdataModelManager(models.Manager):
                                          timetable=timetable,
                                          aisdata_id=aisdata_id)
             aisdata_model.save()
+            logger.info("aisdata_model is %s" % aisdata_model)
             return aisdata_model, None
         except Exception as exp:
+            logger.error("save aisdata error: %s" % str(exp))
             return None, exp
 
 
@@ -174,23 +179,30 @@ class SignalModelManager(models.Manager):
                                        snr=snr
                                        )
             signal_model.save()
+            logger.info("signal_model is %s" % signal_model)
             return signal_model, None
         except Exception as exp:
+            logger.error("save signal error: %s" % str(exp))
             return None, exp
+
+
+# class AISUser(User):
+#     class Meta:
+#         db_table = "AISUser"
 
 
 class DistriModel(BaseModel):
     class Meta:
         db_table = "distri"
     # distri owner
-    # user = models.ForeignKey(User,
-    #                          on_delete=models.PROTECT)
+    user = models.ForeignKey(User,
+                             on_delete=models.PROTECT)
     logger.info("start distriModel")
 
-    user = models.CharField(
-        max_length=20,
-        null=False,
-        unique=False)
+    # user = models.CharField(
+    #     max_length=20,
+    #     null=False,
+    #     unique=False)
     # distri id
     distri_id = models.CharField(
         max_length=20,
@@ -236,6 +248,7 @@ class DistriModel(BaseModel):
         try:
             return DistriModel.objects.filter(deleted=deleted).get(distri_id=distri_id)
         except Exception as exp:
+            logger.error("get distri error is :%s" % exp)
             return False
 
     @classmethod
@@ -243,6 +256,7 @@ class DistriModel(BaseModel):
         try:
             return DistriModel.objects.filter(deleted=deleted).filter(distri_id=distri_id).exists()
         except Exception as exp:
+            logger.error("exist distri_id error: %s" % str(exp))
             return False
 
     @classmethod
@@ -250,6 +264,16 @@ class DistriModel(BaseModel):
         try:
             return DistriModel.objects.get(distri_id=distri_id)
         except Exception as exp:
+            logger.error("describe distri error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def get_distriid_by_id(cls, partable_id, deleted=False):
+        try:
+            distri = PartableModel.objects.filter(deleted=deleted).get(partable_id=partable_id).distri
+            return distri.distri_id
+        except Exception as exp:
+            logger.error("get distri_id error: %s" % str(exp))
             return False
 
     @classmethod
@@ -257,6 +281,7 @@ class DistriModel(BaseModel):
         try:
             return DistriModel.objects.get(distri_id=distri_id).delete()
         except Exception as exp:
+            logger.error("delete distri error: %s" % str(exp))
             return False
 
 class PartableModel(BaseModel):
@@ -301,9 +326,10 @@ class PartableModel(BaseModel):
     @classmethod
     def get_partbale_by_id(cls, partable_id, deleted=False):
         try:
-            logger.info("partable_id is %s"%partable_id)
+            logger.info("partable_id is %s" % partable_id)
             return PartableModel.objects.filter(deleted=deleted).get(partable_id=partable_id)
         except Exception as exp:
+            logger.error("get partable_id error : %s" % str(exp))
             return False
 
     @classmethod
@@ -311,6 +337,7 @@ class PartableModel(BaseModel):
         try:
             return PartableModel.objects.filter(deleted=deleted).filter(partable_id=partable_id).exists()
         except Exception as exp:
+            logger.error("exist partable error: %s" % str(exp))
             return False
 
     @classmethod
@@ -318,6 +345,16 @@ class PartableModel(BaseModel):
         try:
             return PartableModel.objects.get(partable_id = partable_id)
         except Exception as exp:
+            logger.error("get partable error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def get_partableid_by_id(cls, timetable_id, deleted = False):
+        try:
+            par_table = TimetableModel.objects.filter(deleted=deleted).get(timetable_id=timetable_id).partable
+            return par_table.partable_id
+        except Exception as exp:
+            logger.error("get partable_id error: %s" % str(exp))
             return False
 
     @classmethod
@@ -325,6 +362,7 @@ class PartableModel(BaseModel):
         try:
             return PartableModel.objects.get(partable_id=partable_id).delete()
         except Exception as exp:
+            logger.error("delete partable error: %s" % str(exp))
             return False
 
 class TimetableModel(BaseModel):
@@ -358,10 +396,9 @@ class TimetableModel(BaseModel):
     @classmethod
     def get_timetable_by_id(cls, timetable_id, deleted=False):
         try:
-            logger.info("timetable_id is %s"% timetable_id)
             return TimetableModel.objects.filter(deleted=deleted).get(timetable_id=timetable_id)
         except Exception as exp:
-            logger.error(exp)
+            logger.error("get timetable error: %s" % str(exp))
             return False
 
     @classmethod
@@ -369,6 +406,7 @@ class TimetableModel(BaseModel):
         try:
             return TimetableModel.objects.filter(deleted=deleted).filter(timetable_id=timetable_id).exists()
         except Exception as exp:
+            logger.error("exist timetable error: %s" % str(exp))
             return False
 
     @classmethod
@@ -376,6 +414,16 @@ class TimetableModel(BaseModel):
         try:
             return TimetableModel.objects.get(timetable_id = timetable_id)
         except Exception as exp:
+            logger.error("describe timetable error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def get_timetableid_by_id(cls, aisdata_id, deleted = False):
+        try:
+            time_table = AisdataModel.objects.filter(deleted=deleted).get(aisdata_id=aisdata_id).timetable
+            return time_table.timetable_id
+        except Exception as exp:
+            logger.error("get timetable_id error: %s" % str(exp))
             return False
 
     @classmethod
@@ -383,6 +431,7 @@ class TimetableModel(BaseModel):
         try:
             return TimetableModel.objects.get(timetable_id=timetable_id).delete()
         except Exception as exp:
+            logger.error("delete timetable error: %s" % str(exp))
             return False
 
 
@@ -408,6 +457,7 @@ class AisdataModel(BaseModel):
         try:
             return AisdataModel.objects.filter(deleted=deleted).get(aisdata_id=aisdata_id)
         except Exception as exp:
+            logger.error("get aisdata error: %s" % str(exp))
             return False
 
     @classmethod
@@ -415,6 +465,7 @@ class AisdataModel(BaseModel):
         try:
             return AisdataModel.objects.filter(deleted=deleted).filter(aisdata_id=aisdata_id).exists()
         except Exception as exp:
+            logger.error("exist aisdata error: %s" % str(exp))
             return False
 
     @classmethod
@@ -422,6 +473,7 @@ class AisdataModel(BaseModel):
         try:
             return AisdataModel.objects.get(aistdata_id = aisdata_id)
         except Exception as exp:
+            logger.error("describe aisdata error: %s" % str(exp))
             return False
 
     @classmethod
@@ -429,6 +481,16 @@ class AisdataModel(BaseModel):
         try:
             return AisdataModel.objects.get(aisdata_id=aisdata_id).delete()
         except Exception as exp:
+            logger.error("delete aisdata error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def get_aisdataid_by_id(cls, signal_id, deleted = False):
+        try:
+            aisdata = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id).aisdata
+            return aisdata.aisdata_id
+        except Exception as exp:
+            logger.error("get aisdata_id error: %s" % str(exp))
             return False
 
 class SignalModel(BaseModel):
@@ -456,6 +518,7 @@ class SignalModel(BaseModel):
         try:
             return SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id)
         except Exception as exp:
+            logger.error("get signal error: %s" % str(exp))
             return False
 
     @classmethod
@@ -463,6 +526,7 @@ class SignalModel(BaseModel):
         try:
             return SignalModel.objects.filter(deleted=deleted).filter(signal_id=signal_id).exists()
         except Exception as exp:
+            logger.error("exist signal error: %s" % str(exp))
             return False
 
     @classmethod
@@ -470,6 +534,7 @@ class SignalModel(BaseModel):
         try:
             return SignalModel.objects.get(signal_id=signal_id)
         except Exception as exp:
+            logger.error("describe signal error: %s" % str(exp))
             return False
 
     @classmethod
@@ -477,4 +542,5 @@ class SignalModel(BaseModel):
         try:
             return SignalModel.objects.get(signal_id=signal_id).delete()
         except Exception as exp:
+            logger.error("delete signal error: %s" % str(exp))
             return False

@@ -3,12 +3,34 @@
 import string
 import random
 import time
-from django.conf import settings
-from django.utils.translation import ugettext as _
-from control.control.err_msg import PARAMETER_CODE
 
-def username_temp():
-    return "user-uio9m8on"
+from django.conf import settings
+from django.contrib.auth.admin import User
+from django.utils.translation import ugettext as _
+
+from control.control.err_msg import PARAMETER_CODE
+from control.control.logger import getLogger
+
+logger = getLogger(__name__)
+
+
+def user_temp():
+    """
+    get user_temp
+    :return: user
+    """
+    try:
+        user = User.objects.get(username="user-safoewfw")
+        logger.info("user is %s" % user)
+        return user
+    except Exception as exp:
+        logger.info("user is not exist in models")
+        try:
+            user = User.objects.create_user(username="user-safoewfw", email="234241213@qq.com", password="12edd23")
+            return user
+        except Exception as exp:
+            logger.error("Create User Failed！")
+            return False
 
 
 def randomname_maker(num=settings.NAME_ID_LENGTH):
@@ -48,10 +70,20 @@ def is_simple_string_list(data):
     return True
 
 def get_code_by_parameter(parameter):
+    """
+    get code by parameter
+    :param parameter:
+    :return:
+    """
     return PARAMETER_CODE.get(parameter)
 
 
 def control_code(validator):
+    """
+    get code , msg
+    :param validator:
+    :return:
+    """
     if not validator:
         return -1, ""
     errors = validator.errors
@@ -70,6 +102,17 @@ def control_response(code=0,
                      ret_set=None,
                      action_record=None,
                      ret_name_id="distri_id", **kwargs):
+    """
+    generate return parameter
+    :param code:  error code
+    :param msg:  error message
+    :param total_count: ret number
+    :param ret_set: action_id
+    :param action_record: action 记录
+    :param ret_name_id: action_id_name
+    :param kwargs: more arguments
+    :return: return parameter dict
+    """
     msg = convert_to_string(msg)
 
     if code == 0:

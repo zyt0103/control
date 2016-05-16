@@ -3,19 +3,16 @@ from django.shortcuts import render
 
 from control.control.base import control_code
 from control.control.base import control_response
-from control.control.base import username_temp
-# from control.control.default_msg import set_default_payload
-from control.control.default_msg import Defaultvalue
+from control.control.base import user_temp
 
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
 from .serializer import CreateSignalSerializer
-# from .sub_view import Createsignals
-# from .helper import create_ves_distri
-from control.control.logger import getLogger
 from .sub_view import Router
+
+from control.control.logger import getLogger
 
 logger = getLogger(__name__)
 
@@ -32,6 +29,7 @@ class CreateSignal(APIView):
         req_data = request.data
         logger.info(req_data)
         validator = CreateSignalSerializer(data=req_data)
+        # logger.info(validator.errors)
         logger.error("validator is valid: %s" % validator.is_valid())
         if not validator.is_valid():
             code, msg = control_code(validator)
@@ -39,26 +37,26 @@ class CreateSignal(APIView):
             return Response(control_response(code=code, msg=msg),
                             status=status.HTTP_200_OK)
 
-        action_all = validator.validated_data.get("action_all", None)
+        action_all = validator.validated_data.get("action_all", True)
         action = validator.validated_data.get("action", None)
-        lon = validator.validated_data.get("lon", None)
-        lat = validator.validated_data.get("lat", None)
-        height = validator.validated_data.get("height", None)
-        vesnum = validator.validated_data.get("vesnum", None)
-        obtime = validator.validated_data.get("obtime", None)
-        ant_pitch = validator.validated_data.get("ant_pitch", None)
-        ant_azimuth = validator.validated_data.get("ant_azimuth", None)
-        ant_type = validator.validated_data.get("ant_type", None)
-        channel_tpye = validator.validated_data.get("channel_type", None)
-        protocol = validator.validated_data.get("protocol", None)
-        snr = validator.validated_data.get("snr", None)
-        distri_mode = validator.validated_data.get("distri_mode", None)
+        lon = validator.validated_data.get("lon", 102.0)
+        lat = validator.validated_data.get("lat", 31.8029)
+        height = validator.validated_data.get("height", 600)
+        vesnum = validator.validated_data.get("vesnum", 500)
+        obtime = validator.validated_data.get("obtime", 60)
+        ant_pitch = validator.validated_data.get("ant_pitch", 0)
+        ant_azimuth = validator.validated_data.get("ant_azimuth", 0)
+        ant_type = validator.validated_data.get("ant_type", "yagi")
+        channel_tpye = validator.validated_data.get("channel_type", "free space loss")
+        protocol = validator.validated_data.get("protocol", "SOTDMA")
+        snr = validator.validated_data.get("snr", 0)
+        distri_mode = validator.validated_data.get("distri_mode", "random")
         distri_id = validator.validated_data.get("distri_id", None)
         partable_id = validator.validated_data.get("partable_id", None)
         timetable_id = validator.validated_data.get("timetable_id", None)
         aisdata_id = validator.validated_data.get("aisdata_id", None)
         signal_id = validator.validated_data.get("signal_id", None)
-        owner = username_temp()
+        owner = user_temp()
 
         payload = {
             # "action": self.action,
@@ -83,70 +81,8 @@ class CreateSignal(APIView):
             "aisdata_id": aisdata_id,
             "signal_id": signal_id
         }
-        payload_default = Defaultvalue(payload)
-        payload = payload_default.set_default_payload()
-        # payload = set_default_payload(payload)
 
-        logger.info(payload)
-        # resp = Router.Actionrouter(payload)
+        logger.info("The main payload is %s" % payload)
         route = Router(payload)
         resp = route.Actionrouter()
-
-        # resp = Createsignals().Creatdistri(payload)
         return Response(resp, status=status.HTTP_200_OK)
-        # distri_id = validator.validated_data.get("distri_id", None)
-        # distri_lon = validator.validated_data.get("distri_lon", None)
-        # distri_lat = validator.validated_data.get("distri_lat", None)
-        # distri_height = validator.validated_data.get("distri_height", None)
-        # distri_ves_num = validator.validated_data.get("distri_ves_num", None)
-        # distri_mode = validator.validated_data.get("distri_mode", None)
-        # owner = username_temp()
-        #
-        # payload = {
-        #     "action": self.action,
-        #     "owner": owner,
-        #     "distri_id": distri_id,
-        #     "lon": distri_lon,
-        #     "lat": distri_lat,
-        #     "height": distri_height,
-        #     "vesnum": distri_ves_num,
-        #     "distri_mode": distri_mode
-        # }
-        #resp = create_ves_distri(payload=payload)
-
-
-
-
-# class CreateSignal(APIView):
-#     """
-#     创建信号
-#     """
-#     action = "CreateSignal"
-#
-#     def post(self, request, *args, **kwargs):
-#         req_data = request.data
-#         logger.info(req_data)
-#         validator = CreateDistriSerializer(data=req_data)
-#         logger.error("validator is vialid : %s" % validator.is_valid())
-#         if not validator.is_valid():
-#             code, msg = control_code(validator)
-#             # logger.info("validator is invalide")
-#             return Response(control_response(code=code, msg=msg),
-#             # return Response(control_response(code=code, msg='validator error'),
-#                             status=status.HTTP_200_OK)
-#         distri_id = validator.validated_data.get("distri_id", None)
-#         distri_lon = validator.validated_data.get("distri_lon", None)
-#         distri_lat = validator.validated_data.get("distri_lat", None)
-#         distri_height = validator.validated_data.get("distri_height", None)
-#         distri_ves_num = validator.validated_data.get("distri_ves_num", None)
-#         distri_mode = validator.validated_data.get("distri_mode", None)
-#         owner = username_temp()
-#
-#
-#
-#     def creatdistri(payload):
-#         lat = payload.get()
-#         subpayload = {}
-#         create_ves_distri(subpayload)
-#
-#

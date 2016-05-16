@@ -1,13 +1,17 @@
 # coding=utf-8
 
+from control.control.err_msg import ModuErrorCode
+from control.control.base import control_response
+
 from .helper import create_ves_distri
 from .helper import create_ves_parTalb
 from .helper import create_time_table
 from .helper import create_ves_data
 from .helper import create_aissig
-from control.control.err_msg import ModuErrorCode
-from control.control.base import control_response
 from .models import DistriModel
+from .models import PartableModel
+from .models import TimetableModel
+from .models import  AisdataModel
 
 from control.control.logger import getLogger
 
@@ -21,12 +25,12 @@ logger = getLogger(__name__)
 #     def __init__(self, payload):
 #         self.payload = payload
 
-def Createdistri(payload):
+
+def CreateDistri(payload):
     """
     :param payload:  创建信号所需数据
     :return:
     """
-
     # payload = self.payload
     # logger.info("payload is %s", payload)
     action = payload.get("action", None)
@@ -45,16 +49,16 @@ def Createdistri(payload):
         "distri_mode": distri_mode,
         "owner": username
     }
-    # logger.info(payload)
+    logger.info("sub_view distri payload is %s" % sub_payload)
     ret_message = create_ves_distri(sub_payload)
     return ret_message
 
-def Createpartable(payload):
+
+def CreatePartable(payload):
     """
     :payload: 创建信号所需数据
     :return:
     """
-
     # payload = self.payload
     action = payload.get("action", None)
     # action_all = payload.get("action_all", None)
@@ -67,6 +71,9 @@ def Createpartable(payload):
     channel_type = payload.get("channel_type", None)
     distri_id = payload.get("distri_id", None)
 
+    if distri_id is None:
+        return control_response(code=ModuErrorCode.DISTRI_ID_MISSING)
+
     sub_payload = {
         "action": action,
         "height": height,
@@ -78,15 +85,15 @@ def Createpartable(payload):
         "distri_mode": distri_mode,
         "distri_id": distri_id,
     }
-    logger.info("partable_payload is %s" % sub_payload)
+    logger.info("sub_view partable payload is %s" % sub_payload)
     ret_message = create_ves_parTalb(sub_payload)
     return ret_message
 
-def Createtimetable(payload):
+
+def CreateTimetable(payload):
     """
     :return:
     """
-
     # payload = self.payload
     action = payload.get("action", None)
     obtime = payload.get("obtime", None)
@@ -94,6 +101,11 @@ def Createtimetable(payload):
     protocol = payload.get("protocol", None)
     distri_id = payload.get("distri_id", None)
     partable_id = payload.get("partable_id", None)
+    if partable_id is None:
+        return control_response(code=ModuErrorCode.PARTABLE_ID_MISSING)
+    if distri_id is None:
+        distri_id = DistriModel.get_distriid_by_id(partable_id)
+        logger.info("distri_id is %s" % distri_id)
 
     sub_payload = {
         "action": action ,
@@ -103,37 +115,42 @@ def Createtimetable(payload):
         "distri_id": distri_id,
         "partable_id": partable_id,
     }
-    logger.info("partable_id is %s"%partable_id)
+    logger.info("sub_view timetable payload is %s" % sub_payload)
     ret_message = create_time_table(sub_payload)
     return ret_message
 
-def Createaisdata(payload):
+
+def CreateAisdata(payload):
     """
     :param payload: 创建所需信号
     :return:
     """
-
     # payload = self.payload
     action = payload.get("action", None)
     distri_id = payload.get("distri_id", None)
     timetable_id = payload.get("timetable_id", None)
 
+    if timetable_id is None:
+        return control_response(code=ModuErrorCode.TIMETABLE_ID_MISSING)
+    if distri_id is None:
+        partable_id = PartableModel.get_partableid_by_id(timetable_id)
+        distri_id = DistriModel.get_distriid_by_id(partable_id)
     sub_payload = {
         "action": action,
         "distri_id": distri_id,
         "timetable_id": timetable_id,
     }
+    logger.info("sub_view aisdata payload is %s" % sub_payload)
     ret_message = create_ves_data(sub_payload)
     return ret_message
 
-def Createsignal(payload):
+
+def CreateSignal(payload):
     """
     产生AIS信号
     :param payload: 包含必要的关于产生timetable的参数
     :return: aisSig_Path 存储AISSig的路径
     """
-
-    # payload = self.payload
     action = payload.get("action", None)
     obtime = payload.get("obtime", None)
     vesnum = payload.get("vesnum", None)
@@ -142,7 +159,14 @@ def Createsignal(payload):
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
     snr = payload.get("snr")
-
+    if aisdata_id is None:
+        return control_response(code=ModuErrorCode.AISDATA_ID_MISSING)
+    if timetable_id is None:
+        timetable_id = TimetableModel.get_timetableid_by_id(aisdata_id)
+    if partable_id is None:
+        logger.info("partable_id is %s" % partable_id)
+        partable_id = PartableModel.get_partableid_by_id(timetable_id)
+        logger.info("partable_id is %s" % partable_id)
     sub_payload = {
         "action": action,
         "obtime": obtime,
@@ -153,20 +177,21 @@ def Createsignal(payload):
         "aisdata_id": aisdata_id,
         "snr": snr
     }
-    logger.info("signal_payload is %s"%sub_payload)
+    logger.info("sub_view signal payload is %s" % sub_payload)
     ret_message = create_aissig(sub_payload)
     return ret_message
 
-class Router():
 
-    payload = {}
-    ACTION = {"distri": Createdistri,
-          "partable": Createpartable,
-          "timetable": Createtimetable,
-          "aisdata": Createaisdata,
-          "signal": Createsignal
-           }
+class Router():
+    """
+    chose fuction following different action
+    """
     ACTION_LIST = ["distri", "partable", "timetable", "aisdata", "signal"]
+    FUNCTION_LIST = [CreateDistri, CreatePartable, CreateTimetable, CreateAisdata, CreateSignal]
+    # 获取ACTION对应关系
+    ACTION = {}
+    for actionIndex in range(len(ACTION_LIST)):
+        ACTION.update({ACTION_LIST[actionIndex]: FUNCTION_LIST[actionIndex]})
 
     def __init__(self, payload):
         self.payload = payload
@@ -176,32 +201,26 @@ class Router():
         :param payload: 获取action
         :return:
         """
-
         payload = self.payload
         action = payload.get("action", None)
         if action is not None:
             logger.info("action is :%s"% action)
             ret_message = self.ACTION[action](payload)
-            # action_instance = Createsignals(payload)
             return ret_message
 
         action_all = payload.get("action_all", None)
         if action_all is True:
             ret = {}
             for action in self.ACTION_LIST:
-                # logger.info("The action is : %s" % action)
-                # logger.info(payload)
-                # logger.error("ret is : %s" % ret)
                 payload.update({"action": action})
                 if action is not None:
                     # logger.info(self.ACTION[action](payload))
                     # action_instance = CreatSignal(payload)
-                    # logger.info("payload is %s"%payload)
+                    # logger.info("payload is %s" % payload)
                     ret_message = self.ACTION[action](payload)
                     logger.info("ret_message is %s" % ret_message)
                     payload.update({ret_message["ret_name_id"]: ret_message["ret_set"][0]})
                     ret.update(ret_message)
-
             return ret
         return control_response(code=ModuErrorCode.ACTION_GET_FAILED)
 
