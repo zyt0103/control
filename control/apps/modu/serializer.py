@@ -8,21 +8,16 @@ class CreateSignalSerializer(serializers.Serializer):
     """
     创建信号
     """
-    action = serializers.CharField(
-        max_length=20,
-        required=False,
-        validators=[action_validator]
-    )
 
     action_all = serializers.BooleanField(
         required=False,
         validators=[action_all_validator]
     )
 
-    username = serializers.CharField(
-        max_length=30,
+    action = serializers.CharField(
+        max_length=20,
         required=False,
-        validators=[username_validator]
+        validators=[action_validator]
     )
 
     distri_id = serializers.CharField(
@@ -54,6 +49,7 @@ class CreateSignalSerializer(serializers.Serializer):
         max_length=20,
         validators=[signal_id_validator]
     )
+
 
     lon = serializers.FloatField(
         required=False,

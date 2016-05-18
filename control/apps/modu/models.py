@@ -64,15 +64,8 @@ class DistriManager(models.Manager):
                distri_height,
                distri_ves_num,
                distri_mode):
-        logger.info([user,
-               distri_id,
-               distri_lon,
-               distri_lat,
-               distri_height,
-               distri_ves_num,
-               distri_mode])
         try:
-            # user = User.objects.get(username=user)
+            user = User.objects.get(username=user)
             distri_model = DistriModel(user=user,
                                        distri_id=distri_id,
                                        distri_lon=distri_lon,
@@ -81,10 +74,8 @@ class DistriManager(models.Manager):
                                        distri_ves_num=distri_ves_num,
                                        distri_mode=distri_mode)
             distri_model.save()
-            logger.info("distri_model is :%s" % distri_model)
             return distri_model, None
         except Exception as exp:
-            logger.error("save distri error: %s" % str(exp))
             return None, exp
 
 
@@ -98,7 +89,6 @@ class PartableModelManager(models.Manager):
                channel_type):
         try:
             distri = DistriModel.get_distri_by_id(distri_id)
-            logger.info("Partable_distri is %s" % distri)
             partable_model = PartableModel(distri=distri,
                                            partable_id=partable_id,
                                            pitch=pitch,
@@ -107,10 +97,8 @@ class PartableModelManager(models.Manager):
                                            channel_type=channel_type
                                            )
             partable_model.save()
-            logger.info("partable_model is %s" % partable_model)
             return partable_model, None
         except Exception as exp:
-            logger.error("save partable error: %s" % str(exp))
             return None, exp
 
 
@@ -124,7 +112,6 @@ class TimetableModelManager(models.Manager):
         try:
             distri = DistriModel.get_distri_by_id(distri_id)
             partable = PartableModel.get_partbale_by_id(partable_id)
-            logger.info("partable is %s"%partable)
             timetable_model = TimetableModel(distri=distri,
                                              partable=partable,
                                              timetable_id=timetable_id,
@@ -132,10 +119,8 @@ class TimetableModelManager(models.Manager):
                                              protocol=protocol
                                              )
             timetable_model.save()
-            logger.info("timetable_model is %s" % timetable_model)
             return timetable_model, None
         except Exception as exp:
-            logger.error("save timetable error: %s" % str(exp))
             return None, exp
 
 
@@ -146,18 +131,14 @@ class AisdataModelManager(models.Manager):
                 aisdata_id
                 ):
         try:
-            logger.info("aisdata_distri_id is %s" % distri_id)
             distri = DistriModel.get_distri_by_id(distri_id)
             timetable = TimetableModel.get_timetable_by_id(timetable_id)
-            logger.info(timetable_id)
             aisdata_model = AisdataModel(distri=distri,
                                          timetable=timetable,
                                          aisdata_id=aisdata_id)
             aisdata_model.save()
-            logger.info("aisdata_model is %s" % aisdata_model)
             return aisdata_model, None
         except Exception as exp:
-            logger.error("save aisdata error: %s" % str(exp))
             return None, exp
 
 
@@ -179,10 +160,8 @@ class SignalModelManager(models.Manager):
                                        snr=snr
                                        )
             signal_model.save()
-            logger.info("signal_model is %s" % signal_model)
             return signal_model, None
         except Exception as exp:
-            logger.error("save signal error: %s" % str(exp))
             return None, exp
 
 
@@ -197,7 +176,6 @@ class DistriModel(BaseModel):
     # distri owner
     user = models.ForeignKey(User,
                              on_delete=models.PROTECT)
-    logger.info("start distriModel")
 
     # user = models.CharField(
     #     max_length=20,
@@ -326,7 +304,6 @@ class PartableModel(BaseModel):
     @classmethod
     def get_partbale_by_id(cls, partable_id, deleted=False):
         try:
-            logger.info("partable_id is %s" % partable_id)
             return PartableModel.objects.filter(deleted=deleted).get(partable_id=partable_id)
         except Exception as exp:
             logger.error("get partable_id error : %s" % str(exp))

@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from .serializer import CreateSignalSerializer
 from .sub_view import Router
 
+# from control.control.base import get_path
 from control.control.logger import getLogger
 
 logger = getLogger(__name__)
@@ -28,9 +29,11 @@ class CreateSignal(APIView):
     def post(self, request, *args, **kwargs):
         req_data = request.data
         logger.info(req_data)
+        # logger.info(get_path.MATLAB_FILE_PATH)
+        # logger.info(get_path.CELERY_PATH)
+        # logger.info(get_path.CURRENT_PATH)
         validator = CreateSignalSerializer(data=req_data)
-        # logger.info(validator.errors)
-        logger.error("validator is valid: %s" % validator.is_valid())
+        logger.info("validator is valid: %s" % validator.is_valid())
         if not validator.is_valid():
             code, msg = control_code(validator)
             logger.error(str(validator.errors))

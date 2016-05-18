@@ -1,5 +1,5 @@
 # coding=utf-8
-# from django.conf import settings
+
 from control.control import settings
 
 from .models import DistriModel
@@ -64,7 +64,7 @@ def create_ves_distri(payload):
         "vesNum": vesNum,
         "distri_mode": distri_mode,
         "distri_id": distri_id,
-        "owner": username.username
+        "owner": username
     }
     distri_model, error = DistriModel.objects.create(user=username,
                                                        distri_id=distri_id,
@@ -75,7 +75,6 @@ def create_ves_distri(payload):
                                                        distri_mode=distri_mode
                                                        )
     if not distri_model:
-        logger.error("Save distri Failed: %s" % str(error))
         return control_response(code=ModuErrorCode.DISTRI_SAVED_FAILED, msg=error, ret_name_id="distri_id")
     matlab_create_ves_distri.apply_async([sub_payload])
     return control_response(code=0, msg="distri running", ret_set=[distri_id], ret_name_id="distri_id")
@@ -91,7 +90,6 @@ def create_ves_parTalb(payload):
     vesnum = payload.get("vesnum", None)
     ant_pitch = payload.get("ant_pitch", None)
     ant_azimuth = payload.get("ant_azimuth", None)
-    distri_mode = payload.get("distri_mode", None)
     antenna_type = payload.get("antenna_type", None)
     channel_type = payload.get("channel_type", None)
     distri_id = payload.get("distri_id", None)
@@ -104,11 +102,9 @@ def create_ves_parTalb(payload):
         "ant_azimuth": ant_azimuth,
         "antenna_type": antenna_type,
         "channel_type": channel_type,
-        "distri_mode": distri_mode,
         "distri_id": distri_id,
         "partable_id": partable_id
     }
-    logger.info("Partable_payload is %s" % sub_payload)
     parTable_model, error = PartableModel.objects.create(distri_id=distri_id,
                                                          partable_id=partable_id,
                                                          pitch=ant_pitch,
@@ -117,7 +113,6 @@ def create_ves_parTalb(payload):
                                                          channel_type=channel_type
                                                          )
     if not parTable_model:
-        logger.error("Save parTable Failed: %s" % str(error))
         return control_response(code=ModuErrorCode.PARTABLE_SAVED_FAILED, msg=error, ret_name_id="partable_id")
     matlab_create_ves_parTable.apply_async([sub_payload])
     return control_response(code=0, msg="parTable running", ret_set=[partable_id], ret_name_id="partable_id")
@@ -136,7 +131,6 @@ def create_time_table(payload):
     distri_id = payload.get("distri_id", None)
     partable_id = payload.get("partable_id", None)
     timetable_id = make_id(action)
-    # logger.info("partable_id is %s"%partable_id)
     sub_payload = {
         "action": action,
         "obtime": obtime,
@@ -153,7 +147,6 @@ def create_time_table(payload):
                                                            protocol=protocol
                                                           )
     if not timetable_model:
-        logger.error("Save timetable Failed: %s" % str(error))
         return control_response(code=ModuErrorCode.TIMETABLE_SAVED_FAILED, msg=error, ret_name_id="timetable_id")
     matlab_create_time_table.apply_async([sub_payload])
     return control_response(code=0, msg="timetable running", ret_set=[timetable_id], ret_name_id="timetable_id")
@@ -180,7 +173,6 @@ def create_ves_data(payload):
                                                        aisdata_id=aisdata_id
                                                        )
     if not aisdata_model:
-        logger.error("Save aisdata Failed: %s" % str(error))
         return control_response(code=ModuErrorCode.AISDATA_SAVED_FAILED, msg=error, ret_name_id="aisdata_id")
     matlab_create_ves_data.apply_async([sub_payload])
     return control_response(code=0, msg="aisdate running", ret_set=[aisdata_id], ret_name_id="aisdata_id")
@@ -200,7 +192,6 @@ def create_aissig(payload):
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
     snr = payload.get("snr")
-    logger.info("payload is %s" % payload)
     signal_id = make_id(action)
     sub_payload = {
         "action": action,
@@ -221,7 +212,6 @@ def create_aissig(payload):
                                                         snr=snr
                                                         )
     if not signal_model:
-        logger.error("Save signal Failed: %s" % str(error))
         return control_response(code=ModuErrorCode.SIGNAL_SAVED_FAILED, msg=error, ret_name_id="signal_id")
     matlab_create_aisSig.apply_async([sub_payload])
     return control_response(code=0, msg="signal running", ret_set=[signal_id], ret_name_id="signal_id")

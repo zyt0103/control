@@ -79,3 +79,7 @@ SIGNAL_MSG = {
     20042: _(u"Signal数据运行异常"),
     20043: _(u"signal_id is missing")
 }
+
+class DEMODErrorCode():
+    ANT_TYPE_INVALID = 30000
+    

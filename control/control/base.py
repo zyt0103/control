@@ -1,5 +1,6 @@
 # coding=utf-8
 
+import os
 import string
 import random
 import time
@@ -21,13 +22,11 @@ def user_temp():
     """
     try:
         user = User.objects.get(username="user-safoewfw")
-        logger.info("user is %s" % user)
-        return user
+        return user.username
     except Exception as exp:
-        logger.info("user is not exist in models")
         try:
             user = User.objects.create_user(username="user-safoewfw", email="234241213@qq.com", password="12edd23")
-            return user
+            return user.username
         except Exception as exp:
             logger.error("Create User Failed！")
             return False
@@ -40,6 +39,15 @@ def randomname_maker(num=settings.NAME_ID_LENGTH):
     words = ''.join(set(words) - set(exclude_words))
     random.seed(time.time())
     return ''.join(random.sample(words, num))
+
+
+class get_path():
+    """
+    获取文件路径
+    :return:
+    """
+    MATLAB_FILE_PATH = os.path.abspath(os.path.join("../../../AIS"))
+    CELERY_PATH = os.path.abspath(os.path.join("../../../"))
 
 
 

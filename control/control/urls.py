@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^plot$', views.plot.as_view()),
     url(r'^drag$', views.drag.as_view()),
     url(r'^modu/', include('control.apps.modu.urls')),
+    # url(r'^demod/', include('control.apps.demod.urls')),
+    # url(r'^account/', include('account.urls')),
 ]
