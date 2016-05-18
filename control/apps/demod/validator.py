@@ -13,6 +13,14 @@ ANT_TYPE = {
     "four_ant": True
 }
 
+PROTOCOL_TYPE = {
+    "SOTDMA": True
+}
+
+SYNC_TYPE = {
+    "DEFAULT": True
+}
+
 
 def signal_id_validator(signal_id):
     """
@@ -31,6 +39,31 @@ def ant_type_validator(ant_type):
     if isinstance(ant_type, list):
         for key_ant_type in ant_type:
             if key_ant_type not in ANT_TYPE:
-                raise serializers.ValidationError(u"%s is invalid!" % key_ant_type)
+                raise serializers.ValidationError(u"ant_type is invalid！")
     if ant_type not in ANT_TYPE:
-        raise serializers.ValidationError(u"%s is invalid!" % ant_type)
+        raise serializers.ValidationError(u"ant_type is invalid!")
+
+def protocol_validator(protocol_type):
+    """
+    validator protocol
+    :return:
+    """
+    if isinstance(protocol_type, list):
+        for key_protocol_type in protocol_type:
+            if key_protocol_type not in PROTOCOL_TYPE:
+                raise serializers.ValidationError(u"protocol_type is invalid!")
+    if protocol_type not in PROTOCOL_TYPE:
+        raise serializers.ValidationError(u"protocol_type is invalid")
+
+def sync_type_validator(sync_type):
+    """
+    validate sync_type
+    :param sync_type:
+    :return:
+    """
+    if isinstance(sync_type, list):
+        for key_sync_type in sync_type:
+            if key_sync_type not in SYNC_TYPE:
+                raise serializers.ValidationError(u"sync_type is invalid!")
+    if sync_type not in SYNC_TYPE:
+        raise serializers.ValidationError(u"sync_type is invalid!")

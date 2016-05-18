@@ -21,9 +21,9 @@ class Router():
         :return:
         """
         payload = self.payload
-        ant_type = payload.get("ant_type", None)
-        signal_id = payload.get("signal_id", None)
-        protocol = payload.get("protocol", "SOTDMA")
+        ant_type = payload.get("ant_type")
+        signal_id = payload.get("signal_id")
+        protocol = payload.get("protocol")
         logger.info("payload is %s" % payload)
         if not isinstance(ant_type, list):
             ant_type = [ant_type]

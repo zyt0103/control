@@ -40,10 +40,14 @@ class DemodSignal(APIView):
 
         signal_id = validator.validated_data.get("signal_id", None)
         ant_type = validator.validated_data.get("ant_type", "single_ant")
+        protocol = validator.validated_data.get("protocol", "SOTDMA")
+        sync_type = validator.validated_data.get("sync_type", "DEFAULT")
 
         payload = {
             "signal_id": signal_id,
-            "ant_type": ant_type
+            "ant_type": ant_type,
+            "protocol": protocol,
+            "sync_type": sync_type
         }
         logger.info("The main payload is %s" % payload)
         router = Router(payload)

@@ -51,6 +51,7 @@ INSTALLED_APPS = (
 CONTROL_APPS = (
     'control.control',
     'control.apps.modu',
+    'control.apps.demod',
 )
 INSTALLED_APPS += CONTROL_APPS
 
