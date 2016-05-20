@@ -184,7 +184,9 @@ def create_aissig(payload):
     :return: aisSig_Path 存储AISSig的路径
     """
     # action = payload("action", None)
-    action = "signal"
+    action = payload.get("action", None)
+    filename = payload.get("filename", None)
+    packagenum = payload.get("packagenum", None)
     obtime = payload.get("obtime", None)
     vesnum = payload.get("vesnum", None)
     height = payload.get("height", None)
@@ -192,7 +194,6 @@ def create_aissig(payload):
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
     snr = payload.get("snr")
-    signal_id = make_id(action)
     sub_payload = {
         "action": action,
         "obtime": obtime,
@@ -201,17 +202,28 @@ def create_aissig(payload):
         "partable_id": partable_id,
         "timetable_id": timetable_id,
         "aisdata_id": aisdata_id,
-        "signal_id": signal_id,
+        # "signal_id": signal_id,
         "snr": snr
     }
-
-    signal_model, error = SignalModel.objects.create(partable_id=partable_id,
-                                                        timetable_id=timetable_id,
-                                                        aisdata_id = aisdata_id,
-                                                        signal_id=signal_id,
-                                                        snr=snr
-                                                        )
-    if not signal_model:
-        return control_response(code=ModuErrorCode.SIGNAL_SAVED_FAILED, msg=error, ret_name_id="signal_id")
-    matlab_create_aisSig.apply_async([sub_payload])
-    return control_response(code=0, msg="signal running", ret_set=[signal_id], ret_name_id="signal_id")
+    signal_id_list = []
+    for packageIndex in range(packagenum):
+        filenameUpdate = filename + "_" + str(packageIndex)
+        signal_id = make_id(action)
+        sub_payload.update({"signal_id": signal_id})
+        logger.info("sub_payload is %s" % sub_payload)
+        signal_model, error = SignalModel.objects.create(filename=filenameUpdate,
+                                                         partable_id=partable_id,
+                                                         timetable_id=timetable_id,
+                                                         aisdata_id=aisdata_id,
+                                                         signal_id=signal_id,
+                                                         snr=snr
+                                                         )
+        if not signal_model:
+            return control_response(code=ModuErrorCode.SIGNAL_SAVED_FAILED, msg=error, ret_name_id="signal_id")
+        matlab_create_aisSig.apply_async([sub_payload])
+        signal_id_list.append(signal_id)
+    return control_response(code=0,
+                            msg="signal running",
+                            ret_set=[signal_id_list],
+                            ret_name_id="signal_id",
+                            total_count=packagenum)

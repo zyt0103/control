@@ -10,7 +10,7 @@ from .models import TimetableModel
 from .models import AisdataModel
 from .models import SignalModel
 
-from .sub_view import Router
+# from .sub_view import Router
 from control.control.logger import getLogger
 
 logger = getLogger(__name__)
@@ -40,7 +40,6 @@ ACTION_LIST = [
     "aisdata",
     "signal"
 ]
-
 
 
 def action_all_validator(action_all):
@@ -152,6 +151,16 @@ def signal_id_validator(signal_id):
                 raise serializers.ValidationError(_(u"%s not exist in SignalModel" % k))
     if not SignalModel.signal_exist_by_id(signal_id=signal_id):
         raise serializers.ValidationError(_(u"%s not exist in SignalModel" % signal_id))
+
+
+def packagenum_validator(packagenum):
+    """
+    validate packageNum
+    :param packageNum:
+    :return:
+    """
+    if packagenum <=0 or packagenum >20:
+        raise serializers.ValidationError(u"packagenum is out of range!")
 
 
 def lat_validator(lat):

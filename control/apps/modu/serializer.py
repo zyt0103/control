@@ -9,6 +9,17 @@ class CreateSignalSerializer(serializers.Serializer):
     创建信号
     """
 
+    filename = serializers.CharField(
+        max_length=20,
+        required=True,
+        validators=[]
+    )
+
+    packagenum = serializers.IntegerField(
+        required=False,
+        validators=[packagenum_validator]
+    )
+
     action_all = serializers.BooleanField(
         required=False,
         validators=[action_all_validator]

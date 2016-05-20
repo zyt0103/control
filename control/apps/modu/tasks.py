@@ -154,6 +154,7 @@ def matlab_create_aisSig(payload):
     aisdata_id = payload.get("aisdata_id", None)
     signal_id = payload.get("signal_id", None)
     os.chdir(matlab_path)
+    logger.info("The current path is %s" % matlab_path)
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab_signal")

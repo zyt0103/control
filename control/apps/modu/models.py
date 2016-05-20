@@ -144,6 +144,7 @@ class AisdataModelManager(models.Manager):
 
 class SignalModelManager(models.Manager):
     def create(self,
+               filename,
                partable_id,
                timetable_id,
                aisdata_id,
@@ -153,7 +154,8 @@ class SignalModelManager(models.Manager):
             partable = PartableModel.get_partbale_by_id(partable_id)
             timetable = TimetableModel.get_timetable_by_id(timetable_id)
             aisdata = AisdataModel.get_aisdata_by_id(aisdata_id)
-            signal_model = SignalModel(partable=partable,
+            signal_model = SignalModel(filename=filename,
+                                       partable=partable,
                                        timetable=timetable,
                                        aisdata=aisdata,
                                        signal_id=signal_id,
@@ -486,6 +488,13 @@ class SignalModel(BaseModel):
         null=False,
         unique=True
     )
+
+    filename = models.CharField(
+        max_length=30,
+        null=False,
+        unique=False
+    )
+
     snr = models.IntegerField(null=False)
 
     objects = SignalModelManager()
@@ -507,9 +516,9 @@ class SignalModel(BaseModel):
             return False
 
     @classmethod
-    def signal_par_describe_by_id(cls, signal_id, deleted=False):
+    def signal_par_describe_by_filename(cls, filename, deleted=False):
         try:
-            return SignalModel.objects.get(signal_id=signal_id)
+            return SignalModel.objects.get(filename=filename)
         except Exception as exp:
             logger.error("describe signal error: %s" % str(exp))
             return False

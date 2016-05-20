@@ -46,8 +46,8 @@ class get_path():
     获取文件路径
     :return:
     """
-    MATLAB_FILE_PATH = os.path.abspath(os.path.join("../../../AIS"))
-    CELERY_PATH = os.path.abspath(os.path.join("../../../"))
+    MATLAB_FILE_PATH = os.path.abspath(os.path.join("./AIS"))
+    CELERY_PATH = os.path.abspath(os.path.join("../"))
 
 
 

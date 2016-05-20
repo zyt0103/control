@@ -40,6 +40,8 @@ class CreateSignal(APIView):
             return Response(control_response(code=code, msg=msg),
                             status=status.HTTP_200_OK)
 
+        filename = validator.validated_data.get("filename", None)
+        packagenum = validator.validated_data.get("packagenum", 1)
         action_all = validator.validated_data.get("action_all", True)
         action = validator.validated_data.get("action", None)
         lon = validator.validated_data.get("lon", 102.0)
@@ -63,6 +65,8 @@ class CreateSignal(APIView):
 
         payload = {
             # "action": self.action,
+            "filename": filename,
+            "packagenum": packagenum,
             "action_all": action_all,
             "action": action,
             "owner": owner,

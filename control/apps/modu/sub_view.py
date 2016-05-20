@@ -26,6 +26,8 @@ def CreateDistri(payload):
     # payload = self.payload
     # logger.info("payload is %s", payload)
     action = payload.get("action", None)
+    filename = payload.get("filename", None)
+    packagenum= payload.get("packagenum", None)
     lon = payload.get("lon", None)
     lat = payload.get("lat", None)
     height = payload.get("height", None)
@@ -34,6 +36,8 @@ def CreateDistri(payload):
     username = payload.get("owner")
     sub_payload = {
         "action": action,
+        "filename": filename + '_' + action,
+        "packagenum": packagenum,
         "lon": lon,
         "lat": lat,
         "height": height,
@@ -51,6 +55,8 @@ def CreatePartable(payload):
     :return:
     """
     action = payload.get("action", None)
+    filename = payload.get("filename", None)
+    packagenum = payload.get("packagenum", None)
     height = payload.get("height", None)
     vesnum = payload.get("vesnum", None)
     ant_pitch = payload.get("ant_pitch", None)
@@ -64,6 +70,8 @@ def CreatePartable(payload):
 
     sub_payload = {
         "action": action,
+        "filename": filename + '_' + action,
+        "packagenum": packagenum,
         "height": height,
         "vesnum": vesnum,
         "ant_pitch": ant_pitch,
@@ -82,6 +90,8 @@ def CreateTimetable(payload):
     """
     # payload = self.payload
     action = payload.get("action", None)
+    filename = payload.get("filename", None)
+    packagenum = payload.get("filename", None)
     obtime = payload.get("obtime", None)
     height = payload.get("height", None)
     protocol = payload.get("protocol", None)
@@ -94,6 +104,8 @@ def CreateTimetable(payload):
 
     sub_payload = {
         "action": action ,
+        "filename": filename + '_' + action,
+        "packagenum": packagenum,
         "obtime": obtime,
         "height": height,
         "protocol": protocol,
@@ -111,6 +123,8 @@ def CreateAisdata(payload):
     """
     # payload = self.payload
     action = payload.get("action", None)
+    filename = payload.get("filename", None)
+    packagenum = payload.get("packagenum", None)
     distri_id = payload.get("distri_id", None)
     timetable_id = payload.get("timetable_id", None)
 
@@ -121,6 +135,8 @@ def CreateAisdata(payload):
         distri_id = DistriModel.get_distriid_by_id(partable_id)
     sub_payload = {
         "action": action,
+        "filename": filename + '_' + action,
+        "packagenum": packagenum,
         "distri_id": distri_id,
         "timetable_id": timetable_id,
     }
@@ -135,6 +151,8 @@ def CreateSignal(payload):
     :return: aisSig_Path 存储AISSig的路径
     """
     action = payload.get("action", None)
+    filename = payload.get("filename", None)
+    packagenum = payload.get("packagenum", None)
     obtime = payload.get("obtime", None)
     vesnum = payload.get("vesnum", None)
     height = payload.get("height", None)
@@ -150,6 +168,8 @@ def CreateSignal(payload):
         partable_id = PartableModel.get_partableid_by_id(timetable_id)
     sub_payload = {
         "action": action,
+        "filename": filename + '_' + action,
+        "packagenum": packagenum,
         "obtime": obtime,
         "vesnum": vesnum,
         "height": height,
