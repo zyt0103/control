@@ -94,8 +94,12 @@ WSGI_APPLICATION = 'control.control.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.path.join('AIS_db'),
+        'USER': 'root',
+        'PASSWORD': '0627szqSZQ',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 

@@ -17,6 +17,7 @@ from control.control.logger import getLogger
 
 logger = getLogger(__name__)
 
+from .models import SignalModel
 # Create your views here.
 
 
@@ -32,6 +33,7 @@ class CreateSignal(APIView):
         # logger.info(get_path.MATLAB_FILE_PATH)
         # logger.info(get_path.CELERY_PATH)
         # logger.info(get_path.CURRENT_PATH)
+        # logger.info("filename is %s" % SignalModel.get_signal_by_id("signal-h7aiwz4v").filename)
         validator = CreateSignalSerializer(data=req_data)
         logger.info("validator is valid: %s" % validator.is_valid())
         if not validator.is_valid():

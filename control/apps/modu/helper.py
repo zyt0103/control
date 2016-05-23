@@ -207,7 +207,10 @@ def create_aissig(payload):
     }
     signal_id_list = []
     for packageIndex in range(packagenum):
-        filenameUpdate = filename + "_" + str(packageIndex)
+        if packagenum == 1:
+            filenameUpdate = filename
+        else:
+            filenameUpdate = filename + "_" + str(packageIndex)
         signal_id = make_id(action)
         sub_payload.update({"signal_id": signal_id})
         logger.info("sub_payload is %s" % sub_payload)

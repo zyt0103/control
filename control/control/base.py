@@ -109,7 +109,7 @@ def control_response(code=0,
                      total_count=0,
                      ret_set=None,
                      action_record=None,
-                     ret_name_id="distri_id", **kwargs):
+                     ret_name_id=None, **kwargs):
     """
     generate return parameter
     :param code:  error code

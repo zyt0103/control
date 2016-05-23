@@ -266,7 +266,7 @@ class DistriModel(BaseModel):
 
 class PartableModel(BaseModel):
     class Meta:
-        db_table="partable"
+        db_table = "partable"
 
     # partable from
     distri = models.ForeignKey(DistriModel,
@@ -416,7 +416,7 @@ class TimetableModel(BaseModel):
 
 class AisdataModel(BaseModel):
     class Meta:
-        db_table="aisdata"
+        db_table = "aisdata"
     distri = models.ForeignKey(DistriModel,
                                on_delete=models.PROTECT)
     timetable = models.ForeignKey(TimetableModel,
@@ -463,18 +463,18 @@ class AisdataModel(BaseModel):
             logger.error("delete aisdata error: %s" % str(exp))
             return False
 
-    @classmethod
-    def get_aisdataid_by_id(cls, signal_id, deleted = False):
-        try:
-            aisdata = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id).aisdata
-            return aisdata.aisdata_id
-        except Exception as exp:
-            logger.error("get aisdata_id error: %s" % str(exp))
-            return False
+    # @classmethod
+    # def get_aisdataid_by_id(cls, signal_id, deleted = False):
+    #     try:
+    #         aisdata = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id).aisdata
+    #         return aisdata.aisdata_id
+    #     except Exception as exp:
+    #         logger.error("get aisdata_id error: %s" % str(exp))
+    #         return False
 
 class SignalModel(BaseModel):
     class Meta:
-        db_table="signal"
+        db_table = "signal"
     partable = models.ForeignKey(PartableModel,
                                  on_delete=models.PROTECT)
     timetable = models.ForeignKey(TimetableModel,
@@ -530,3 +530,19 @@ class SignalModel(BaseModel):
         except Exception as exp:
             logger.error("delete signal error: %s" % str(exp))
             return False
+
+
+class ScheduleModel(models.Model):
+    class Meta:
+        db_table = "schedule"
+    action = models.CharField(
+        max_length=20,
+        null=False,
+        unique=False
+    )
+
+    rate = models.FloatField(
+        max_length=20,
+        null=False,
+        unique=False
+    )
