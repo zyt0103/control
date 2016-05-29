@@ -34,3 +34,8 @@ class drag(View):
         # return render_to_response("index/index.html",
         #                           context_instance=RequestContext(request, locals()))
         return render(request, "index/drag.html")
+
+class newindex(View):
+    def get(self, request ):
+
+        return render(request, "index/newIndex.html")

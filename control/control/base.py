@@ -47,7 +47,15 @@ class get_path():
     :return:
     """
     MATLAB_FILE_PATH = os.path.abspath(os.path.join("./AIS"))
+
+    MATLAB_DEMOD_SINGLE_ANT_PATH = os.path.abspath(os.path.join("./sing_ant_demod"))
+    MATLAB_DEMOD_DOUBLE_ANT_PATH = os.path.abspath(os.path.join("./sing_ant_demod"))
+    MATLAB_DEMOD_FOUR_ANT_PATH = os.path.abspath(os.path.join("./sing_ant_demod"))
+
+    MATALB_CHECKPROB_PATH = os.path.abspath(os.path.join("./checkprob"))
+
     CELERY_PATH = os.path.abspath(os.path.join("../"))
+
 
 
 

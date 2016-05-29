@@ -15,12 +15,12 @@ PARAMETER_CODE = {
 }
 
 PARAMETER_MSG = {
-    10001: _(u"参数distri_id不合法"),
-    10002: _(u"参数distri_lon不合法"),
-    10003: _(u"参数distri_lat不合法"),
-    10004: _(u"参数distri_height不合法"),
-    10005: _(u"参数distri_ves_num不合法"),
-    10006: _(u"参数distri_mode不合法")
+    10001: _(u"参数 distri_id 不合法"),
+    10002: _(u"参数 distri_lon 不合法"),
+    10003: _(u"参数 distri_lat 不合法"),
+    10004: _(u"参数 distri_height 不合法"),
+    10005: _(u"参数 distri_ves_num 不合法"),
+    10006: _(u"参数 distri_mode 不合法")
 }
 
 class ModuErrorCode(object):
@@ -51,35 +51,51 @@ ACTIN_MSG = {
 }
 
 DISTRI_MSG = {
-    20001: _(u"保存Distri数据异常"),
-    20002: _(u"Distri数据运行异常"),
+    20001: _(u"保存 Distri 数据异常"),
+    20002: _(u"Distri 数据运行异常"),
     20003: _(u"distri_id is missing")
 }
 
 PARTABLE_MSG = {
-    20011: _(u"保存Partable数据异常"),
-    20012: _(u"Partable数据运行异常"),
+    20011: _(u"保存 Partable 数据异常"),
+    20012: _(u"Partable 数据运行异常"),
     20013: _(u"partable_id is missing")
 }
 
 TIMETABLE_MSG = {
-    20021: _(u"保存Timetable数据异常"),
-    20022: _(u"Timetable数据运行异常"),
+    20021: _(u"保存 Timetable 数据异常"),
+    20022: _(u"Timetable 数据运行异常"),
     20023: _(u"timetable_id is missing")
 }
 
 AISDATA_MSG = {
-    20031: _(u"保存Aisdata数据异常"),
-    20032: _(u"Aisdata数据运行异常"),
+    20031: _(u"保存 Aisdata 数据异常"),
+    20032: _(u"Aisdata 数据运行异常"),
     20033: _(u"aisdata_id is missing")
 }
 
 SIGNAL_MSG = {
-    20041: _(u"保存Singnal数据异常"),
+    20041: _(u"保存 Singnal 数据异常"),
     20042: _(u"Signal数据运行异常"),
     20043: _(u"signal_id is missing")
 }
 
-class DEMODErrorCode():
+class DemodErrorCode():
     ANT_TYPE_INVALID = 30000
-    
+    DEMOD_SAVE_FAILED = 30001
+
+    ACTIN_MSG = {
+        30000: _(u"action 丢失")
+    }
+
+    DEMOD_MSG = {
+        30001: _(u"保存 demod 数据错误")
+    }
+
+
+class CheckProbErrorCode():
+
+    CHEKPROB_SAVE_FAILED = 40001
+    CHECKPROB_MSG = {
+        40001:_(u"保存 checkprob 数据错误！")
+    }

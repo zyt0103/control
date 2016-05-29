@@ -37,7 +37,6 @@ class DemodSignal(APIView):
             return Response(control_response(code=code, msg=msg),
                             status=status.HTTP_200_OK)
 
-
         signal_id = validator.validated_data.get("signal_id", None)
         ant_type = validator.validated_data.get("ant_type", "single_ant")
         protocol = validator.validated_data.get("protocol", "SOTDMA")
