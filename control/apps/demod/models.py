@@ -66,6 +66,8 @@ class DemodModel(BaseModel):
         except Exception as exp:
             logger.error("demod save error: %s" % exp)
             return False
+
+
     @classmethod
     def demod_delete_by_id(self, signal_id, deleted=False):
         """
@@ -78,4 +80,4 @@ class DemodModel(BaseModel):
             return DemodModel.objects.filter(deleted=deleted).filter(signal_id=signal_id).delete()
         except Exception as exp:
             logger.error("demod delete error: %s" % exp)
-            return exp
+            return False

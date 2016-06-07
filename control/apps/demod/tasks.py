@@ -18,7 +18,7 @@ celery_path = get_path.CELERY_PATH
 
 
 @shared_task()
-def Demode_single_ant(payload):
+def Demod_single_ant(payload):
     """
     单天线解调
     :param payload: 解调所需参数
@@ -32,9 +32,9 @@ def Demode_single_ant(payload):
     eng = matlab.engine.start_matlab()
     logger.info(os.getcwd())
     try:
-        logger.info("payload is %s, %s, %s" % (signal_id, protocol, sync_type))
+        logger.info("payload is %s, %s, %s, %s" % (signal_id, protocol, sync_type, action))
         logger.info("start matlab single_ant demode")
-        eng.Main(signal_id, protocol, sync_type)
+        eng.Main(signal_id, protocol, sync_type, action)
         eng.quit()
         os.chdir(celery_path)
         return True
@@ -46,7 +46,7 @@ def Demode_single_ant(payload):
 
 
 @shared_task()
-def Demode_double_ant(payload):
+def Demod_double_ant(payload):
     """
     双天线解调
     :param payload:
@@ -61,7 +61,7 @@ def Demode_double_ant(payload):
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab double_ant demode")
-        eng.Main(signal_id, protocol, sync_type)
+        eng.Main(signal_id, protocol, sync_type, action)
         eng.quit()
         os.chdir(celery_path)
         return True
@@ -73,7 +73,7 @@ def Demode_double_ant(payload):
 
 
 @shared_task()
-def Demode_four_ant(payload):
+def Demod_four_ant(payload):
     """
     双天线解调
     :param payload:
@@ -88,7 +88,7 @@ def Demode_four_ant(payload):
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab four_ant demode")
-        eng.Main(signal_id, protocol, sync_type)
+        eng.Main(signal_id, protocol, sync_type, action)
         eng.quit()
         os.chdir(celery_path)
         return True

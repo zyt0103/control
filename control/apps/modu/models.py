@@ -49,9 +49,14 @@ class BaseModel(models.Model):
     )
 
     # file size
-    file_size = models.FloatField(
+    signal_size = models.FloatField(
         null=True,
         blank=True
+    )
+
+    schedule = models.FloatField(
+        null=True,
+        blank=True,
     )
 
 
@@ -108,6 +113,7 @@ class TimetableModelManager(models.Manager):
                partable_id,
                timetable_id,
                obtime,
+               transinterval,
                protocol):
         try:
             distri = DistriModel.get_distri_by_id(distri_id)
@@ -116,6 +122,7 @@ class TimetableModelManager(models.Manager):
                                              partable=partable,
                                              timetable_id=timetable_id,
                                              obtime=obtime,
+                                             transinterval=transinterval,
                                              protocol=protocol
                                              )
             timetable_model.save()
@@ -144,7 +151,7 @@ class AisdataModelManager(models.Manager):
 
 class SignalModelManager(models.Manager):
     def create(self,
-               filename,
+               name_signal,
                partable_id,
                timetable_id,
                aisdata_id,
@@ -154,7 +161,7 @@ class SignalModelManager(models.Manager):
             partable = PartableModel.get_partbale_by_id(partable_id)
             timetable = TimetableModel.get_timetable_by_id(timetable_id)
             aisdata = AisdataModel.get_aisdata_by_id(aisdata_id)
-            signal_model = SignalModel(filename=filename,
+            signal_model = SignalModel(name_signal=name_signal,
                                        partable=partable,
                                        timetable=timetable,
                                        aisdata=aisdata,
@@ -224,14 +231,6 @@ class DistriModel(BaseModel):
     objects = DistriManager()
 
     @classmethod
-    def get_distri_by_id(cls, distri_id, deleted=False):
-        try:
-            return DistriModel.objects.filter(deleted=deleted).get(distri_id=distri_id)
-        except Exception as exp:
-            logger.error("get distri error is :%s" % exp)
-            return False
-
-    @classmethod
     def distri_exist_by_id(cls, distri_id, deleted=False):
         try:
             return DistriModel.objects.filter(deleted=deleted).filter(distri_id=distri_id).exists()
@@ -240,24 +239,15 @@ class DistriModel(BaseModel):
             return False
 
     @classmethod
-    def distri_par_describe_by_id(cls, distri_id, deleted=False):
+    def get_distri_by_id(cls, distri_id, deleted=False):
         try:
-            return DistriModel.objects.get(distri_id=distri_id)
+            return DistriModel.objects.filter(deleted=deleted).get(distri_id=distri_id)
         except Exception as exp:
-            logger.error("describe distri error: %s" % str(exp))
+            logger.error("get distri error is :%s" % exp)
             return False
 
     @classmethod
-    def get_distriid_by_id(cls, partable_id, deleted=False):
-        try:
-            distri = PartableModel.objects.filter(deleted=deleted).get(partable_id=partable_id).distri
-            return distri.distri_id
-        except Exception as exp:
-            logger.error("get distri_id error: %s" % str(exp))
-            return False
-
-    @classmethod
-    def distri_par_delete_by_id(cls, distri_id, deleted = False):
+    def distri_delete_by_id(cls, distri_id, deleted = False):
         try:
             return DistriModel.objects.get(distri_id=distri_id).delete()
         except Exception as exp:
@@ -304,14 +294,6 @@ class PartableModel(BaseModel):
     objects = PartableModelManager()
 
     @classmethod
-    def get_partbale_by_id(cls, partable_id, deleted=False):
-        try:
-            return PartableModel.objects.filter(deleted=deleted).get(partable_id=partable_id)
-        except Exception as exp:
-            logger.error("get partable_id error : %s" % str(exp))
-            return False
-
-    @classmethod
     def partable_exist_by_id(cls, partable_id, deleted=False):
         try:
             return PartableModel.objects.filter(deleted=deleted).filter(partable_id=partable_id).exists()
@@ -320,26 +302,26 @@ class PartableModel(BaseModel):
             return False
 
     @classmethod
-    def partable_par_describe_by_id(cls, partable_id, deleted=False):
+    def get_partbale_by_id(cls, partable_id, deleted=False):
         try:
-            return PartableModel.objects.get(partable_id = partable_id)
+            return PartableModel.objects.filter(deleted=deleted).get(partable_id=partable_id)
         except Exception as exp:
-            logger.error("get partable error: %s" % str(exp))
+            logger.error("get partable_id error : %s" % str(exp))
             return False
 
     @classmethod
-    def get_partableid_by_id(cls, timetable_id, deleted = False):
+    def get_distri_id_by_partable_id(cls, partable_id, deleted = False):
         try:
-            par_table = TimetableModel.objects.filter(deleted=deleted).get(timetable_id=timetable_id).partable
-            return par_table.partable_id
+            distri = PartableModel.objects.filter(deleted=deleted).get(partable_id=partable_id).distri
+            return distri.distri_id
         except Exception as exp:
-            logger.error("get partable_id error: %s" % str(exp))
+            logger.error("get distri_id error: %s" % str(exp))
             return False
 
     @classmethod
-    def partable_par_delete_by_id(cls, partable_id, deleted = False):
+    def partable_delete_by_id(cls, partable_id, deleted = False):
         try:
-            return PartableModel.objects.get(partable_id=partable_id).delete()
+            return PartableModel.objects.filter(deleted=deleted).get(partable_id=partable_id).delete()
         except Exception as exp:
             logger.error("delete partable error: %s" % str(exp))
             return False
@@ -360,6 +342,11 @@ class TimetableModel(BaseModel):
         unique=True
     )
 
+    transinterval = models.IntegerField(
+        null=False,
+        default=0
+    )
+
     obtime = models.FloatField(null=False,
                                default=0)
 
@@ -373,14 +360,6 @@ class TimetableModel(BaseModel):
     objects = TimetableModelManager()
 
     @classmethod
-    def get_timetable_by_id(cls, timetable_id, deleted=False):
-        try:
-            return TimetableModel.objects.filter(deleted=deleted).get(timetable_id=timetable_id)
-        except Exception as exp:
-            logger.error("get timetable error: %s" % str(exp))
-            return False
-
-    @classmethod
     def timetable_exist_by_id(cls, timetable_id, deleted=False):
         try:
             return TimetableModel.objects.filter(deleted=deleted).filter(timetable_id=timetable_id).exists()
@@ -389,26 +368,35 @@ class TimetableModel(BaseModel):
             return False
 
     @classmethod
-    def timetable_par_describe_by_id(cls, timetable_id, deleted=False):
+    def get_timetable_by_id(cls, timetable_id, deleted=False):
         try:
-            return TimetableModel.objects.get(timetable_id = timetable_id)
+            return TimetableModel.objects.filter(deleted=deleted).get(timetable_id = timetable_id)
         except Exception as exp:
-            logger.error("describe timetable error: %s" % str(exp))
+            logger.error("get timetable error: %s" % str(exp))
             return False
 
     @classmethod
-    def get_timetableid_by_id(cls, aisdata_id, deleted = False):
+    def get_distri_id_by_timetable_id(cls, timetable_id, deleted = False):
         try:
-            time_table = AisdataModel.objects.filter(deleted=deleted).get(aisdata_id=aisdata_id).timetable
-            return time_table.timetable_id
+            distri = TimetableModel.objects.filter(deleted=deleted).get(timetable_id=timetable_id).distri
+            return distri.distri_id
         except Exception as exp:
-            logger.error("get timetable_id error: %s" % str(exp))
+            logger.error("get distri_id error: %s" % str(exp))
             return False
 
     @classmethod
-    def timetable_par_delete_by_id(cls, timetable_id, deleted = False):
+    def get_partable_id_by_timetable_id(cls, timetable_id, deleted = False):
         try:
-            return TimetableModel.objects.get(timetable_id=timetable_id).delete()
+            partable = TimetableModel.objects.filter(deleted=deleted).get(timetable_id=timetable_id).partable
+            return partable.partable_id
+        except Exception as exp:
+            logger.error("get partable_id error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def timetable_delete_by_id(cls, timetable_id, deleted = False):
+        try:
+            return TimetableModel.objects.filter(deleted=deleted).get(timetable_id=timetable_id).delete()
         except Exception as exp:
             logger.error("delete timetable error: %s" % str(exp))
             return False
@@ -432,14 +420,6 @@ class AisdataModel(BaseModel):
     objects = AisdataModelManager()
 
     @classmethod
-    def get_aisdata_by_id(cls, aisdata_id, deleted=False):
-        try:
-            return AisdataModel.objects.filter(deleted=deleted).get(aisdata_id=aisdata_id)
-        except Exception as exp:
-            logger.error("get aisdata error: %s" % str(exp))
-            return False
-
-    @classmethod
     def aisdata_exist_by_id(cls, aisdata_id, deleted=False):
         try:
             return AisdataModel.objects.filter(deleted=deleted).filter(aisdata_id=aisdata_id).exists()
@@ -448,17 +428,35 @@ class AisdataModel(BaseModel):
             return False
 
     @classmethod
-    def aisdata_par_describe_by_id(cls, aisdata_id, deleted=False):
+    def get_aisdata_by_id(cls, aisdata_id, deleted=False):
         try:
-            return AisdataModel.objects.get(aistdata_id = aisdata_id)
+            return AisdataModel.objects.filter(deleted=deleted).get(aisdata_id=aisdata_id)
         except Exception as exp:
-            logger.error("describe aisdata error: %s" % str(exp))
+            logger.error("get aisdata error: %s" % str(exp))
             return False
 
     @classmethod
-    def aisdata_par_delete_by_id(cls, aisdata_id, deleted = False):
+    def get_distri_id_by_aisdata_id(cls, aisdata_id, deleted = False):
         try:
-            return AisdataModel.objects.get(aisdata_id=aisdata_id).delete()
+            distri = AisdataModel.objects.filter(deleted=deleted).get(aisdata_id=aisdata_id).distri
+            return distri.distri_id
+        except Exception as exp:
+            logger.error("get distri_id error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def get_timetable_id_by_aisdata_id(cls, aisdata_id, deleted = False):
+        try:
+            timetable = AisdataModel.objects.filter(deleted=deleted).get(aisdata_id=aisdata_id).timetable
+            return timetable.timetable_id
+        except Exception as exp:
+            logger.error("get timetable_id error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def aisdata_delete_by_id(cls, aisdata_id, deleted = False):
+        try:
+            return AisdataModel.objects.filter(deleted=deleted).get(aisdata_id=aisdata_id).delete()
         except Exception as exp:
             logger.error("delete aisdata error: %s" % str(exp))
             return False
@@ -474,7 +472,7 @@ class AisdataModel(BaseModel):
 
 class SignalModel(BaseModel):
     class Meta:
-        db_table = "signal"
+        db_table = "aissignal"
     partable = models.ForeignKey(PartableModel,
                                  on_delete=models.PROTECT)
     timetable = models.ForeignKey(TimetableModel,
@@ -489,7 +487,7 @@ class SignalModel(BaseModel):
         unique=True
     )
 
-    filename = models.CharField(
+    name_signal = models.CharField(
         max_length=30,
         null=False,
         unique=False
@@ -500,14 +498,6 @@ class SignalModel(BaseModel):
     objects = SignalModelManager()
 
     @classmethod
-    def get_signal_by_id(cls, signal_id, deleted=False):
-        try:
-            return SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id)
-        except Exception as exp:
-            logger.error("get signal error: %s" % str(exp))
-            return False
-
-    @classmethod
     def signal_exist_by_id(cls, signal_id, deleted=False):
         try:
             return SignalModel.objects.filter(deleted=deleted).filter(signal_id=signal_id).exists()
@@ -516,33 +506,137 @@ class SignalModel(BaseModel):
             return False
 
     @classmethod
-    def signal_par_describe_by_filename(cls, filename, deleted=False):
+    def signal_exist_by_filename(cls, filename, deleted=False):
         try:
-            return SignalModel.objects.get(filename=filename)
+            return SignalModel.objects.filter(deleted=deleted).filter(filename=filename).exists()
         except Exception as exp:
-            logger.error("describe signal error: %s" % str(exp))
+            logger.error("exist signal error: %s" % str(exp))
             return False
 
     @classmethod
-    def signal_par_delete_by_id(cls, signal_id, deleted = False):
+    def get_signal_by_id(cls, signal_id, deleted=False):
         try:
-            return SignalModel.objects.get(signal_id=signal_id).delete()
+            return SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id)
+        except Exception as exp:
+            logger.error("get signal error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def get_aisdata_id_by_siganl_id(cls, signal_id, deleted=False):
+        try:
+            aisdata = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id).aisdata
+            return aisdata.aisdata_id
+        except Exception as exp:
+            logger.error("get aisdata_id error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def get_timetable_id_by_signal_id(cls, signal_id, deleted = False):
+        try:
+            time_table = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id).timetable
+            return time_table.timetable_id
+        except Exception as exp:
+            logger.error("get timetable_id error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def get_partable_id_by_signal_id(cls, signal_id, deleted = False):
+        try:
+            par_table = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id).partable
+            return par_table.partable_id
+        except Exception as exp:
+            logger.error("get timetable_id error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def get_signal_by_name_signal(cls, name_signal, deleted=False):
+        try:
+            return SignalModel.objects.filter(deleted=deleted).get(name_signal=name_signal)
+        except Exception as exp:
+            logger.error("get signal by name_signal error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def signal_delete_by_id(cls, signal_id, deleted = False):
+        try:
+            return SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id).delete()
         except Exception as exp:
             logger.error("delete signal error: %s" % str(exp))
             return False
+
+    @classmethod
+    def signal_get_record(cls, deleted=False):
+        try:
+            return SignalModel.objects.filter(deleted=deleted)
+        except Exception as exp:
+            logger.error("get signal record error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def status_size_save(cls, signal_id, signalsize, deleted=False):
+        """
+        :param signal_id:
+        :param signalsize:
+        :param schedule:
+        :return:
+        """
+        try:
+            signal = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id)
+            signal.signal_size = signalsize
+            signal.save()
+            return signal, None
+        except Exception as exp:
+            logger.error("siganlsize save error: %s" % str(exp))
+            return None, exp
+
+
+    @classmethod
+    def status_schedule_save(cls, signal_id, schedule, deleted=False):
+        """
+        :param signal_id:
+        :param signalsize:
+        :param schedule:
+        :return:
+        """
+        try:
+            signal = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id)
+            signal.schedule = schedule
+            signal.save()
+            return signal, None
+        except Exception as exp:
+            logger.error("schedule save error: %s" % str(exp))
+            return None, exp
 
 
 class ScheduleModel(models.Model):
     class Meta:
         db_table = "schedule"
-    action = models.CharField(
+    model_id = models.CharField(
         max_length=20,
+        null=False,
+        unique=True
+    )
+
+    model_rate = models.FloatField(
         null=False,
         unique=False
     )
 
-    rate = models.FloatField(
-        max_length=20,
-        null=False,
-        unique=False
+    deleted = models.BooleanField(
+        default=False
     )
+
+    @classmethod
+    def get_schedule_by_model_id(cls, model_id, deleted=False):
+        """
+        获取进度值
+        :return:
+        """
+        try:
+            logger.info("here!")
+            logger.info("schedule is %s" % ScheduleModel.objects.get(model_id=model_id).model_rate)
+            schedule = ScheduleModel.objects.filter(deleted=deleted).get(model_id=model_id).model_rate
+            logger.info("schedule is %f" % schedule)
+            return schedule
+        except Exception as exp:
+            return 0

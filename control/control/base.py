@@ -114,7 +114,7 @@ def control_code(validator):
 
 def control_response(code=0,
                      msg=_(u"服务器响应成功"),
-                     total_count=0,
+                     total_count=1,
                      ret_set=None,
                      action_record=None,
                      ret_name_id=None, **kwargs):
@@ -123,7 +123,7 @@ def control_response(code=0,
     :param code:  error code
     :param msg:  error message
     :param total_count: ret number
-    :param ret_set: action_id
+    :param ret_set: return data
     :param action_record: action 记录
     :param ret_name_id: action_id_name
     :param kwargs: more arguments

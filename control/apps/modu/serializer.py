@@ -9,7 +9,7 @@ class CreateSignalSerializer(serializers.Serializer):
     创建信号
     """
 
-    filename = serializers.CharField(
+    name_signal = serializers.CharField(
         max_length=20,
         required=True,
         validators=[]
@@ -28,7 +28,7 @@ class CreateSignalSerializer(serializers.Serializer):
     action = serializers.CharField(
         max_length=20,
         required=False,
-        validators=[action_validator]
+        validators=[action_createsignal_validator]
     )
 
     distri_id = serializers.CharField(
@@ -120,4 +120,27 @@ class CreateSignalSerializer(serializers.Serializer):
     snr = serializers.IntegerField(
         required=False,
         validators=[snr_validator]
+    )
+
+
+class DescribeSignalSerializer(serializers.Serializer):
+    """
+    查询信号信息
+    """
+    action = serializers.CharField(
+        required=True,
+        max_length=20,
+        validators=[action_describe_validator]
+    )
+
+    filename = serializers.CharField(
+        required=False,
+        max_length=30,
+        validators=[filename_validator]
+    )
+
+    signal_id = serializers.CharField(
+        required=True,
+        max_length=20,
+        validators=[signal_id_validator]
     )

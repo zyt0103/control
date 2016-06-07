@@ -23,6 +23,7 @@ PARAMETER_MSG = {
     10006: _(u"参数 distri_mode 不合法")
 }
 
+
 class ModuErrorCode(object):
     ACTION_GET_FAILED = 20000
 
@@ -45,6 +46,8 @@ class ModuErrorCode(object):
     SIGNAL_SAVED_FAILED = 20041
     SIGNAL_RUNNING_FAILED = 20042
     SIGNAL_ID_MISSING = 20043
+
+
 
 ACTIN_MSG = {
     20000: _(u"action 丢失")
@@ -80,6 +83,8 @@ SIGNAL_MSG = {
     20043: _(u"signal_id is missing")
 }
 
+
+
 class DemodErrorCode():
     ANT_TYPE_INVALID = 30000
     DEMOD_SAVE_FAILED = 30001
@@ -99,3 +104,22 @@ class CheckProbErrorCode():
     CHECKPROB_MSG = {
         40001:_(u"保存 checkprob 数据错误！")
     }
+
+
+class DESCRIBErrorCode():
+
+    GET_DESCRIBE_FAILED = 20050
+    GET_CREATETIME_FAILED = 20051
+    GET_SIGNALSIZE_FAILED = 20052
+    GET_SCHEDULE_FAILED = 20053
+    SAVE_STATUS_ERROR = 20054
+
+
+DESCRIB_MSG = {
+    20050: _(u"信息查询错误！"),
+    20051: _(u"获取信号创建时间失败！"),
+    20052: _(u"获取信号大小失败！"),
+    20053: _(u"获取信号进度失败！"),
+    20054: _(u"保存状态信息错误！")
+
+}

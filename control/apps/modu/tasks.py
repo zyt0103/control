@@ -92,6 +92,7 @@ def matlab_create_time_table(payload):
     obtime = payload.get("obtime", None)
     protocol = payload.get("protocol", None)
     height = payload.get("height", None)
+    transInterval = payload.get("transInterval", None)
     distri_id = payload.get("distri_id", None)
     partable_id = payload.get("partable_id", None)
     timetable_id = payload.get("timetable_id", None)
@@ -99,7 +100,8 @@ def matlab_create_time_table(payload):
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab_timetable")
-        eng.F_genTimeTable(obtime, protocol, height, distri_id, partable_id, timetable_id)
+        logger.info("payload is %s", payload)
+        eng.F_genTimeTable(obtime, protocol, height, transInterval, distri_id, partable_id, timetable_id)
         eng.quit()
         os.chdir(celery_path)
         return True
@@ -158,6 +160,7 @@ def matlab_create_aisSig(payload):
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab_signal")
+        logger.info("payload is %s" % payload)
         eng.F_genAISSig(obtime, vesnum, height, snr, partable_id, timetable_id, aisdata_id, signal_id)
         eng.quit()
         os.chdir(celery_path)

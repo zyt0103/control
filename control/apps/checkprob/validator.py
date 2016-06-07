@@ -5,6 +5,25 @@ from rest_framework import serializers
 
 from control.apps.demod.models import DemodModel
 
+ACTION = {
+    "untheory": True,
+    "theory": True
+}
+
+
+def action_validator(action):
+    """
+    validate action
+    :param action:
+    :return:
+    """
+    if isinstance(action, list):
+        for key_action in action:
+            if key_action not in ACTION:
+                raise serializers.ValidationError(u"action is invalid!")
+    if action not in ACTION:
+        raise serializers.ValidationError(u"action is invalid!")
+
 
 def demodSignal_id_validator(demodSignal_id):
     """

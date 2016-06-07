@@ -42,6 +42,14 @@ ACTION_LIST = [
 ]
 
 
+ACTION_DESCRIBE_LIST = {
+    "describe": True,
+    "schedule": True,
+    "signalsize": True,
+    "createtime": True
+}
+
+
 def action_all_validator(action_all):
     """
     validate action_all
@@ -52,13 +60,22 @@ def action_all_validator(action_all):
         raise serializers.ValidationError(u"action_all is not exist！")
 
 
-def action_validator(action):
+def action_createsignal_validator(action):
     """
-    validate action
+    validate createsignal action
     :param action: 所需产生动作
     :return:
     """
     if not action or action not in ACTION_LIST:
+        raise serializers.ValidationError(u"action is invalid!")
+
+def action_describe_validator(action):
+    """
+    validate describe action
+    :param action:
+    :return:
+    """
+    if not action or action not in ACTION_DESCRIBE_LIST:
         raise serializers.ValidationError(u"action is invalid!")
 
 
@@ -68,7 +85,7 @@ def username_validator(username):
     :param username: username
     :return: 异常
     """
-    if not User.objects.filter(username=username).exist():
+    if not User.objects.filter(username=username).exists():
         raise serializers.ValidationError(u"The username is already exist in database!")
 
 
@@ -270,3 +287,19 @@ def snr_validator(snr):
     """
     if snr < 0:
         raise serializers.ValidationError(u"snr 参数错误！")
+
+
+def filename_validator(filename):
+    """
+    validate whether filename is exist
+    :param filename:
+    :return:
+    """
+    if isinstance(filename, list):
+        for key_filename in filename:
+            if not SignalModel.signal_exist_by_filename(key_filename):
+                raise serializers.ValidationError(u"filename is not exist in SignalModel!")
+    elif not SignalModel.signal_exist_by_filename(filename):
+        raise serializers.ValidationError(u"filename is not exist in SignalModel!")
+
+

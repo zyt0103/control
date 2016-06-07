@@ -1,15 +1,17 @@
 # coding=utf-8
+from django.contrib.auth.admin import User
 from django.shortcuts import render
-
-from control.control.base import control_code
-from control.control.base import control_response
-from control.control.base import user_temp
 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from control.control.base import control_code
+from control.control.base import control_response
+from control.control.base import user_temp
+
 from .serializer import CreateSignalSerializer
+from .serializer import DescribeSignalSerializer
 from .sub_view import Router
 
 # from control.control.base import get_path
@@ -27,6 +29,20 @@ class CreateSignal(APIView):
     """
     # action = "CreateSignal"
 
+    def get(self, request, *args, **kwargs):
+        """
+        get 方式发送数据
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        req_data = request.data
+        logger.info(req_data)
+        user_id = self.request.Get.get("user_id")
+        record_signal = SignalModel.signal_get_record()
+        return record_signal
+
     def post(self, request, *args, **kwargs):
         req_data = request.data
         logger.info(req_data)
@@ -38,11 +54,10 @@ class CreateSignal(APIView):
         logger.info("validator is valid: %s" % validator.is_valid())
         if not validator.is_valid():
             code, msg = control_code(validator)
-            logger.error(str(validator.errors))
             return Response(control_response(code=code, msg=msg),
                             status=status.HTTP_200_OK)
 
-        filename = validator.validated_data.get("filename", None)
+        name_signal = validator.validated_data.get("name_signal", None)
         packagenum = validator.validated_data.get("packagenum", 1)
         action_all = validator.validated_data.get("action_all", True)
         action = validator.validated_data.get("action", None)
@@ -64,10 +79,12 @@ class CreateSignal(APIView):
         aisdata_id = validator.validated_data.get("aisdata_id", None)
         signal_id = validator.validated_data.get("signal_id", None)
         owner = user_temp()
+        # 默认参数 暂未提供接口
+        transInterval = 12
 
         payload = {
             # "action": self.action,
-            "filename": filename,
+            "name_signal": name_signal,
             "packagenum": packagenum,
             "action_all": action_all,
             "action": action,
@@ -88,10 +105,39 @@ class CreateSignal(APIView):
             "partable_id": partable_id,
             "timetable_id": timetable_id,
             "aisdata_id": aisdata_id,
-            "signal_id": signal_id
+            "signal_id": signal_id,
+            "transInterval": transInterval
         }
 
         logger.info("The main payload is %s" % payload)
         route = Router(payload)
-        resp = route.Actionrouter()
+        resp = route.CreateSignalRouter()
+        return Response(resp, status=status.HTTP_200_OK)
+
+
+class DescribeSignal(APIView):
+    """
+    查询信号信息
+    """
+    def post(self, request, *args, **kwargs):
+        req_data = request.data
+        logger.info(req_data)
+        validator = DescribeSignalSerializer(data=req_data)
+        logger.info("validator valid is %s" % validator.is_valid())
+        if not validator.is_valid():
+            code, msg = control_code(validator)
+            return Response(control_response(code=code, msg=msg),
+                            status=status.HTTP_200_OK)
+
+        action = validator.validated_data.get("action", "describe")
+        signal_id = validator.validated_data.get("signal_id", None)
+
+        payload = {
+            "action": action,
+            "signal_id": signal_id
+        }
+
+        route = Router(payload)
+        resp = route.DescribeSignalRouter()
+        logger.info("the return is %s" % resp)
         return Response(resp, status=status.HTTP_200_OK)

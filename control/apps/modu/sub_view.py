@@ -8,6 +8,10 @@ from .helper import create_ves_parTalb
 from .helper import create_time_table
 from .helper import create_ves_data
 from .helper import create_aissig
+from .helper import Getcreatetime
+from .helper import Getsignalsize
+from .helper import Getschedule
+from .helper import Getdescribe
 from .models import DistriModel
 from .models import PartableModel
 from .models import TimetableModel
@@ -26,7 +30,7 @@ def CreateDistri(payload):
     # payload = self.payload
     # logger.info("payload is %s", payload)
     action = payload.get("action", None)
-    filename = payload.get("filename", None)
+    name_signal = payload.get("name_signal", None)
     packagenum= payload.get("packagenum", None)
     lon = payload.get("lon", None)
     lat = payload.get("lat", None)
@@ -36,7 +40,7 @@ def CreateDistri(payload):
     username = payload.get("owner")
     sub_payload = {
         "action": action,
-        "filename": filename + '_' + action,
+        "name_signal": name_signal + '_' + action,
         "packagenum": packagenum,
         "lon": lon,
         "lat": lat,
@@ -55,7 +59,7 @@ def CreatePartable(payload):
     :return:
     """
     action = payload.get("action", None)
-    filename = payload.get("filename", None)
+    name_signal = payload.get("name_signal", None)
     packagenum = payload.get("packagenum", None)
     height = payload.get("height", None)
     vesnum = payload.get("vesnum", None)
@@ -70,7 +74,7 @@ def CreatePartable(payload):
 
     sub_payload = {
         "action": action,
-        "filename": filename + '_' + action,
+        "name_signal": name_signal + '_' + action,
         "packagenum": packagenum,
         "height": height,
         "vesnum": vesnum,
@@ -90,24 +94,26 @@ def CreateTimetable(payload):
     """
     # payload = self.payload
     action = payload.get("action", None)
-    filename = payload.get("filename", None)
+    name_signal = payload.get("name_signal", None)
     packagenum = payload.get("filename", None)
     obtime = payload.get("obtime", None)
     height = payload.get("height", None)
+    transInterval = payload.get("transInterval", None)
     protocol = payload.get("protocol", None)
     distri_id = payload.get("distri_id", None)
     partable_id = payload.get("partable_id", None)
     if partable_id is None:
         return control_response(code=ModuErrorCode.PARTABLE_ID_MISSING, msg="partable_id is needed!")
     if distri_id is None:
-        distri_id = DistriModel.get_distriid_by_id(partable_id)
+        distri_id = PartableModel.get_distri_id_by_partable_id(partable_id)
 
     sub_payload = {
         "action": action ,
-        "filename": filename + '_' + action,
+        "name_signal": name_signal + '_' + action,
         "packagenum": packagenum,
         "obtime": obtime,
         "height": height,
+        "transInterval": transInterval,
         "protocol": protocol,
         "distri_id": distri_id,
         "partable_id": partable_id,
@@ -123,7 +129,7 @@ def CreateAisdata(payload):
     """
     # payload = self.payload
     action = payload.get("action", None)
-    filename = payload.get("filename", None)
+    name_signal = payload.get("name_signal", None)
     packagenum = payload.get("packagenum", None)
     distri_id = payload.get("distri_id", None)
     timetable_id = payload.get("timetable_id", None)
@@ -131,11 +137,10 @@ def CreateAisdata(payload):
     if timetable_id is None:
         return control_response(code=ModuErrorCode.TIMETABLE_ID_MISSING, msg="timetable_id is needed!")
     if distri_id is None:
-        partable_id = PartableModel.get_partableid_by_id(timetable_id)
-        distri_id = DistriModel.get_distriid_by_id(partable_id)
+        distri_id = TimetableModel.get_distri_id_by_timetable_id(timetable_id)
     sub_payload = {
         "action": action,
-        "filename": filename + '_' + action,
+        "name_signal": name_signal + '_' + action,
         "packagenum": packagenum,
         "distri_id": distri_id,
         "timetable_id": timetable_id,
@@ -151,7 +156,7 @@ def CreateSignal(payload):
     :return: aisSig_Path 存储AISSig的路径
     """
     action = payload.get("action", None)
-    filename = payload.get("filename", None)
+    name_signal = payload.get("name_signal", None)
     packagenum = payload.get("packagenum", None)
     obtime = payload.get("obtime", None)
     vesnum = payload.get("vesnum", None)
@@ -163,12 +168,12 @@ def CreateSignal(payload):
     if aisdata_id is None:
         return control_response(code=ModuErrorCode.AISDATA_ID_MISSING, msg="aisdata_id is needed!")
     if timetable_id is None:
-        timetable_id = TimetableModel.get_timetableid_by_id(aisdata_id)
+        timetable_id = AisdataModel.get_timetable_id_by_aisdata_id(aisdata_id)
     if partable_id is None:
-        partable_id = PartableModel.get_partableid_by_id(timetable_id)
+        partable_id = TimetableModel.get_partable_id_by_timetable_id(timetable_id)
     sub_payload = {
         "action": action,
-        "filename": filename + '_' + action,
+        "name_signal": name_signal + '_' + action,
         "packagenum": packagenum,
         "obtime": obtime,
         "vesnum": vesnum,
@@ -196,7 +201,7 @@ class Router():
     def __init__(self, payload):
         self.payload = payload
 
-    def Actionrouter(self):
+    def CreateSignalRouter(self):
         """
         :param payload: 获取action
         :return:
@@ -221,3 +226,20 @@ class Router():
             return ret
         return control_response(code=ModuErrorCode.ACTION_GET_FAILED, msg="action 获取失败")
 
+    def DescribeSignalRouter(self):
+        """
+        查询信号信息
+        :return:
+        """
+        payload = self.payload
+        action = payload.get("action", None)
+        signal_id = payload.get("signal_id", None)
+
+        if action == "describe":
+            return Getdescribe(payload)
+        if action == "schedule":
+            return Getschedule(payload)
+        if action == "signalsize":
+            return Getsignalsize(payload)
+        if action == "createtime":
+            return Getcreatetime(payload)

@@ -97,13 +97,14 @@ WSGI_APPLICATION = 'control.control.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.path.join('AIS_db'),
-        'USER': 'root',
-        'PASSWORD': '0627szqSZQ',
-        'HOST': 'localhost',
-        'PORT': '3306',
+    'ENGINE': 'django.db.backends.mysql',
+    'NAME': config.get("database", "db_name"),
+    'USER': config.get("database", "db_user"),
+    'PASSWORD': config.get("database", "db_password"),
+    'HOST': config.get("database", "db_host"),
+    'PORT': config.get("database", "db_port"),
     }
+
 }
 
 
@@ -129,7 +130,7 @@ REDIS_DB_CELERY = config.get("redis", "db_celery")
 REDIS_DB_CELERY_BACKEND = config.get("redis", "db_celery_backend")
 
 ##############Celery Settings#######################
-BROKER_URL = 'redis://:%s@%s:%s/%s'  % (REDIS_PASSWORD, REDIS_HOST, REDIS_PORT, REDIS_DB_CELERY)
+BROKER_URL = 'redis://:%s@%s:%s/%s' % (REDIS_PASSWORD, REDIS_HOST, REDIS_PORT, REDIS_DB_CELERY)
 CELERY_SEND_EVENTS = config.getboolean("celery", "event")
 CELERY_RESULT_BACKEND = 'redis://:%s@%s:%s/%s' % (REDIS_PASSWORD, REDIS_HOST, REDIS_PORT, REDIS_DB_CELERY_BACKEND)
 if not config.getboolean("celery", "result"):
@@ -176,3 +177,6 @@ TIMETABLE_PREFIX = "timetable"
 AISDATA_PREFIX = "aisdata"
 SIGNAL_PREFIX = "signal"
 NAME_ID_LENGTH = 8
+
+###################IF RUN MATLAB SETTINGS#############
+IF_RUN_MATLAB = config.get("matlab", "runMatlab")

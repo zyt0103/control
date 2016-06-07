@@ -4,9 +4,9 @@ from control.control.base import control_response
 from control.control.err_msg import DemodErrorCode
 
 from .models import DemodModel
-from .tasks import Demode_single_ant
-from .tasks import Demode_double_ant
-from .tasks import Demode_four_ant
+from .tasks import Demod_single_ant
+from .tasks import Demod_double_ant
+from .tasks import Demod_four_ant
 
 from control.control.logger import getLogger
 
@@ -44,26 +44,29 @@ class Router():
                 sub_payload = {
                     "signal_id": signal_id,
                     "protocol": protocol,
-                    "sync_type": sync_type
+                    "sync_type": sync_type,
+                    "action": ant_type
 
                 }
                 logger.info("The sub_payload is %s" % sub_payload)
 
-                Demode_single_ant.apply_async([sub_payload])
+                Demod_single_ant.apply_async([sub_payload])
 
             if key_ant_type == "douoble_ant":
                 sub_payload = {
                     "signal_id": signal_id,
                     "protocol": protocol,
-                    "sync_type": sync_type
+                    "sync_type": sync_type,
+                    "action": ant_type
                 }
-                Demode_double_ant.apply_async([sub_payload])
+                Demod_double_ant.apply_async([sub_payload])
 
             if key_ant_type == "four_ant":
                 sub_payload = {
                     "signal_id": signal_id,
                     "protocol": protocol,
-                    "sync_type": sync_type
+                    "sync_type": sync_type,
+                    "action": ant_type
                 }
-                Demode_four_ant.apply_async([sub_payload])
+                Demod_four_ant.apply_async([sub_payload])
         return control_response(code=0, msg="Demod is running!")
