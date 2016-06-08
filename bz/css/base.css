@@ -112,7 +112,7 @@ body{
 }
 .table-time {
 	word-break: break-all;
-    max-width: 100px;
+    width: 100px;
 }
 .pagefooter{
 	position:fixed;

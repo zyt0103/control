@@ -51,12 +51,14 @@ class BaseModel(models.Model):
     # file size
     signal_size = models.FloatField(
         null=True,
-        blank=True
+        blank=True,
+        default=0
     )
 
     schedule = models.FloatField(
         null=True,
         blank=True,
+        default=0
     )
 
 

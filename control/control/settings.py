@@ -45,12 +45,16 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djcelery',
+    # 'django-crontab',
     'rest_framework',
 )
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
 }
 
+# CRONJOBS = [
+#     ('/1* * * * *', "control.apps.modu.helper.signal_info_save"),
+# ]
 CONTROL_APPS = (
     'control.control',
     'control.apps.modu',
@@ -64,7 +68,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -113,7 +117,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "Asia/Shanghai"
 
 USE_I18N = True
 
@@ -180,3 +184,6 @@ NAME_ID_LENGTH = 8
 
 ###################IF RUN MATLAB SETTINGS#############
 IF_RUN_MATLAB = config.get("matlab", "runMatlab")
+
+##################SAVE SIGNAL INFO PERIED ############
+SAVE_PERIED = 1

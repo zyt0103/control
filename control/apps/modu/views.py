@@ -29,19 +29,19 @@ class CreateSignal(APIView):
     """
     # action = "CreateSignal"
 
-    def get(self, request, *args, **kwargs):
-        """
-        get 方式发送数据
-        :param request:
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        req_data = request.data
-        logger.info(req_data)
-        user_id = self.request.Get.get("user_id")
-        record_signal = SignalModel.signal_get_record()
-        return record_signal
+    # def get(self, request, *args, **kwargs):
+    #     """
+    #     get 方式发送数据
+    #     :param request:
+    #     :param args:
+    #     :param kwargs:
+    #     :return:
+    #     """
+    #     req_data = request.data
+    #     logger.info(req_data)
+    #     user_id = self.request.Get.get("user_id")
+    #     record_signal = SignalModel.signal_get_record()
+    #     return record_signal
 
     def post(self, request, *args, **kwargs):
         req_data = request.data
@@ -112,6 +112,7 @@ class CreateSignal(APIView):
         logger.info("The main payload is %s" % payload)
         route = Router(payload)
         resp = route.CreateSignalRouter()
+        signal_info_save.apply_async(resp["ret_set"])
         return Response(resp, status=status.HTTP_200_OK)
 
 

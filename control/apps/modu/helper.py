@@ -1,13 +1,10 @@
 # coding=utf-8
 from __future__ import division
 
-import os
-
 from os.path import getsize
 from os.path import join
 
 from control.control import settings
-from control.control.base import get_path
 from control.control.base import control_response
 from control.control.base import randomname_maker
 from control.control.err_msg import ModuErrorCode
@@ -410,3 +407,19 @@ def get_matlab_rate(total_filenum, signal_id):
     signal_all_rate = (signal_rate + filenum)/total_filenum
     rate = distri_rate * 0.05 + partable_rate * 0.05 + timetable_rate * 0.35 + aisdata_rate * 0.05 + signal_all_rate * 0.5
     return rate, filenum
+
+# def signal_info_save():
+#     """
+#     保存信号的状态信息
+#     :param signal_id: 信号id
+#     :return: None
+#     """
+#     signal_list = SignalModel.objects.filter(deleted=False)
+#     for signal in signal_list:
+#         signal_id = signal.signal_id
+#         try:
+#             get_save_schedule(signal_id=signal_id)
+#             get_save_signalsize(signal_id)
+#             logger.info("%s is saved!" % signal_id)
+#         except Exception as exp:
+#             logger.error("%s info save error: %s" % (signal_id, exp))

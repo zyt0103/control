@@ -18,41 +18,34 @@ $(function(){
     var $showTable = $("#showTable");
     var $addClose = $("#addClose");
     function addMessage(){
-        var addString={};
-        for(var i=0; i<$addTableTr.length; i++){
-            addString[i] = $($addTableTr[i]).find("input").val();
-            addString[10] = $($addTableTr[10]).find("option").val();
-        }
-        var strTip;
-        strTip = "<tr><td class='table-time'><input type='checkbox'>"+addString[0]+
-                 "</td><td class='table-time'>"+addString[1]+
-                 "</td><td class='table-time'>"+addString[2]+
-                 '</td><td class="table-time">'+addString[3]+
-                 '</td><td class="table-time">'+addString[4]+
-                 '</td><td class="table-time">'+addString[5]+
-                 '</td><td class="table-time">'+addString[6]+
-                 '</td><td class="table-time">'+addString[7]+
-                 '</td><td class="table-time">'+addString[8]+
-                 '</td><td class="table-time">'+addString[9]+
-                 '</td><td class="table-time">'+addString[10]+
-//               '</td><td class="table-time">'+addString[11]+
-//               '</td><td class="table-time">'+addString[12]+
-//               '</td><td class="table-time">'+addString[13]+
-//               '</td><td class="table-time">'+addString[14]+
-                 "</td></tr>"
-        $(strTip).appendTo($showTable);
-        for(var j=0; j<$addTableTr.length; j++){
-        $($addTableTr[j]).find("input").val("");
-        }
-        $addClose.click();
+        //var addString={};
+        //for(var i=0; i<$addTableTr.length; i++){
+        //    addString[i] = $($addTableTr[i]).find("input").val();
+        //    addString[8] = $($addTableTr[8]).find("option").val();
+        //}
+        //var strTip;
+        //strTip = "<tr><td class='table-time'><input type='checkbox'>"+addString[0]+
+        //         "</td><td class='table-time'>"+addString[1]+
+        //         "</td><td class='table-time'>"+addString[2]+
+        //         '</td><td class="table-time">'+addString[3]+
+        //         '</td><td class="table-time">'+addString[4]+
+        //         '</td><td class="table-time">'+addString[5]+
+        //         '</td><td class="table-time">'+addString[6]+
+        //         '</td><td class="table-time">'+addString[7]+
+        //         '</td><td class="table-time">'+addString[8]+
+        //         //'</td><td class="table-time">'+addString[9]+
+        //         //'</td><td class="table-time">'+addString[10]+
+			//     //'</td><td class="table-time">'+addString[11]+
+			//     //'</td><td class="table-time">'+addString[12]+
+			//     //'</td><td class="table-time">'+addString[13]+
+        //         "</td></tr>"
+        //$(strTip).appendTo($showTable);
+        ////for(var j=0; j<$addTableTr.length; j++){
+        ////$($addTableTr[j]).find("input").val("");
+        ////}
+        $("#addClose").click();
     }
-    $addOK.bind("click", function(){
-    	var flag = validateForm();
-    	if(flag){
-    		addMessage();
-    	}
-        
-    });
+
 //   $addClose.bind("click", function(){
 ////  	    $('table td').();
 //  	    document.getElementsByTagName("td").style.background="white";
@@ -88,36 +81,16 @@ $(function(){
         $analy_btn.attr("class", "active").siblings().attr("class", "");
     });
     
-     //验证 function,action_all
-    var $action_all= $("#action_all");
-    $action_all.bind('focus', function(){
-    	addOK.disabled=false;
-    	document.getElementById("action_all").style.background="white";
-    })
-    $action_all.bind("blur",function(){
-	    var text=document.getElementById("action_all").value; 
-	    var regExp = /True|False/;
-	    if(!regExp.test(text)){
-	        document.getElementById("action_all").style.background="orangered";
-	        document.getElementById("action_allcheck").style.visibility="hidden";
-	    }
-	    else{
-			document.getElementById("action_all").style.background="white";
-			addOK.disabled=false;
-			document.getElementById("action_allcheck").style.visibility="visible";
-		}
-    });
-    
-      //验证 function,filename
+      //验证 function,name_signal
     var $filename = $("#filename");
-    $filename.bind('focus', function(){
+    $("#addModal1").on('focus',"#filename", function() {
     	addOK.disabled=false;
     	document.getElementById("filename").style.background="white";
     })
-    $filename.bind("blur",function(){
+    $("#addModal1").on('blur',"#filename", function() {
 	    var text=document.getElementById("filename").value; 
 	   
-	    if(text.length>20){
+	    if(text.length>20||text==null||text==""){
 	        document.getElementById("filename").style.background="orangered";
 	        document.getElementById("filenamecheck").style.visibility="hidden";
 	    }
@@ -129,14 +102,14 @@ $(function(){
     });
     //验证 function,lat
     var $lat = $("#lat");
-    $lat.bind('focus', function(){
-    	addOK.disabled=false;
-    	document.getElementById("lat").style.background="white";
-    })
-    $lat.bind("blur",function(){
+    $("#addModal1").on('focus',"#lat", function() {
+		addOK.disabled = false;
+		document.getElementById("lat").style.background = "white";
+	});
+    $("#addModal1").on('blur',"#lat", function(){
 	    var text=document.getElementById("lat").value; 
 	    var regExp = /^-?([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/;
-	    if((!regExp.test(text))||text>90||text<-90){
+		if((!regExp.test(text))||text>90||text<-90){
 	        document.getElementById("lat").style.background="orangered";
 //	        $("#latcheck").display="none";
 	        document.getElementById("latcheck").style.visibility="hidden";
@@ -150,16 +123,15 @@ $(function(){
     });
      //验证 function,lon
     var $lon = $("#lon");
-    $lon.bind('focus', function(){
+    $("#addModal1").on('focus',"#lon", function() {
     	addOK.disabled=false;
     	document.getElementById("lon").style.background="white";
     })
-    $lon.bind("blur",function(){
+    $("#addModal1").on('blur',"#lon", function() {
 	    var text=document.getElementById("lon").value; 
 //	    var regExp = /^-?\d+$/; 
 	    var regExp = /^-?([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/;
-	   
-	    if((!regExp.test(text))||text>180||text<-180){
+		if((!regExp.test(text))||text>180||text<-180){
 	        document.getElementById("lon").style.background="orangered";
 	         document.getElementById("loncheck").style.visibility="hidden";
 	    }
@@ -172,16 +144,15 @@ $(function(){
     
      //验证 function,height
     var $height = $("#height");
-    $height.bind('focus', function(){
+    $("#addModal1").on('focus',"#height", function() {
     	addOK.disabled=false;
     	document.getElementById("height").style.background="white";
     })
-    $height.bind("blur",function(){
+    $("#addModal1").on('blur',"#height", function() {
 	    var text=document.getElementById("height").value; 
 //	    var regExp = /^\d+$/; 
 	    var regExp = /^([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*)$/;
-	   
-	    if(!regExp.test(text)){
+		if(!regExp.test(text)){
 	        document.getElementById("height").style.background="orangered";
 	        document.getElementById("heightcheck").style.visibility="hidden";
 	    }
@@ -194,15 +165,14 @@ $(function(){
     
      //验证 function,vesnum
     var $vesnum = $("#vesnum");
-    $vesnum.bind('focus', function(){
+    $("#addModal1").on('focus',"#vesnum", function() {
     	addOK.disabled=false;
     	document.getElementById("vesnum").style.background="white";
     })
-    $vesnum.bind("blur",function(){
+    $("#addModal1").on('blur',"#vesnum", function() {
 	    var text=document.getElementById("vesnum").value; 
-	    var regExp = /^([1-9]\d*)$/; 
-	   
-	    if(!regExp.test(text)){
+	    var regExp = /^([1-9]\d*)$/;
+		if(!regExp.test(text)){
 	        document.getElementById("vesnum").style.background="orangered";
 	        document.getElementById("vesnumcheck").style.visibility="hidden";
 	    }
@@ -215,14 +185,13 @@ $(function(){
     
      //验证 function,obtime
     var $obtime = $("#obtime");
-    $obtime.bind('focus', function(){
+    $("#addModal1").on('focus',"#obtime", function() {
     	addOK.disabled=false;
     	document.getElementById("obtime").style.background="white";
     })
-    $obtime.bind("blur",function(){
+    $("#addModal1").on('blur',"#obtime", function() {
 	    var text=document.getElementById("obtime").value; 
 	    var regExp = /^([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*)$/; 
-	   
 	    if(!regExp.test(text)){
 	        document.getElementById("obtime").style.background="orangered";
 	        document.getElementById("obtimecheck").style.visibility="hidden";
@@ -236,15 +205,14 @@ $(function(){
     
      //验证 function,ant_pitch
     var $ant_pitch = $("#ant_pitch");
-    $ant_pitch.bind('focus', function(){
+    $("#addModal1").on('focus',"#ant_pitch", function() {
     	addOK.disabled=false;
     	document.getElementById("ant_pitch").style.background="white";
     })
-    $ant_pitch.bind("blur",function(){
+    $("#addModal1").on('blur',"#ant_pitch", function() {
 	    var text=document.getElementById("ant_pitch").value; 
 	    var regExp = /^-?([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/;
-	   
-	    if((!regExp.test(text))||text>180||text<-180){
+		if((!regExp.test(text))||text>180||text<-180){
 	        document.getElementById("ant_pitch").style.background="orangered";
 	        document.getElementById("ant_pitchcheck").style.visibility="hidden";
 	    }
@@ -257,14 +225,13 @@ $(function(){
     
      //验证 function,ant_azimuth
     var $ant_azimuth = $("#ant_azimuth");
-    $ant_azimuth.bind('focus', function(){
+    $("#addModal1").on('focus',"#ant_azimuth", function() {
     	addOK.disabled=false;
     	document.getElementById("ant_azimuth").style.background="white";
     })
-    $ant_azimuth.bind("blur",function(){
+    $("#addModal1").on('blur',"#ant_azimuth", function() {
 	    var text=document.getElementById("ant_azimuth").value; 
 	    var regExp = /^-?([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/;
-	   
 	    if((!regExp.test(text))||text>360||text<0){
 	        document.getElementById("ant_azimuth").style.background="orangered";
 //	       	$("#ant_azimuthcheck").removeClass("checkV").addClass("check");
@@ -277,13 +244,32 @@ $(function(){
 			addOK.disabled=false;
 		}
     });
+	 //验证 function,snr
+    var $snr = $("#snr");
+    $("#addModal1").on('focus',"#snr", function() {
+    	addOK.disabled=false;
+    	document.getElementById("snr").style.background="white";
+    })
+    $("#addModal1").on('blur',"#snr", function() {
+	    var text=document.getElementById("snr").value;
+	    var regExp =/^([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*)$/;
+	    if(!regExp.test(text)){
+	        document.getElementById("snr").style.background="orangered";
+			document.getElementById("snrcheck").style.visibility="hidden";
+	    }
+	    else{
+			document.getElementById("snr").style.background="white";
+			document.getElementById("snrcheck").style.visibility="visible";
+			addOK.disabled=false;
+		}
+    });
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //校验lat字段是否提交
     function validateFormlat(){
     	var flag = true;
     	var regExp = /^-?([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/;
-    	var text=document.getElementById("lat").value; 
-	    if((!regExp.test(text))||text>90||text<-90){
+    	var text=document.getElementById("lat").value;
+		if((!regExp.test(text))||text>90||text<-90){
 	        document.getElementById("lat").style.background="orangered";
 	        flag = false;
 	        addOK.disabled=true;
@@ -298,8 +284,8 @@ $(function(){
     function validateFormlon(){
     	var flag = true;
     	var regExp = /^-?([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/;
-    	var text=document.getElementById("lon").value; 
-	    if((!regExp.test(text))||text>180||text<-180){
+    	var text=document.getElementById("lon").value;
+		if((!regExp.test(text))||text>180||text<-180){
 	        document.getElementById("lon").style.background="orangered";
 	        flag = false;
 	        addOK.disabled=true;
@@ -310,28 +296,11 @@ $(function(){
 		}
 	    return flag;
     }
-    //校验action_all字段是否提交
-    function validateFormaction_all(){
-    	var flag = true;
-    	var text=document.getElementById("action_all").value; 
-	    var regExp = /True|False/;
-	    if(!regExp.test(text)){
-	        document.getElementById("action_all").style.background="orangered";
-	        flag = false;
-	        addOK.disabled=true;
-	    }
-	    else{
-			document.getElementById("action_all").style.background="white";
-			addOK.disabled=false;
-		}
-	    return flag;
-    }
     //校验filename字段是否提交
     function validateFormfilename(){
     	var flag = true;
-    	 var text=document.getElementById("filename").value; 
-	   
-	    if(text.length>20){
+		var text=document.getElementById("filename").value;
+	    if(text.length>20||text==null||text==""){
 	        document.getElementById("filename").style.background="orangered";
 	        flag = false;
 	        addOK.disabled=true;
@@ -347,8 +316,7 @@ $(function(){
     	var flag = true;
     	var text=document.getElementById("height").value; 
 	    var regExp = /^([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*)$/;
-	   
-	    if(!regExp.test(text)){
+		if(!regExp.test(text)){
 	        document.getElementById("height").style.background="orangered";
 	        flag = false;
 	        addOK.disabled=true;
@@ -363,9 +331,8 @@ $(function(){
     function validateFormvesnum(){
     	var flag = true;
     	var text=document.getElementById("vesnum").value; 
-	    var regExp = /^([1-9]\d*)$/; 
-	   
-	    if(!regExp.test(text)){
+	    var regExp = /^([1-9]\d*)$/;
+		if(!regExp.test(text)){
 	        document.getElementById("vesnum").style.background="orangered";
 	        flag = false;
 	        addOK.disabled=true;
@@ -380,9 +347,8 @@ $(function(){
     function validateFormobtime(){
     	var flag = true;
     	var text=document.getElementById("obtime").value; 
-	    var regExp = /^([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*)$/; 
-	   
-	    if(!regExp.test(text)){
+	    var regExp = /^([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*)$/;
+		if(!regExp.test(text)){
 	        document.getElementById("obtime").style.background="orangered";
 	        flag = false;
 	        addOK.disabled=true;
@@ -398,8 +364,7 @@ $(function(){
     	var flag = true;
     	var text=document.getElementById("ant_pitch").value; 
 	    var regExp = /^-?([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/;
-	   
-	    if((!regExp.test(text))||text>180||text<-180){
+		if((!regExp.test(text))||text>180||text<-180){
 	        document.getElementById("ant_pitch").style.background="orangered";
 	        flag = false;
 	        addOK.disabled=true;
@@ -413,10 +378,9 @@ $(function(){
     //校验ant_azimuth字段是否提交
     function validateFormant_azimuth(){
     	var flag = true;
-    	 var text=document.getElementById("ant_azimuth").value; 
+		var text=document.getElementById("ant_azimuth").value;
 	    var regExp = /^-?([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/;
-	   
-	    if((!regExp.test(text))||text>360||text<0){
+		if((!regExp.test(text))||text>360||text<0){
 	        document.getElementById("ant_azimuth").style.background="orangered";
 	        flag = false;
 	        addOK.disabled=true;
@@ -427,11 +391,26 @@ $(function(){
 		}
 	    return flag;
     }
+	//校验snr字段是否提交
+    function validateFormsnr(){
+    	var flag = true;
+		var text=document.getElementById("snr").value;
+	    var regExp =/^([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*)$/;
+		if((!regExp.test(text))){
+	        document.getElementById("snr").style.background="orangered";
+	        flag = false;
+	        addOK.disabled=true;
+	    }
+	    else{
+			document.getElementById("snr").style.background="white";
+			addOK.disabled=false;
+		}
+	    return flag;
+    }
     //校验是否提交
     function validateForm(){
     	var flag = false;
 //  	var flag1 = validateFormuser();
-    	var flag2 = validateFormaction_all();
     	var flag3 = validateFormfilename();
     	var flag4 = validateFormlat();
     	var flag5 = validateFormlon();
@@ -440,18 +419,20 @@ $(function(){
     	var flag8 = validateFormobtime();
     	var flag9 = validateFormant_pitch();
     	var flag10 = validateFormant_azimuth();
-    	if(flag2&flag3&flag4&flag5&flag4&flag7&flag8&flag9&flag10){
+		var flag11 = validateFormsnr();
+    	if(flag3&&flag4&&flag5&&flag6&&flag7&&flag8&&flag9&&flag10&&flag11){
     		flag=true;
     		addOK.disabled=false;
     		document.getElementById("latcheck").style.visibility="hidden";
     		document.getElementById("loncheck").style.visibility="hidden";
-    		document.getElementById("action_allcheck").style.visibility="hidden";
     		document.getElementById("filenamecheck").style.visibility="hidden";
     		document.getElementById("heightcheck").style.visibility="hidden";
     		document.getElementById("vesnumcheck").style.visibility="hidden";
     		document.getElementById("obtimecheck").style.visibility="hidden";
     		document.getElementById("ant_pitchcheck").style.visibility="hidden";
     		document.getElementById("ant_azimuthcheck").style.visibility="hidden";
+			document.getElementById("snrcheck").style.visibility="hidden";
+			//document.getElement("snrcheck").style.visibility="hidden";
 // 			$("table span > span").removeClass("checkV").addClass('check');
     		
     	}
@@ -460,30 +441,107 @@ $(function(){
     	}
     	return flag;
     }
-  
-//  $addOK.bind("click",function(e){
-//  	e.preventDefault();
-//  	var text=document.getElementById("idinput"); 
-//	    if(text.value>100||text.value<-100){
-//	        document.getElementById("idinput").style.background="orangered";
-//	        xid="1";
-//	    } else{
-//	    	xid="0";
-//			document.getElementById("idinput").style.background="white";
-//			
-//		}
-//	    if(xid=="1"){
-//	    	
-//	    	addOK.disabled=true;
-//	    }
-//	    else{
-//	    	addOK.disabled=false;
-//	    }
-//  });
 
-        // $.ajax({type: 'POST', url: '/modu/createsignal', success: function(res){console.log(res)}, data:JSON.stringify({"lon": 34, "lat": 34, "height": 600, "vesnum": 500, "distri_mode": "random", "filename": "abbc"}), headers: {'X-CSRFToken': 'JxH08rgyxxGyiH4TlmjCpPSjHrtHQAle','Content-Type': 'application/json'}})
-    
+//$addOK.bind("click", function(){
+//    	var flag = validateForm();
+//    	if(flag){
+//    		ajax();
+//			addMessage();
+//    	}
+//    });
+$('#addModal1').on('click','#addOK',function(){
+    	var flag = validateForm();
+    	if(flag){
+    		ajax();
+			addMessage();
+    	}
+    });
+
+
+function ajax(){
+	var param={
+	"name_signal":$("#filename").val(),
+	"lat":$("#lat").val(),
+	"lon":$("#lon").val(),
+	"height":$("#height").val(),
+	"vesnum":$("#vesnum").val(),
+	"obtime":$("#obtime").val(),
+	"ant_pitch":$("#ant_pitch").val(),
+	"ant_azimuth":$("#ant_azimuth").val(),
+	"ant-type":$("#ant_type").val(),
+	"channel_type":$("#channel_type").val(),
+	"protocol":$("#protocol").val(),
+	"snr":$("3snr").val(),
+	"packagenum":$("#packagenum").val(),
+	"distri_mode":$("#distri_mode").val(),
+	}
+	$.ajax({
+		type: 'POST',
+		dataType: 'JSON',
+		url: '/modu/createsignal',
+		success:function(res) {
+			if(res.ret_code==0){
+				if(res.total_count==1){
+					var signal_id = res.ret_set;
+					var $showTableTh = $("#showTable").find("th");
+					var addString={};
+					for(var i=0; i<$showTableTh.length; i++){
+						addString[i] = 0;
+						addString[0] = signal_id;
+					}
+					var strTip;
+					strTip = "<tr><td class='table-time'><input type='checkbox'>"+addString[0]+
+							 "</td><td class='table-time'>"+addString[1]+
+							 "</td><td class='table-time'>"+addString[2]+
+							 "</td><td class='table-time'>"+addString[3]+
+							 "</td></tr>"
+					$(strTip).appendTo($showTable);
+				}
+				else{
+					var total_count = res.total_count;
+					var signal_id = res.ret_set[0];
+					var $showTableTh = $("#showTable").find("th");
+					var addString={};
+					for(var j=0;j<total_count;j++){
+						for(var i=0; i<$showTableTh.length;i++){
+							addString[i] = 0;
+							addString[0] = signal_id[j];
+						}
+						var strTip;
+						strTip = "<tr><td class='table-time'><input type='checkbox'>"+addString[0]+
+								 "</td><td class='table-time'>"+addString[1]+
+								 "</td><td class='table-time'>"+addString[2]+
+								 "</td><td class='table-time'>"+addString[3]+
+								 "</td></tr>"
+						$(strTip).appendTo($showTable);
+					}
+				}
+			}
+			else{
+				alert("创建信号不成功！")
+			}
+		},
+		data: JSON.stringify(param),
+		headers: {
+			//'X-CSRFToken': 'JxH08rgyxxGyiH4TlmjCpPSjHrtHQAle',//?
+			'X-CSRFToken':'xiiJZVs0zyMteF3Z3LcOiyhPA2J3KU9e',//?
+			'Content-Type': 'application/json'
+
+		}
+	});
+	//var successFun = function(res) {
+	//		if(res.ret_code==0){
+	//		    alert("sucess!")
+	//		}
+	//		else{
+	//			alert("创建信号不成功！")
+	//		}
+	//	};
+}
 
 });
+function addmodel(){
+	$('#addModal1').load('/addmodel.html');
+}
 
     
