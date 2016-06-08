@@ -40,10 +40,10 @@ class drag(View):
 
 class newindex(View):
     def get(self, request):
-
         user_id = request.REQUEST.get("user_id", "user-safoewfw")
         signal = SignalModel.objects.filter(deleted=False).filter(partable__distri__user__username=user_id)
-        logger.info("signal_id is %s" % signal[0].signal_id)
+        if signal:
+            logger.info("signal_id is %s" % signal[0].signal_id)
         info = []
         for i in range(len(signal)):
             signal_info = {"name_signal": signal[i].name_signal,
@@ -56,7 +56,26 @@ class newindex(View):
             # logger.info(info)
         # info = {"a": 1, "b": 2, "c": 3}
         return render(request, "index/newIndex.html", Context({"Info": info}))
-class addmodel(View):
+class addmodal(View):
     def get(self, request):
 
-        return render(request,"index/addmodel.html")
+        return render(request,"index/addmodal.html")
+
+
+class addmodalDemodul(View):
+    def get(self, request):
+
+        return render(request, "index/addModalDemodul.html")
+
+
+class addmodalType(View):
+    def get(self, request):
+        dict_obj = {}
+        dict_obj['demo_list'] = []
+        for i in range(0, 4):
+            temp = {}
+            temp.update({'type': u'method_1', 'ant_type': 'single_type',
+                         'protocol': 'default', 'sync_type': 'sotdma',
+                         'mod_type':'gmsk'})
+            dict_obj['demo_list'].append(temp)
+        return render(request, "index/addModalType.html",dict_obj)

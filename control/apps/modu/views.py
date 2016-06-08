@@ -28,7 +28,6 @@ class CreateSignal(APIView):
     创建信号
     """
     # action = "CreateSignal"
-
     # def get(self, request, *args, **kwargs):
     #     """
     #     get 方式发送数据
@@ -79,6 +78,7 @@ class CreateSignal(APIView):
         aisdata_id = validator.validated_data.get("aisdata_id", None)
         signal_id = validator.validated_data.get("signal_id", None)
         owner = user_temp()
+
         # 默认参数 暂未提供接口
         transInterval = 12
 

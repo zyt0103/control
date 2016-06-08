@@ -1,5 +1,7 @@
 # coding=utf-8
 
+from django.conf import settings
+
 from control.control.base import control_response
 from control.control.err_msg import CheckProbErrorCode
 
@@ -32,5 +34,6 @@ class Router():
                 "demodSignal_id": demodSignal_id,
                 "action": action
             }
-            CheckProb.apply_async([sub_payload])
+            if settings.IF_RUN_MATLAB:
+                CheckProb.apply_async([sub_payload])
         return control_response(code=0, msg="checkprob is running!")

@@ -7,6 +7,4 @@ urlpatterns = [
     url(r'describe$', modu_view.DescribeSignal.as_view()),
     # url(r'delete$', modu_view.DeleteSignal.as_view()),
     # url(r'get$', modu_view.GetSignal.as_view()),
-
-
 ]

@@ -67,7 +67,6 @@ class DemodModel(BaseModel):
             logger.error("demod save error: %s" % exp)
             return False
 
-
     @classmethod
     def demod_delete_by_id(self, signal_id, deleted=False):
         """

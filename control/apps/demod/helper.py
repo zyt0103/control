@@ -1,5 +1,7 @@
 # coding=utf-8
 
+from django.conf import settings
+
 from control.control.base import control_response
 from control.control.err_msg import DemodErrorCode
 
@@ -46,11 +48,10 @@ class Router():
                     "protocol": protocol,
                     "sync_type": sync_type,
                     "action": ant_type
-
                 }
                 logger.info("The sub_payload is %s" % sub_payload)
-
-                Demod_single_ant.apply_async([sub_payload])
+                if settings.IF_RUN_MATLAB:
+                    Demod_single_ant.apply_async([sub_payload])
 
             if key_ant_type == "douoble_ant":
                 sub_payload = {
@@ -59,7 +60,8 @@ class Router():
                     "sync_type": sync_type,
                     "action": ant_type
                 }
-                Demod_double_ant.apply_async([sub_payload])
+                if settings.IF_RUN_MATLAB:
+                    Demod_double_ant.apply_async([sub_payload])
 
             if key_ant_type == "four_ant":
                 sub_payload = {
@@ -68,5 +70,6 @@ class Router():
                     "sync_type": sync_type,
                     "action": ant_type
                 }
-                Demod_four_ant.apply_async([sub_payload])
+                if settings.IF_RUN_MATLAB:
+                    Demod_four_ant.apply_async([sub_payload])
         return control_response(code=0, msg="Demod is running!")

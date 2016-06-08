@@ -48,7 +48,6 @@ class ModuErrorCode(object):
     SIGNAL_ID_MISSING = 20043
 
 
-
 ACTIN_MSG = {
     20000: _(u"action 丢失")
 }
@@ -82,7 +81,6 @@ SIGNAL_MSG = {
     20042: _(u"Signal数据运行异常"),
     20043: _(u"signal_id is missing")
 }
-
 
 
 class DemodErrorCode():

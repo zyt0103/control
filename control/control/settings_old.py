@@ -45,20 +45,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djcelery',
-    # 'django-crontab',
     'rest_framework',
 )
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
-}
 
-# CRONJOBS = [
-#     ('/1* * * * *', "control.apps.modu.helper.signal_info_save"),
-# ]
 CONTROL_APPS = (
     'control.control',
     'control.apps.modu',
-    'control.apps.demod',
 )
 INSTALLED_APPS += CONTROL_APPS
 
@@ -68,7 +60,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -101,13 +93,9 @@ WSGI_APPLICATION = 'control.control.wsgi.application'
 
 DATABASES = {
     'default': {
-    'ENGINE': 'django.db.backends.mysql' if config.get("database", "db_engine") == "mysql" else 'django.db.backends.sqlite3',
-    'NAME': config.get("database", "db_name"),
-    'USER': config.get("database", "db_user"),
-    'PASSWORD': config.get("database", "db_password"),
-    'HOST': config.get("database", "db_host"),
-    'PORT': config.get("database", "db_port"),
-    },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 
@@ -116,7 +104,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = "Asia/Shanghai"
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -133,7 +121,7 @@ REDIS_DB_CELERY = config.get("redis", "db_celery")
 REDIS_DB_CELERY_BACKEND = config.get("redis", "db_celery_backend")
 
 ##############Celery Settings#######################
-BROKER_URL = 'redis://:%s@%s:%s/%s' % (REDIS_PASSWORD, REDIS_HOST, REDIS_PORT, REDIS_DB_CELERY)
+BROKER_URL = 'redis://:%s@%s:%s/%s'  % (REDIS_PASSWORD, REDIS_HOST, REDIS_PORT, REDIS_DB_CELERY)
 CELERY_SEND_EVENTS = config.getboolean("celery", "event")
 CELERY_RESULT_BACKEND = 'redis://:%s@%s:%s/%s' % (REDIS_PASSWORD, REDIS_HOST, REDIS_PORT, REDIS_DB_CELERY_BACKEND)
 if not config.getboolean("celery", "result"):
@@ -180,9 +168,3 @@ TIMETABLE_PREFIX = "timetable"
 AISDATA_PREFIX = "aisdata"
 SIGNAL_PREFIX = "signal"
 NAME_ID_LENGTH = 8
-
-###################IF RUN MATLAB SETTINGS#############
-IF_RUN_MATLAB = config.get("matlab", "runMatlab")
-
-##################SAVE SIGNAL INFO PERIED ############
-SAVE_PERIED = 1

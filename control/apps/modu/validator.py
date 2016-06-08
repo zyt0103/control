@@ -49,7 +49,6 @@ ACTION_DESCRIBE_LIST = {
     "createtime": True
 }
 
-
 def action_all_validator(action_all):
     """
     validate action_all
@@ -77,7 +76,6 @@ def action_describe_validator(action):
     """
     if not action or action not in ACTION_DESCRIBE_LIST:
         raise serializers.ValidationError(u"action is invalid!")
-
 
 def username_validator(username):
     """
@@ -301,5 +299,3 @@ def filename_validator(filename):
                 raise serializers.ValidationError(u"filename is not exist in SignalModel!")
     elif not SignalModel.signal_exist_by_filename(filename):
         raise serializers.ValidationError(u"filename is not exist in SignalModel!")
-
-

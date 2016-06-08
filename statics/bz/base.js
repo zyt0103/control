@@ -64,10 +64,10 @@ $(function(){
     var $ais_demodulation = $("#ais_demodulation");
     var $demodul = $("#demodul"); //demodulation button in the topbar
     var $demodul_btn = $("#demodul_btn");
-    $demodul.bind("click", function(){
-        $ais_demodulation.attr("class", "show").siblings().attr("class","hidden");
-        $demodul_btn.attr("class", "active").siblings().attr("class", "");
-    });
+    //$demodul.bind("click", function(){
+    //    $ais_demodulation.attr("class", "show").siblings().attr("class","hidden");
+    //    $demodul_btn.attr("class", "active").siblings().attr("class", "");
+    //});
     $demodul_btn.bind("click", function(){
         $ais_demodulation.attr("class", "show").siblings().attr("class", "hidden");
         $demodul_btn.attr("class", "active").siblings().attr("class", "");
@@ -80,8 +80,8 @@ $(function(){
         ais_analysis.attr("class", "show").siblings().attr("class", "hidden");
         $analy_btn.attr("class", "active").siblings().attr("class", "");
     });
-    
-      //验证 function,name_signal
+
+      //验证 function,filename
     var $filename = $("#filename");
     $("#addModal1").on('focus',"#filename", function() {
     	addOK.disabled=false;
@@ -162,7 +162,6 @@ $(function(){
 			addOK.disabled=false;
 		}
     });
-    
      //验证 function,vesnum
     var $vesnum = $("#vesnum");
     $("#addModal1").on('focus',"#vesnum", function() {
@@ -244,24 +243,48 @@ $(function(){
 			addOK.disabled=false;
 		}
     });
+	//封装blurValidate()函数
+	function blurValidate(elemId,elemCheckId,regExp){
+		var text=document.getElementById(elemId).value;
+	    if(!regExp.test(text)){
+	        document.getElementById(elemId).style.background="orangered";
+			document.getElementById(elemCheckId).style.visibility="hidden";
+	    }
+	    else{
+			document.getElementById(elemeId).style.background="white";
+			document.getElementById(elemCheckId).style.visibility="visible";
+			addOK.disabled=false;
+		}
+	}
+
+
+
 	 //验证 function,snr
-    var $snr = $("#snr");
+    //var $snr = $("#snr");
+    //$("#addModal1").on('focus',"#snr", function() {
+    //	addOK.disabled=false;
+    //	document.getElementById("snr").style.background="white";
+    //})
+    //$("#addModal1").on('blur',"#snr", function() {
+	 //   var text=document.getElementById("snr").value;
+	 //   var regExp =/^([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*)$/;
+	 //   if(!regExp.test(text)){
+	 //       document.getElementById("snr").style.background="orangered";
+		//	document.getElementById("snrcheck").style.visibility="hidden";
+	 //   }
+	 //   else{
+		//	document.getElementById("snr").style.background="white";
+		//	document.getElementById("snrcheck").style.visibility="visible";
+		//	addOK.disabled=false;
+		//}
+    //});
+	 var $snr = $("#snr");
     $("#addModal1").on('focus',"#snr", function() {
     	addOK.disabled=false;
     	document.getElementById("snr").style.background="white";
     })
     $("#addModal1").on('blur',"#snr", function() {
-	    var text=document.getElementById("snr").value;
-	    var regExp =/^([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*)$/;
-	    if(!regExp.test(text)){
-	        document.getElementById("snr").style.background="orangered";
-			document.getElementById("snrcheck").style.visibility="hidden";
-	    }
-	    else{
-			document.getElementById("snr").style.background="white";
-			document.getElementById("snrcheck").style.visibility="visible";
-			addOK.disabled=false;
-		}
+	    blurValidate("snr","snrCheck",/^([1-9]\d*|[1-9]\d*\.\d*[1-9]\d*|0\.\d*[1-9]\d*)$/);
     });
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //校验lat字段是否提交
@@ -410,7 +433,6 @@ $(function(){
     //校验是否提交
     function validateForm(){
     	var flag = false;
-//  	var flag1 = validateFormuser();
     	var flag3 = validateFormfilename();
     	var flag4 = validateFormlat();
     	var flag5 = validateFormlon();
@@ -423,15 +445,15 @@ $(function(){
     	if(flag3&&flag4&&flag5&&flag6&&flag7&&flag8&&flag9&&flag10&&flag11){
     		flag=true;
     		addOK.disabled=false;
-    		document.getElementById("latcheck").style.visibility="hidden";
-    		document.getElementById("loncheck").style.visibility="hidden";
-    		document.getElementById("filenamecheck").style.visibility="hidden";
-    		document.getElementById("heightcheck").style.visibility="hidden";
-    		document.getElementById("vesnumcheck").style.visibility="hidden";
-    		document.getElementById("obtimecheck").style.visibility="hidden";
-    		document.getElementById("ant_pitchcheck").style.visibility="hidden";
-    		document.getElementById("ant_azimuthcheck").style.visibility="hidden";
-			document.getElementById("snrcheck").style.visibility="hidden";
+            //document.getElementById("latcheck").style.visibility="hidden";
+            //document.getElementById("loncheck").style.visibility="hidden";
+            //document.getElementById("filenamecheck").style.visibility="hidden";
+            //document.getElementById("heightcheck").style.visibility="hidden";
+            //document.getElementById("vesnumcheck").style.visibility="hidden";
+            //document.getElementById("obtimecheck").style.visibility="hidden";
+            //document.getElementById("ant_pitchcheck").style.visibility="hidden";
+            //document.getElementById("ant_azimuthcheck").style.visibility="hidden";
+			//document.getElementById("snrcheck").style.visibility="hidden";
 			//document.getElement("snrcheck").style.visibility="hidden";
 // 			$("table span > span").removeClass("checkV").addClass('check');
     		
@@ -442,13 +464,6 @@ $(function(){
     	return flag;
     }
 
-//$addOK.bind("click", function(){
-//    	var flag = validateForm();
-//    	if(flag){
-//    		ajax();
-//			addMessage();
-//    	}
-//    });
 $('#addModal1').on('click','#addOK',function(){
     	var flag = validateForm();
     	if(flag){
@@ -460,7 +475,7 @@ $('#addModal1').on('click','#addOK',function(){
 
 function ajax(){
 	var param={
-	"name_signal":$("#filename").val(),
+	"filename":$("#filename").val(),
 	"lat":$("#lat").val(),
 	"lon":$("#lon").val(),
 	"height":$("#height").val(),
@@ -483,35 +498,43 @@ function ajax(){
 			if(res.ret_code==0){
 				if(res.total_count==1){
 					var signal_id = res.ret_set;
+					var signal_name =$("#filename").val();
 					var $showTableTh = $("#showTable").find("th");
 					var addString={};
 					for(var i=0; i<$showTableTh.length; i++){
 						addString[i] = 0;
-						addString[0] = signal_id;
+						addString[1] = signal_id;
+						addString[0] = signal_name;
 					}
 					var strTip;
 					strTip = "<tr><td class='table-time'><input type='checkbox'>"+addString[0]+
 							 "</td><td class='table-time'>"+addString[1]+
 							 "</td><td class='table-time'>"+addString[2]+
 							 "</td><td class='table-time'>"+addString[3]+
+							 "</td><td class='table-time'>"+addString[4]+
+						     "</td><td class='table-time'>"+addString[5]+
 							 "</td></tr>"
 					$(strTip).appendTo($showTable);
 				}
 				else{
 					var total_count = res.total_count;
 					var signal_id = res.ret_set[0];
+					var signal_name =$("#filename").val();
 					var $showTableTh = $("#showTable").find("th");
 					var addString={};
 					for(var j=0;j<total_count;j++){
 						for(var i=0; i<$showTableTh.length;i++){
 							addString[i] = 0;
-							addString[0] = signal_id[j];
+							addString[1] = signal_id[j];
+							addString[0] = signal_name+j;
 						}
 						var strTip;
 						strTip = "<tr><td class='table-time'><input type='checkbox'>"+addString[0]+
 								 "</td><td class='table-time'>"+addString[1]+
 								 "</td><td class='table-time'>"+addString[2]+
 								 "</td><td class='table-time'>"+addString[3]+
+								 "</td><td class='table-time'>"+addString[4]+
+								 "</td><td class='table-time'>"+addString[5]+
 								 "</td></tr>"
 						$(strTip).appendTo($showTable);
 					}
@@ -523,10 +546,8 @@ function ajax(){
 		},
 		data: JSON.stringify(param),
 		headers: {
-			//'X-CSRFToken': 'JxH08rgyxxGyiH4TlmjCpPSjHrtHQAle',//?
-			'X-CSRFToken':'xiiJZVs0zyMteF3Z3LcOiyhPA2J3KU9e',//?
+			'X-CSRFToken': 'JxH08rgyxxGyiH4TlmjCpPSjHrtHQAle',//?
 			'Content-Type': 'application/json'
-
 		}
 	});
 	//var successFun = function(res) {
@@ -540,8 +561,13 @@ function ajax(){
 }
 
 });
-function addmodel(){
-	$('#addModal1').load('/addmodel.html');
+function addmodal(){
+	$('#addModal1').load('/addmodal.html');
 }
-
+function addmodalDemodul(){
+	$('#addModalDemodul').load('/addModalDemodul.html');
+}
+function addmodalType(){
+	$('#addModalType').load('/addModalType.html');
+}
     

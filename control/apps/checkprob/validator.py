@@ -24,7 +24,6 @@ def action_validator(action):
     if action not in ACTION:
         raise serializers.ValidationError(u"action is invalid!")
 
-
 def demodSignal_id_validator(demodSignal_id):
     """
     validate demodSignal_id

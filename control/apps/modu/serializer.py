@@ -8,7 +8,6 @@ class CreateSignalSerializer(serializers.Serializer):
     """
     创建信号
     """
-
     name_signal = serializers.CharField(
         max_length=20,
         required=True,
