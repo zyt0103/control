@@ -112,7 +112,7 @@ class CreateSignal(APIView):
         logger.info("The main payload is %s" % payload)
         route = Router(payload)
         resp = route.CreateSignalRouter()
-        signal_info_save.apply_async(resp["ret_set"])
+        # signal_info_save.apply_async(resp["ret_set"])
         return Response(resp, status=status.HTTP_200_OK)
 
 

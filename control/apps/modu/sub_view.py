@@ -27,6 +27,7 @@ def CreateDistri(payload):
     :param payload:  创建信号所需数据
     :return:
     """
+    logger("payload is %s " % payload)
     # payload = self.payload
     # logger.info("payload is %s", payload)
     action = payload.get("action", None)
@@ -49,6 +50,7 @@ def CreateDistri(payload):
         "distri_mode": distri_mode,
         "owner": username
     }
+
     ret_message = create_ves_distri(sub_payload)
     return ret_message
 
