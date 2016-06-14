@@ -27,7 +27,6 @@ def CreateDistri(payload):
     :param payload:  创建信号所需数据
     :return:
     """
-    logger("payload is %s " % payload)
     # payload = self.payload
     # logger.info("payload is %s", payload)
     action = payload.get("action", None)

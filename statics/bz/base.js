@@ -468,13 +468,13 @@ $(function(){
 $('#addModal1').on('click','#addOK',function(){
     	var flag = validateForm();
     	if(flag){
-    		ajax();
+    		aj();
 			$("#addClose").click();
     	}
     });
 
 
-function ajax(){
+function aj(){
 	var param={
 	"name_signal":$("#filename").val(),
 	"lat":$("#lat").val(),
