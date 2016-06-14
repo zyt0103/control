@@ -17,7 +17,6 @@ from kombu import Exchange
 from kombu import Queue
 
 from .config import setup_config
-
 config = setup_config()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -45,7 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djcelery',
-    # 'django-crontab',
+    # 'django_crontab',
     'rest_framework',
 )
 REST_FRAMEWORK = {

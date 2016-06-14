@@ -475,7 +475,7 @@ $('#addModal1').on('click','#addOK',function(){
 
 function ajax(){
 	var param={
-	"filename":$("#filename").val(),
+	"name_signal":$("#filename").val(),
 	"lat":$("#lat").val(),
 	"lon":$("#lon").val(),
 	"height":$("#height").val(),
@@ -546,7 +546,8 @@ function ajax(){
 		},
 		data: JSON.stringify(param),
 		headers: {
-			'X-CSRFToken': 'JxH08rgyxxGyiH4TlmjCpPSjHrtHQAle',//?
+			//'X-CSRFToken': 'JxH08rgyxxGyiH4TlmjCpPSjHrtHQAle',//?
+			'X-CSRFToken': 'xiiJZVs0zyMteF3Z3LcOiyhPA2J3KU9e',//?
 			'Content-Type': 'application/json'
 		}
 	});

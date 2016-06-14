@@ -11,6 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 from control.apps.modu.views import SignalModel
+
+from control.apps.modu.sub_view import SaveSignalInfo
+
 from control.control.base import getLogger
 logger = getLogger(__name__)
 
@@ -44,6 +47,9 @@ class newindex(View):
         signal = SignalModel.objects.filter(deleted=False).filter(partable__distri__user__username=user_id)
         if signal:
             logger.info("signal_id is %s" % signal[0].signal_id)
+        for signal_index in signal:
+            if signal_index.schedule != 1:
+                SaveSignalInfo(signal_index.signal_id)
         info = []
         for i in range(len(signal)):
             signal_info = {"name_signal": signal[i].name_signal,
@@ -53,13 +59,11 @@ class newindex(View):
                            "create_time": signal[i].create_datetime
                            }
             info.append(signal_info)
-            # logger.info(info)
-        # info = {"a": 1, "b": 2, "c": 3}
         return render(request, "index/newIndex.html", Context({"Info": info}))
 class addmodal(View):
     def get(self, request):
 
-        return render(request,"index/addmodal.html")
+        return render(request, "index/addmodal.html")
 
 
 class addmodalDemodul(View):

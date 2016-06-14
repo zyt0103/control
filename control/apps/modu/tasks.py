@@ -49,6 +49,7 @@ def matlab_create_ves_distri(payload):
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab_distri")
+        logger.info("the current path is %s" % os.getcwd())
         eng.F_genDistri(lon, lat, height, vesNum, distri_mode, distri_id)
         eng.quit()
         os.chdir(celery_path)

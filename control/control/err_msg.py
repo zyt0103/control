@@ -121,3 +121,11 @@ DESCRIB_MSG = {
     20054: _(u"保存状态信息错误！")
 
 }
+
+
+class DELETEErrorCode():
+    DELETE_SIGANL_FAILED = 20061
+
+DELETE_MSG = {
+    20061: _(u"信号删除失败！")
+}

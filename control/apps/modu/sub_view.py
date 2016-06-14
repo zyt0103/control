@@ -12,10 +12,14 @@ from .helper import Getcreatetime
 from .helper import Getsignalsize
 from .helper import Getschedule
 from .helper import Getdescribe
+from .helper import get_save_schedule
+from .helper import get_save_signalsize
+
 from .models import DistriModel
 from .models import PartableModel
 from .models import TimetableModel
 from .models import  AisdataModel
+from .models import SignalModel
 
 from control.control.logger import getLogger
 
@@ -84,6 +88,7 @@ def CreatePartable(payload):
         "channel_type": channel_type,
         "distri_id": distri_id,
     }
+    logger.info("patable_payload is %s" % sub_payload)
     ret_message = create_ves_parTalb(sub_payload)
     return ret_message
 
@@ -187,16 +192,36 @@ def CreateSignal(payload):
     return ret_message
 
 
+def SaveSignalInfo(signal_id):
+    """
+    保存信号的状态信息
+    :param signal_id: 信号id
+    :return: None
+    """
+    # signal_list = SignalModel.objects.filter(deleted=False)
+    # for signal in signal_list:
+    #     signal_id = signal.signal_id
+    try:
+        get_save_schedule(signal_id=signal_id)
+        get_save_signalsize(signal_id)
+        logger.info("%s is saved!" % signal_id)
+        return True
+    except Exception as exp:
+        logger.error("%s info save error: %s" % (signal_id, exp))
+        return False
+
 class Router():
     """
     chose fuction following different action
     """
-    ACTION_LIST = ["distri", "partable", "timetable", "aisdata", "signal"]
-    FUNCTION_LIST = [CreateDistri, CreatePartable, CreateTimetable, CreateAisdata, CreateSignal]
-    # 获取ACTION对应关系
-    ACTION = {}
-    for actionIndex in range(len(ACTION_LIST)):
-        ACTION.update({ACTION_LIST[actionIndex]: FUNCTION_LIST[actionIndex]})
+
+
+    # ACTION_LIST = ["distri", "partable", "timetable", "aisdata", "signal"]
+    # FUNCTION_LIST = [CreateDistri, CreatePartable, CreateTimetable, CreateAisdata, CreateSignal]
+    # # 获取ACTION对应关系
+    # ACTION = {}
+    # for actionIndex in range(len(ACTION_LIST)):
+    #     ACTION.update({ACTION_LIST[actionIndex]: FUNCTION_LIST[actionIndex]})
 
     def __init__(self, payload):
         self.payload = payload
@@ -208,23 +233,52 @@ class Router():
         """
         payload = self.payload
         action = payload.get("action", None)
-        if action is not None:
-            logger.info("Current action is: %s" % action)
-            ret_message = self.ACTION[action](payload)
-            return ret_message
 
+        if action is not None:
+            logger.info("action is %s" % action)
+            if action == "distri":
+                return CreateDistri(payload)
+            if action == "partable":
+                return CreatePartable(payload)
+            if action == "timetable":
+                return CreateTimetable(payload)
+            if action == "aisdata":
+                return CreateAisdata(payload)
+            if action == "signal":
+                return CreateSignal(payload)
+
+            return control_response(code=ModuErrorCode.ACTION_GET_FAILED, msg="action 获取失败")
         action_all = payload.get("action_all", None)
         if action_all is True:
-            ret = {}
-            for action in self.ACTION_LIST:
-                payload.update({"action": action})
-                if action is not None:
-                    logger.info("Current action is: %s" % action)
-                    ret_message = self.ACTION[action](payload)
-                    payload.update({ret_message["ret_name_id"]: ret_message["ret_set"][0]})
-                    ret.update(ret_message)
-            return ret
-        return control_response(code=ModuErrorCode.ACTION_GET_FAILED, msg="action 获取失败")
+            payload.update({"action": "distri"})
+            ret_distri = CreateDistri(payload)
+            payload.update({"action": "partable", "distri_id": ret_distri["ret_set"][0]})
+            ret_partable = CreatePartable(payload)
+            payload.update({"action": "timetable", "partable_id": ret_partable["ret_set"][0]})
+            ret_timetable = CreateTimetable(payload)
+            payload.update({"action": "aisdata", "timetable_id": ret_timetable["ret_set"][0]})
+            ret_aisdata = CreateAisdata(payload)
+            payload.update({"action": "signal", "aisdata_id": ret_aisdata["ret_set"][0]})
+            ret_signal = CreateSignal(payload)
+            return ret_signal
+        return control_response(code=ModuErrorCode.ACTION_GET_FAILED, msg="action_all 获取失败")
+        # if action is not None:
+        #     logger.info("Current action is: %s" % action)
+        #     ret_message = self.ACTION[action](payload)
+        #     return ret_message
+
+        # action_all = payload.get("action_all", None)
+        # if action_all is True:
+        #     ret = {}
+        #     for action in self.ACTION_LIST:
+        #         payload.update({"action": action})
+        #         if action is not None:
+        #             logger.info("Current action is: %s" % action)
+        #             ret_message = self.ACTION[action](payload)
+        #             payload.update({ret_message["ret_name_id"]: ret_message["ret_set"][0]})
+        #             ret.update(ret_message)
+        #     return ret
+        # return control_response(code=ModuErrorCode.ACTION_GET_FAILED, msg="action 获取失败")
 
     def DescribeSignalRouter(self):
         """

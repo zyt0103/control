@@ -76,16 +76,17 @@ def create_ves_distri(payload):
         "owner": username
     }
     distri_model, error = DistriModel.objects.create(user=username,
-                                                       distri_id=distri_id,
-                                                       distri_lon=lon,
-                                                       distri_lat=lat,
-                                                       distri_height=height,
-                                                       distri_ves_num=vesNum,
-                                                       distri_mode=distri_mode
-                                                       )
+                                                     distri_id=distri_id,
+                                                     distri_lon=lon,
+                                                     distri_lat=lat,
+                                                     distri_height=height,
+                                                     distri_ves_num=vesNum,
+                                                     distri_mode=distri_mode
+                                                     )
     if not distri_model:
         return control_response(code=ModuErrorCode.DISTRI_SAVED_FAILED, msg=error, ret_name_id="distri_id")
     if settings.IF_RUN_MATLAB:
+        logger.info("run matlab is %s" % settings.IF_RUN_MATLAB)
         matlab_create_ves_distri.apply_async([sub_payload])
     return control_response(code=0, msg="distri running", ret_set=[distri_id], ret_name_id="distri_id")
 
@@ -415,18 +416,4 @@ def get_matlab_rate(total_filenum, signal_id):
     rate = distri_rate * 0.05 + partable_rate * 0.05 + timetable_rate * 0.35 + aisdata_rate * 0.05 + signal_all_rate * 0.5
     return rate, filenum
 
-# def signal_info_save():
-#     """
-#     保存信号的状态信息
-#     :param signal_id: 信号id
-#     :return: None
-#     """
-#     signal_list = SignalModel.objects.filter(deleted=False)
-#     for signal in signal_list:
-#         signal_id = signal.signal_id
-#         try:
-#             get_save_schedule(signal_id=signal_id)
-#             get_save_signalsize(signal_id)
-#             logger.info("%s is saved!" % signal_id)
-#         except Exception as exp:
-#             logger.error("%s info save error: %s" % (signal_id, exp))
+
