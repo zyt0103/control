@@ -11,8 +11,12 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 from control.apps.modu.views import SignalModel
+
+from control.apps.modu.sub_view import SaveSignalInfo
+
 from control.control.base import getLogger
 logger = getLogger(__name__)
+
 
 class Index(View):
     def get(self, request, *args, **kwargs):
@@ -20,11 +24,13 @@ class Index(View):
         #                           context_instance=RequestContext(request, locals()))
         return render(request, "index/index.html")
 
+
 class test(View):
     def get(self, request, *args, **kwargs):
         # return render_to_response("index/index.html",
         #                           context_instance=RequestContext(request, locals()))
         return render(request, "index/test.html")
+
 
 class plot(View):
     def get(self, request, *args, **kwargs):
@@ -32,11 +38,13 @@ class plot(View):
         #                           context_instance=RequestContext(request, locals()))
         return render(request, "index/plot.html")
 
+
 class drag(View):
     def get(self, request, *args, **kwargs):
         # return render_to_response("index/index.html",
         #                           context_instance=RequestContext(request, locals()))
         return render(request, "index/drag.html")
+
 
 class newindex(View):
     def get(self, request):
@@ -44,22 +52,37 @@ class newindex(View):
         signal = SignalModel.objects.filter(deleted=False).filter(partable__distri__user__username=user_id)
         if signal:
             logger.info("signal_id is %s" % signal[0].signal_id)
+        for signal_index in signal:
+            if signal_index.schedule != 1:
+                SaveSignalInfo(signal_index.signal_id)
         info = []
         for i in range(len(signal)):
             signal_info = {"name_signal": signal[i].name_signal,
                            "signal_id": signal[i].signal_id,
-                           "size": signal[i].signal_size,
-                           "status": signal[i].schedule,
+                           "size": int(signal[i].signal_size),
+                           "status": signal[i].schedule * 100,
                            "create_time": signal[i].create_datetime
                            }
             info.append(signal_info)
-            # logger.info(info)
-        # info = {"a": 1, "b": 2, "c": 3}
         return render(request, "index/newIndex.html", Context({"Info": info}))
+
+
+class demodul(View):
+    def get(self, request):
+
+        return render(request, "index/demodul.html")
+
+
+class analysis(View):
+    def get(self, request):
+
+        return render(request, "index/analysis.html")
+
+
 class addmodal(View):
     def get(self, request):
 
-        return render(request,"index/addmodal.html")
+        return render(request, "index/addmodal.html")
 
 
 class addmodalDemodul(View):
@@ -74,8 +97,8 @@ class addmodalType(View):
         dict_obj['demo_list'] = []
         for i in range(0, 4):
             temp = {}
-            temp.update({'type': u'method_1', 'ant_type': 'single_type',
-                         'protocol': 'default', 'sync_type': 'sotdma',
+            temp.update({'type_name_de': u'method_1', 'ant_type_de': 'single_ant',
+                         'protocol_de': 'SOTDMA', 'sync_type': 'DEFAULT',
                          'mod_type':'gmsk'})
             dict_obj['demo_list'].append(temp)
-        return render(request, "index/addModalType.html",dict_obj)
+        return render(request, "index/addModalType.html", dict_obj)

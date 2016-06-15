@@ -114,7 +114,7 @@ def control_code(validator):
 
 def control_response(code=0,
                      msg=_(u"服务器响应成功"),
-                     total_count=1,
+                     total_count= None,
                      ret_set=None,
                      action_record=None,
                      ret_name_id=None, **kwargs):

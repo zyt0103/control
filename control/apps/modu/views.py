@@ -12,11 +12,10 @@ from control.control.base import user_temp
 
 from .serializer import CreateSignalSerializer
 from .serializer import DescribeSignalSerializer
+from .serializer import DeleteSignalSerializer
 from .sub_view import Router
 
-# from control.control.base import get_path
 from control.control.logger import getLogger
-
 logger = getLogger(__name__)
 
 from .models import SignalModel
@@ -45,10 +44,6 @@ class CreateSignal(APIView):
     def post(self, request, *args, **kwargs):
         req_data = request.data
         logger.info(req_data)
-        # logger.info(get_path.MATLAB_FILE_PATH)
-        # logger.info(get_path.CELERY_PATH)
-        # logger.info(get_path.CURRENT_PATH)
-        # logger.info("filename is %s" % SignalModel.get_signal_by_id("signal-h7aiwz4v").filename)
         validator = CreateSignalSerializer(data=req_data)
         logger.info("validator is valid: %s" % validator.is_valid())
         if not validator.is_valid():
@@ -108,11 +103,9 @@ class CreateSignal(APIView):
             "signal_id": signal_id,
             "transInterval": transInterval
         }
-
         logger.info("The main payload is %s" % payload)
         route = Router(payload)
         resp = route.CreateSignalRouter()
-        signal_info_save.apply_async(resp["ret_set"])
         return Response(resp, status=status.HTTP_200_OK)
 
 
@@ -121,8 +114,8 @@ class DescribeSignal(APIView):
     查询信号信息
     """
     def post(self, request, *args, **kwargs):
-        req_data = request.data
-        logger.info(req_data)
+        req_data = parProcess(request.data)
+        logger.info("payload is %s" % req_data)
         validator = DescribeSignalSerializer(data=req_data)
         logger.info("validator valid is %s" % validator.is_valid())
         if not validator.is_valid():
@@ -132,7 +125,6 @@ class DescribeSignal(APIView):
 
         action = validator.validated_data.get("action", "describe")
         signal_id = validator.validated_data.get("signal_id", None)
-
         payload = {
             "action": action,
             "signal_id": signal_id
@@ -142,3 +134,68 @@ class DescribeSignal(APIView):
         resp = route.DescribeSignalRouter()
         logger.info("the return is %s" % resp)
         return Response(resp, status=status.HTTP_200_OK)
+
+
+class DeleteSiganl(APIView):
+    """
+    删除信号信息
+    """
+    def post(self, request, *args, **kwargs):
+        req_data = request.data
+        logger.info("request data is %s" % req_data)
+        validator = DeleteSignalSerializer(req_data)
+        logger.info("validator valid is %s" % validator.is_valid())
+        if not validator.is_valid():
+            code, msg = control_code(validator)
+            return Response(control_response(code=code, msg=msg),
+                            status=status.HTTP_200_OK)
+
+        action = validator.validated_data.get("action", "delete")
+        signal_id = validator.validated_data.get("signal_id", None)
+        payload = {
+            "action": action,
+            "signal_id": signal_id
+        }
+        route = Router(payload=payload)
+        resp = route.DeleteSignalRouter()
+        return Response(resp, status=status.HTTP_200_OK)
+
+
+def parProcess(payload):
+    """
+    数据验证前的数据处理
+    :param payload:
+    :return:
+    """
+    distri_id = payload.get("distri_id")
+    partable_id = payload.get("partable_id")
+    timetable_id = payload.get("timetable_id")
+    aisdata_id = payload.get("aisdata_id")
+    signal_id = payload.get("signal_id")
+    logger.info("signal_id is %s" % signal_id)
+    if distri_id:
+        if not isinstance(distri_id, list):
+            distri_id = [distri_id]
+    if partable_id:
+        if not isinstance(partable_id, list):
+            partable_id = [partable_id]
+    if timetable_id:
+        if not isinstance(timetable_id, list):
+            timetable_id = [timetable_id]
+    if aisdata_id:
+        if not isinstance(aisdata_id, list):
+            aisdata_id = [aisdata_id]
+    if signal_id:
+        if not isinstance(signal_id, list):
+            signal_id = [signal_id]
+    payload.update(
+        {
+            "distri_id": distri_id,
+            "partable_id": partable_id,
+            "timetable_id": timetable_id,
+            "aisdata_id": aisdata_id,
+            "signal_id": signal_id
+        }
+    )
+    logger.info(signal_id)
+    return payload

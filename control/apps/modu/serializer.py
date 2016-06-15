@@ -4,6 +4,7 @@ from .validator import *
 from control.control.logger import getLogger
 logger = getLogger(__name__)
 
+
 class CreateSignalSerializer(serializers.Serializer):
     """
     创建信号
@@ -138,8 +139,25 @@ class DescribeSignalSerializer(serializers.Serializer):
         validators=[filename_validator]
     )
 
-    signal_id = serializers.CharField(
+    signal_id = serializers.ListField(
         required=True,
+        # max_length=20,
+        validators=[signal_id_validator]
+    )
+
+
+class DeleteSignalSerializer(serializers.Serializer):
+    """
+    删除信号
+    """
+    action = serializers.CharField(
+        required=False,
         max_length=20,
+        validators=[action_delete_validator]
+    )
+
+    signal_id = serializers.ListField(
+        required=True,
+        # max_length=20,
         validators=[signal_id_validator]
     )

@@ -508,9 +508,9 @@ class SignalModel(BaseModel):
             return False
 
     @classmethod
-    def signal_exist_by_filename(cls, filename, deleted=False):
+    def signal_exist_by_name_signal(cls, name_signal, deleted=False):
         try:
-            return SignalModel.objects.filter(deleted=deleted).filter(filename=filename).exists()
+            return SignalModel.objects.filter(deleted=deleted).filter(filename=name_signal).exists()
         except Exception as exp:
             logger.error("exist signal error: %s" % str(exp))
             return False
@@ -521,6 +521,14 @@ class SignalModel(BaseModel):
             return SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id)
         except Exception as exp:
             logger.error("get signal error: %s" % str(exp))
+            return False
+
+    @classmethod
+    def get_signal_by_name_signal(cls, name_signal, deleted=False):
+        try:
+            return SignalModel.objects.filter(deleted=deleted).get(name_signal=name_signal)
+        except Exception as exp:
+            logger.error("get signal by name_signal error: %s" % str(exp))
             return False
 
     @classmethod
@@ -548,14 +556,6 @@ class SignalModel(BaseModel):
             return par_table.partable_id
         except Exception as exp:
             logger.error("get timetable_id error: %s" % str(exp))
-            return False
-
-    @classmethod
-    def get_signal_by_name_signal(cls, name_signal, deleted=False):
-        try:
-            return SignalModel.objects.filter(deleted=deleted).get(name_signal=name_signal)
-        except Exception as exp:
-            logger.error("get signal by name_signal error: %s" % str(exp))
             return False
 
     @classmethod

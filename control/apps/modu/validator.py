@@ -1,5 +1,7 @@
 # encoding=utf-8
 
+import json
+
 from django.utils.translation import ugettext as _
 from django.contrib.auth.admin import User
 from rest_framework import serializers
@@ -46,7 +48,12 @@ ACTION_DESCRIBE_LIST = {
     "describe": True,
     "schedule": True,
     "signalsize": True,
-    "createtime": True
+    "createtime": True,
+    "detail": True
+}
+
+ACTION_DELETE_LIST = {
+    "delete": True
 }
 
 def action_all_validator(action_all):
@@ -75,6 +82,15 @@ def action_describe_validator(action):
     :return:
     """
     if not action or action not in ACTION_DESCRIBE_LIST:
+        raise serializers.ValidationError(u"action is invalid!")
+
+def action_delete_validator(action):
+    """
+    validator delete action
+    :param action:
+    :return:
+    """
+    if not action or action not in ACTION_DELETE_LIST:
         raise serializers.ValidationError(u"action is invalid!")
 
 def username_validator(username):
@@ -161,10 +177,14 @@ def signal_id_validator(signal_id):
     :return:
     """
     if isinstance(signal_id, list):
+        # logger.info("signal_id list is %s" % signal_id)
         for k in signal_id:
+            logger.info("signal_id is %s" % k)
             if not SignalModel.signal_exist_by_id(k):
+                logger.info("signal_id is %s" % signal_id)
                 raise serializers.ValidationError(_(u"%s not exist in SignalModel" % k))
-    if not SignalModel.signal_exist_by_id(signal_id=signal_id):
+    elif not SignalModel.signal_exist_by_id(signal_id=signal_id):
+        logger.info("signal_id is %s" % signal_id)
         raise serializers.ValidationError(_(u"%s not exist in SignalModel" % signal_id))
 
 
@@ -174,7 +194,7 @@ def packagenum_validator(packagenum):
     :param packageNum:
     :return:
     """
-    if packagenum <=0 or packagenum >20:
+    if packagenum <= 0 or packagenum >20:
         raise serializers.ValidationError(u"packagenum is out of range!")
 
 
