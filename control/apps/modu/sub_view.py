@@ -54,6 +54,7 @@ def CreateDistri(payload):
         "distri_mode": distri_mode,
         "owner": username
     }
+
     ret_message = create_ves_distri(sub_payload)
     return ret_message
 

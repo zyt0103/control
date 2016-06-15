@@ -16,7 +16,6 @@ from .serializer import DeleteSignalSerializer
 from .sub_view import Router
 
 from control.control.logger import getLogger
-
 logger = getLogger(__name__)
 
 from .models import SignalModel
@@ -104,7 +103,6 @@ class CreateSignal(APIView):
             "signal_id": signal_id,
             "transInterval": transInterval
         }
-
         logger.info("The main payload is %s" % payload)
         route = Router(payload)
         resp = route.CreateSignalRouter()

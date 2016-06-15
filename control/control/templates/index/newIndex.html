@@ -10,42 +10,6 @@
 		<link rel="stylesheet" href="{% static "bz/base.css" %}">
 		
 		<title>AIS平台</title>
-		<style>
-		.left-container{ ;
-			float: left;
-			width: 20%;
-			height: 725px;
-		}
-		.top-nav{
-			padding-right: 40px;
-			height: 60px;
-			background:#eee ;
-		}
-		.myNav{
-			line-height: 60px;
-			}
-		.myNav span{
-			margin-right: 10px;
-			}
-		@media (min-width: 700px){ 
-			.myNav{
-				float: right;
-			}
-		}
-		@media (max-width: 700px) { 
-			.top-nav{
-				text-align: center;
-			}
-		}
-		.main{
-			padding: 0 20px 20px 20px;
-		}
-		.myPanel{
-			float: left;
-			padding: 0 5px 0 0;
-		}
-		
-	</style>
 	</head>
 <!-------------------------------------------------------body----------------------------------------------------------------->
 	<body>
@@ -57,9 +21,9 @@
         			</div>
 	        		<div class="side-nav container"><!--左下-->
 			            <ul class="nav nav-stacked nav-pills">
-			                <li  id="modul_btn"><a href="#"><span class="fa fa-user"></span>调制</a></li>
-			                <li  id="demodul_btn"><a href="#"><span class="fa fa-user"></span>解调</a></li>
-			                <li  id="analy_btn"><a href="#"><span class="fa fa-user"></span>分析</a></li>
+			                <li  id="modul_btn" class="active"><a href="newindex.html"><span class="fa fa-user"></span>调制</a></li>
+			                <li  id="demodul_btn"><a href="demodul.html"><span class="fa fa-user"></span>解调</a></li>
+			                <li  id="analy_btn"><a href="analysis.html"><span class="fa fa-user"></span>分析</a></li>
 			            </ul>
 	        		</div>
     			</div>
@@ -79,12 +43,12 @@
 	                            <button onclick="addmodal()" type="button"  class="handle btn btn-info pull-right"
                                         data-toggle="modal" data-target="#addModal1" id="add">创建信号</button>
 	                        </span>
-	                        <span class="myPanel">
-	                            <input type="button" class="handle btn btn-warning pull-right" id="delete" value="删除信号" />
+	                        <span class="myPanel ">
+	                            <input type="button" class=" handle btn btn-warning pull-right noclick" id="delete" value="删除信号" />
 	                        </span>
 	                        <span class="myPanel">
-	                            <input onclick="addmodalType()" type="button" class="handle btn btn-success pull-right"
-                                       data-toggle="modal" data-target="#addModalType" id="demodul" value="解调信号">
+	                            <input  type="button" class="handle btn btn-success pull-right noclick"
+                                       data-toggle="modal" data-target="#addModalType" id="demodul" value="解调信号"></input>
 	                        </span>
 						</div>
 						<div class="panel panel-default modul_contain ">
@@ -111,6 +75,26 @@
                                             <td>{{ infoIndex.create_time }}</td>
                                         </tr>
                                     {% endfor %}
+		                            <tr>
+		                                <td>
+		                                    <input type="checkbox">信号1
+		                                </td>
+                                        <td>signal-26anue4b</td>
+		                                <td>aaa</td>
+		                                <td>aaa</td>
+		                                <td>aaa</td>
+                                        <td>no</td>
+		                            </tr>
+                                    <tr>
+		                                <td>
+		                                    <input type="checkbox">信号2
+		                                </td>
+                                        <td>signal-6nmw8vac</td>
+		                                <td>aaa</td>
+		                                <td>aaa</td>
+		                                <td>aaa</td>
+                                        <td>no</td>
+		                            </tr>
 		                        </tbody>
 		                    </table>
                         </div>
@@ -125,47 +109,6 @@
                         	</ul>
                         </div>
                      </div>
-					
-     <!-------------------------------------------------解调页面------------------------------------------------------------------->
-            		<div id="ais_demodulation" class="hidden ">
-            			<div class="panel-default control_button panel-body">
-	                        <span class=" myPanel ">
-	                            <button onclick="addmodalDemodul()" type="button"  class="handle btn btn-info pull-right"
-                                        data-toggle="modal" data-target="#addModalDemodul" id="addDemodul">创建解调方式</button>
-	                        </span>
-	                        <span class="myPanel">
-	                            <input type="button" class="handle btn btn-warning pull-right" id="deleteDemodul" value="删除解调方式" />
-	                        </span>
-						</div>
-                        <div class="panel panel-default modul_contain ">
-                    	    <table class="table table-bordered text-center" id="showTableDemodul">
-		                        <thead>
-		                            <tr>
-		                                <th class="text-center active">type</th>
-		                                <th class="text-center active">ant_type</th>
-		                                <th class="text-center active">protocol</th>
-		                                <th class="text-center active">sync_type</th>
-                                        <th class="text-center active">mod_type</th>
-		                            </tr>
-		                        </thead>
-		                        <tbody>
-		                            <tr>
-		                                <td>
-		                                    <input type="checkbox">方式一
-		                                </td>
-		                                <td>single_ant</td>
-		                                <td>default</td>
-		                                <td>SOTDMA</td>
-                                        <td>gmask</td>
-		                            </tr>
-		                        </tbody>
-		                    </table>
-                        </div>
-            		</div>
-     <!-------------------------------------------------分析页面------------------------------------------------------------------->
-			        <div id="ais_analysis" class="hidden">
-			                        分析页面
-			        </div>
 				</div>
 			</div>
 		</div>
