@@ -328,15 +328,15 @@ def Getdetail(payload):
         return control_response(code=DESCRIBErrorCode.GET_DETAIL_FAILED, msg=str(exp))
 
 
-def Deletesignal(payload):
-    """
-    删除信号信息
-    :param payload:
-    :return:
-    """
-    signal_id = payload.get("signal_id")
-    if isinstance(signal_id, list):
-        for 
+# def Deletesignal(payload):
+#     """
+#     删除信号信息
+#     :param payload:
+#     :return:
+#     """
+#     signal_id = payload.get("signal_id")
+#     if isinstance(signal_id, list):
+#         for
 
 
 def get_createtime(signal_id):
