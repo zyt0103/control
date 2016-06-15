@@ -12,6 +12,7 @@ from .helper import Getcreatetime
 from .helper import Getsignalsize
 from .helper import Getschedule
 from .helper import Getdescribe
+from .helper import Getdetail
 from .helper import get_save_schedule
 from .helper import get_save_signalsize
 
@@ -297,3 +298,16 @@ class Router():
             return Getsignalsize(payload)
         if action == "createtime":
             return Getcreatetime(payload)
+        if action == "detail":
+            return Getdetail(payload)
+
+
+    def DeleteSignalRouter(self):
+        """
+        删除信号
+        :return:
+        """
+        payload = self.payload
+        action = payload.get("action")
+        if action == "delete":
+            return Deletesignal(payload)

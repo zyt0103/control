@@ -314,6 +314,32 @@ def Getschedule(payload):
         return control_response(code=DESCRIBErrorCode.GET_SCHEDULE_FAILED, msg=str(exp))
 
 
+def Getdetail(payload):
+    """
+    获取信号的详细参数信息
+    :param payload:
+    :return:
+    """
+    try:
+        signal_id = payload.get("signal_id")
+        detail_info = get_signal_detail(signal_id)
+        return control_response(code=0, ret_set=detail_info)
+    except Exception as exp:
+        logger.info("get signal detail info error:%s" % str(exp))
+        return control_response(code=DESCRIBErrorCode.GET_DETAIL_FAILED, msg=str(exp))
+
+
+def Deletesignal(payload):
+    """
+    删除信号信息
+    :param payload:
+    :return:
+    """
+    signal_id = payload.get("signal_id")
+    if isinstance(signal_id, list):
+        for 
+
+
 def get_createtime(signal_id):
     """
     获取创建时间
@@ -356,6 +382,7 @@ def get_save_schedule(signal_id):
             rate = filenum / total_filenum
         else:
             rate = rate_matlab
+        rate = round(rate, 2)
         status_model, error = SignalModel.status_schedule_save(signal_id=signal_id, schedule=rate)
         if not status_model:
             return control_response(code=DESCRIBErrorCode.SAVE_STATUS_ERROR, msg=error)
@@ -363,6 +390,23 @@ def get_save_schedule(signal_id):
     except Exception as exp:
         logger.error("get schedule error: %s" % str(exp))
         return 0
+
+
+def get_signal_detail(signal_id):
+    """
+    获取信号详细参数信息
+    :param signal_id:
+    :return:
+    """
+    if isinstance(signal_id, list):
+        detail_info = []
+        for key_signal_id in signal_id:
+            info = get_par_by_signal_id(key_signal_id)
+            detail_info.append(info)
+        return detail_info
+    else:
+        detail_info = get_par_by_signal_id(signal_id)
+        return detail_info
 
 
 def getdirsize(dir):
@@ -375,7 +419,7 @@ def getdirsize(dir):
     size = 0L
     for root, dirs, files in os.walk(dir):
         size += sum([getsize(join(root, name)) for name in files])
-    return size/1024
+    return round(size/1024)
 
 
 def getfilenum(signal_id):
@@ -417,3 +461,36 @@ def get_matlab_rate(total_filenum, signal_id):
     return rate, filenum
 
 
+def get_par_by_signal_id(signal_id):
+    try:
+        # 获取各个表
+        signal = SignalModel.get_signal_by_id(signal_id)
+        aisdata_id = SignalModel.get_aisdata_id_by_siganl_id(signal_id)
+        aisdata = AisdataModel.get_aisdata_by_id(aisdata_id)
+        timetable_id = SignalModel.get_timetable_id_by_signal_id(signal_id)
+        timetable = TimetableModel.get_timetable_by_id(timetable_id)
+        partable_id = SignalModel.get_partable_id_by_signal_id(signal_id)
+        partable = PartableModel.get_partbale_by_id(partable_id)
+        distri_id = PartableModel.get_distri_id_by_partable_id(partable_id)
+        distri = DistriModel.get_distri_by_id(distri_id)
+        # 获取个表中对应信号的参数信息
+        par = {
+            "lat": distri.distri_lat,
+            "lon": distri.distri_lon,
+            "height": distri.distri_height,
+            "vesnum": distri.distri_ves_num,
+            "distri_mode": distri.distri_mode,
+            "pitch": partable.pitch,
+            "azimuth": partable.azimuth,
+            "ant_type": partable.antenna_type,
+            "channel_type": partable.channel_type,
+            "obtime": timetable.obtime,
+            "transinterval": timetable.transinterval,
+            "protocol": timetable.protocol,
+            "name_sinal": signal.name_signal,
+            "snr": signal.snr
+            }
+        return par
+    except Exception as exp:
+        logger.error("get parameter from database error: %s" % str(exp))
+        return False

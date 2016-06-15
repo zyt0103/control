@@ -110,15 +110,18 @@ class DESCRIBErrorCode():
     GET_CREATETIME_FAILED = 20051
     GET_SIGNALSIZE_FAILED = 20052
     GET_SCHEDULE_FAILED = 20053
-    SAVE_STATUS_ERROR = 20054
+    GET_DETAIL_FAILED = 20054
+    SAVE_STATUS_ERROR = 20055
+
 
 
 DESCRIB_MSG = {
-    20050: _(u"信息查询错误！"),
     20051: _(u"获取信号创建时间失败！"),
+    20050: _(u"信息查询错误！"),
     20052: _(u"获取信号大小失败！"),
     20053: _(u"获取信号进度失败！"),
-    20054: _(u"保存状态信息错误！")
+    20054: _(u"获取信号详细信息失败！"),
+    20055: _(u"保存状态信息错误！")
 
 }
 

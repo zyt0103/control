@@ -17,11 +17,13 @@ from control.apps.modu.sub_view import SaveSignalInfo
 from control.control.base import getLogger
 logger = getLogger(__name__)
 
+
 class Index(View):
     def get(self, request, *args, **kwargs):
         # return render_to_response("index/index.html",
         #                           context_instance=RequestContext(request, locals()))
         return render(request, "index/index.html")
+
 
 class test(View):
     def get(self, request, *args, **kwargs):
@@ -29,17 +31,20 @@ class test(View):
         #                           context_instance=RequestContext(request, locals()))
         return render(request, "index/test.html")
 
+
 class plot(View):
     def get(self, request, *args, **kwargs):
         # return render_to_response("index/index.html",
         #                           context_instance=RequestContext(request, locals()))
         return render(request, "index/plot.html")
 
+
 class drag(View):
     def get(self, request, *args, **kwargs):
         # return render_to_response("index/index.html",
         #                           context_instance=RequestContext(request, locals()))
         return render(request, "index/drag.html")
+
 
 class newindex(View):
     def get(self, request):
@@ -54,12 +59,14 @@ class newindex(View):
         for i in range(len(signal)):
             signal_info = {"name_signal": signal[i].name_signal,
                            "signal_id": signal[i].signal_id,
-                           "size": signal[i].signal_size,
-                           "status": signal[i].schedule,
+                           "size": int(signal[i].signal_size),
+                           "status": signal[i].schedule * 100,
                            "create_time": signal[i].create_datetime
                            }
             info.append(signal_info)
         return render(request, "index/newIndex.html", Context({"Info": info}))
+
+
 class addmodal(View):
     def get(self, request):
 
