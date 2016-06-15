@@ -82,8 +82,8 @@ class addmodalType(View):
         dict_obj['demo_list'] = []
         for i in range(0, 4):
             temp = {}
-            temp.update({'type': u'method_1', 'ant_type': 'single_type',
-                         'protocol': 'default', 'sync_type': 'sotdma',
+            temp.update({'type_name_de': u'method_1', 'ant_type_de': 'single_ant',
+                         'protocol_de': 'SOTDMA', 'sync_type': 'DEFAULT',
                          'mod_type':'gmsk'})
             dict_obj['demo_list'].append(temp)
-        return render(request, "index/addModalType.html",dict_obj)
+        return render(request, "index/addModalType.html", dict_obj)
