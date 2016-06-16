@@ -53,7 +53,7 @@ class newindex(View):
         if signal:
             logger.info("signal_id is %s" % signal[0].signal_id)
         for signal_index in signal:
-            if signal_index.schedule != 1:
+            if signal_index.schedule != 1 or signal_index.signal_size == 0:
                 SaveSignalInfo(signal_index.signal_id)
         info = []
         for i in range(len(signal)):
