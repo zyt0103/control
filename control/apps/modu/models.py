@@ -559,12 +559,15 @@ class SignalModel(BaseModel):
             return False
 
     @classmethod
-    def signal_delete_by_id(cls, signal_id, deleted = False):
+    def signal_delete_by_id(cls, signal_id, deleted=False):
         try:
-            return SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id).delete()
+            signal = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id)
+            signal.deleted = True
+            signal.save()
+            return True, None
         except Exception as exp:
             logger.error("delete signal error: %s" % str(exp))
-            return False
+            return None, exp
 
     @classmethod
     def signal_get_record(cls, deleted=False):
