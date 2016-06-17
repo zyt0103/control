@@ -16,10 +16,24 @@ class DemodSignalSerializer(serializers.Serializer):
         validators=[signal_id_validator]
     )
 
-    ant_type = serializers.CharField(
+    demod_type_id = serializers.CharField(
         max_length=20,
         required=False,
-        validators=[ant_type_validator]
+        validators=[demod_type_id_validator]
+    )
+
+
+
+class DemodTypeSerializer(serializers.Serializer):
+    """
+    解调方式序列化函数
+    """
+    demod_type_name = serializers.CharField(
+        max_length=20
+    )
+
+    ant_num = serializers.IntegerField(
+        validators=[ant_num_validator]
     )
 
     protocol = serializers.CharField(

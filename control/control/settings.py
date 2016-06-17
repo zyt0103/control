@@ -178,6 +178,7 @@ PARTABLE_PREFIX = "partable"
 TIMETABLE_PREFIX = "timetable"
 AISDATA_PREFIX = "aisdata"
 SIGNAL_PREFIX = "signal"
+DEMOD_TYPE_PREFIX = "demodtype"
 NAME_ID_LENGTH = 8
 
 ###################IF RUN MATLAB SETTINGS#############

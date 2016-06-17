@@ -10,9 +10,14 @@ from django.views.decorators.cache import cache_page
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from control.apps.modu.views import SignalModel
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
 
+from control.apps.modu.models import SignalModel
 from control.apps.modu.sub_view import SaveSignalInfo
+
+from control.apps.demod.models import DemodType
 
 from control.control.base import getLogger
 logger = getLogger(__name__)
@@ -50,8 +55,15 @@ class newindex(View):
     def get(self, request):
         user_id = request.REQUEST.get("user_id", "user-safoewfw")
         signal = SignalModel.objects.filter(deleted=False).filter(partable__distri__user__username=user_id)
-        if signal:
-            logger.info("signal_id is %s" % signal[0].signal_id)
+        paginator = Paginator(signal, 12)
+        page = request.REQUEST.get("page", 1)
+        try:
+            signal = paginator.page(page)
+        except PageNotAnInteger:
+            signal = paginator.page(1)
+        except EmptyPage:
+            signal = paginator.page(paginator.num_pages)
+
         for signal_index in signal:
             if signal_index.schedule != 1:
                 SaveSignalInfo(signal_index.signal_id)
@@ -64,13 +76,24 @@ class newindex(View):
                            "create_time": signal[i].create_datetime
                            }
             info.append(signal_info)
-        return render(request, "index/newIndex.html", Context({"Info": info}))
+        return render(request, "index/newIndex.html", Context({"Info": info, "topics": signal}))
 
 
 class demodul(View):
     def get(self, request):
+        user_id = request.REQUEST.get("user_id", "user-safoewfw")
+        demod_type = DemodType.objects.filter(deleted=False).filter(user_id=user_id)
+        paginator = Paginator(demod_type, 12)
+        page = request.REQUEST.get("page", 1)
 
-        return render(request, "index/demodul.html")
+        try:
+            demod_type = paginator.page(page)
+        except PageNotAnInteger:
+            demod_type = paginator.page(1)
+        except EmptyPage:
+            demod_type = paginator.page(paginator.num_pages)
+
+        return render(request, "index/demodul.html", {"topics": demod_type})
 
 
 class analysis(View):

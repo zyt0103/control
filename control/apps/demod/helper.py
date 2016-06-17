@@ -5,7 +5,7 @@ from django.conf import settings
 from control.control.base import control_response
 from control.control.err_msg import DemodErrorCode
 
-from .models import DemodModel
+from .models import DemodModel, DemodType
 from .tasks import Demod_single_ant
 from .tasks import Demod_double_ant
 from .tasks import Demod_four_ant
@@ -21,55 +21,80 @@ class Router():
 
     def Ant_select(self):
         """
-        选择解调的天线类型
+        选择解调的方式(天线数量)
         :return:
         """
         payload = self.payload
-        ant_type = payload.get("ant_type")
+        demod_type_id = payload.get("demod_type_id")
         signal_id = payload.get("signal_id")
-        protocol = payload.get("protocol")
-        sync_type = payload.get("sync_type")
         logger.info("payload is %s" % payload)
         demod_model, error = DemodModel.objects.create(signal_id=signal_id,
-                                                       ant_type=ant_type,
-                                                       protocol=protocol,
-                                                       sync_type=sync_type)
+                                                       demod_type_id=demod_type_id,
+                                                       demod_prob_fact=None,
+                                                       demod_prob_theory=None)
         if not demod_model:
             return control_response(code=DemodErrorCode.DEMOD_SAVE_FAILED, msg=error)
 
-        if not isinstance(ant_type, list):
-            ant_type = [ant_type]
+        demod_type = DemodType.get_demodtype_by_id(demodType_id=demod_type_id)
+        key_ant_type = demod_type.ant_num
+        protocol = demod_type.protocol
+        sync_type = demod_type.sync_type
+        ant_type = demod_type.ant_type
 
-        for key_ant_type in ant_type:
+        if key_ant_type == "single_ant":
+            sub_payload = {
+                "signal_id": signal_id,
+                "protocol": protocol,
+                "sync_type": sync_type,
+                "action": ant_type
+            }
+            logger.info("The sub_payload is %s" % sub_payload)
+            if settings.IF_RUN_MATLAB == 'True':
+                Demod_single_ant.apply_async([sub_payload])
 
-            if key_ant_type == "single_ant":
-                sub_payload = {
-                    "signal_id": signal_id,
-                    "protocol": protocol,
-                    "sync_type": sync_type,
-                    "action": ant_type
-                }
-                logger.info("The sub_payload is %s" % sub_payload)
-                if settings.IF_RUN_MATLAB == 'True':
-                    Demod_single_ant.apply_async([sub_payload])
+        if key_ant_type == "douoble_ant":
+            sub_payload = {
+                "signal_id": signal_id,
+                "protocol": protocol,
+                "sync_type": sync_type,
+                "action": ant_type
+            }
+            if settings.IF_RUN_MATLAB == 'True':
+                Demod_double_ant.apply_async([sub_payload])
 
-            if key_ant_type == "douoble_ant":
-                sub_payload = {
-                    "signal_id": signal_id,
-                    "protocol": protocol,
-                    "sync_type": sync_type,
-                    "action": ant_type
-                }
-                if settings.IF_RUN_MATLAB == 'True':
-                    Demod_double_ant.apply_async([sub_payload])
-
-            if key_ant_type == "four_ant":
-                sub_payload = {
-                    "signal_id": signal_id,
-                    "protocol": protocol,
-                    "sync_type": sync_type,
-                    "action": ant_type
-                }
-                if settings.IF_RUN_MATLAB == 'True':
-                    Demod_four_ant.apply_async([sub_payload])
+        if key_ant_type == "four_ant":
+            sub_payload = {
+                "signal_id": signal_id,
+                "protocol": protocol,
+                "sync_type": sync_type,
+                "action": ant_type
+            }
+            if settings.IF_RUN_MATLAB == 'True':
+                Demod_four_ant.apply_async([sub_payload])
         return control_response(code=0, msg="Demod is running!")
+
+
+def create_demod_type(payload):
+    """
+    创建解调方式
+    :param payload:
+    :return:
+    """
+    user_id = payload.get("user_id")
+    demod_type_id = payload.get("demod_type_id")
+    demod_type_name = payload.get("demod_type_name")
+    ant_num = payload.get("ant_num")
+    protocol = payload.get("protocol")
+    sync_type = payload.get("sync_type")
+
+    demod_type, error = DemodType.objects.create(user_id=user_id,
+                                                demod_type_id=demod_type_id,
+                                                demod_type_name=demod_type_name,
+                                                ant_num=ant_num,
+                                                protocol=protocol,
+                                                sync_type=sync_type)
+
+    if error:
+        return control_response(code=DemodErrorCode.DEMOD_TYPE_SAVE_FAILED, msg=error)
+
+    return control_response(code=0, msg="Demod Type create succ")

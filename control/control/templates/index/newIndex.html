@@ -73,39 +73,24 @@
                                             <td>{{ infoIndex.status}}%</td>
                                             <td>{{ infoIndex.size }} KB</td>
                                             <td>{{ infoIndex.create_time }}</td>
+                                            <td></td>
                                         </tr>
                                     {% endfor %}
-		                            <tr>
-		                                <td>
-		                                    <input type="checkbox">信号1
-		                                </td>
-                                        <td>signal-26anue4b</td>
-		                                <td>aaa</td>
-		                                <td>aaa</td>
-		                                <td>aaa</td>
-                                        <td>no</td>
-		                            </tr>
-                                    <tr>
-		                                <td>
-		                                    <input type="checkbox">信号2
-		                                </td>
-                                        <td>signal-6nmw8vac</td>
-		                                <td>aaa</td>
-		                                <td>aaa</td>
-		                                <td>aaa</td>
-                                        <td>no</td>
-		                            </tr>
 		                        </tbody>
 		                    </table>
                         </div>
                         <div class="text-center pagefooter">
                         	<ul class="pagination">
-                        		<li><a href="#">&laquo;</a></li>
-                        		<li><a href="#">1</a></li>
-                        		<li><a href="#">2</a></li>
-                        		<li><a href="#">3</a></li>
-                        		<li><a href="#">4</a></li>
-                        		<li><a href="#">&raquo;</a></li>
+                                <p>
+                                {% if topics.has_previous %}
+                                  <a href="?page={{ topics.previous_page_number }}">Previous</a>
+                                  {% endif %}
+                                  {# topics.paginator.number_pages 返回总页数 #}
+                                  Page {{ topics.number }} of {{ topics.paginator.num_pages }}.
+                                {% if topics.has_next %}
+                                  <a href="?page={{ topics.next_page_number }}">Next</a>
+                                {% endif %}
+                                </p>
                         	</ul>
                         </div>
                      </div>
