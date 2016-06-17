@@ -54,7 +54,7 @@ class CreateSignalSerializer(serializers.Serializer):
         max_length=20,
         validators=[aisdata_id_validator]
     )
-    # logger.info("aisdata_id is %s"% aisdata_id)
+
     singal_id = serializers.CharField(
         required=False,
         max_length=20,

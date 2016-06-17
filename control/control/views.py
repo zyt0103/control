@@ -65,7 +65,7 @@ class newindex(View):
             signal = paginator.page(paginator.num_pages)
 
         for signal_index in signal:
-            if signal_index.schedule != 1:
+            if signal_index.schedule != 1 or signal_index.signal_size == 0:
                 SaveSignalInfo(signal_index.signal_id)
         info = []
         for i in range(len(signal)):

@@ -11,6 +11,7 @@ from control.control.base import control_response
 from control.control.base import randomname_maker
 from control.control.err_msg import ModuErrorCode
 from control.control.err_msg import DESCRIBErrorCode
+from control.control.err_msg import DELETEErrorCode
 
 from .models import AisdataModel
 from .models import DistriModel
@@ -334,15 +335,33 @@ def Getdetail(payload):
         return control_response(code=DESCRIBErrorCode.GET_DETAIL_FAILED, msg=str(exp))
 
 
-# def Deletesignal(payload):
-#     """
-#     删除信号信息
-#     :param payload:
-#     :return:
-#     """
-#     signal_id = payload.get("signal_id")
-#     if isinstance(signal_id, list):
-#         for
+def Deletesignal(payload):
+    """
+    删除信号信息
+    :param payload:
+    :return:
+    """
+    signal_id_list = payload.get("signal_id")
+    if isinstance(signal_id_list, list):
+        delete_error = {}
+        for signal_id in signal_id_list:
+            deleted, error = SignalModel.signal_delete_by_id(signal_id)
+            if error is not None:
+                logger.error(u"信号%s删除失败：%s" % (signal_id, error))
+                delete_error.update({signal_id: error})
+        if delete_error:
+            return control_response(code=DELETEErrorCode.DELETE_SIGANL_FAILED,
+                                    msg=u"信号删除失败！",
+                                    ret_set=[delete_error])
+        return control_response(code=0, msg=u"信号删除成功！")
+    deleted, error = SignalModel.signal_delete_by_id(signal_id_list)
+    if error is not None:
+        delete_error = {signal_id_list: error}
+        logger.error(u"信号%s删除失败：%s" % (signal_id_list, error))
+        return control_response(code=DELETEErrorCode.DELETE_SIGANL_FAILED,
+                                msg=u"信号删除失败！",
+                                ret_set=[delete_error])
+    return control_response(code=0, msg=u"信号删除成功！")
 
 
 def get_createtime(signal_id):
@@ -367,7 +386,7 @@ def get_save_signalsize(signal_id):
     status_model, error = SignalModel.status_size_save(signal_id=signal_id, signalsize=signalsize)
     logger.info("status_model is %s" % status_model)
     if not status_model:
-        return control_response(code=DESCRIBErrorCode.SAVE_STATUS_ERROR, msg=error)
+        return 0
     return signalsize
 
 
@@ -390,11 +409,11 @@ def get_save_schedule(signal_id):
         rate = round(rate, 2)
         status_model, error = SignalModel.status_schedule_save(signal_id=signal_id, schedule=rate)
         if not status_model:
-            return control_response(code=DESCRIBErrorCode.SAVE_STATUS_ERROR, msg=error)
+            return 0
         return rate
     except Exception as exp:
         logger.error("get schedule error: %s" % str(exp))
-        return 0
+        return 0, None
 
 
 def get_signal_detail(signal_id):
