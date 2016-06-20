@@ -10,6 +10,14 @@ from django.contrib.auth.admin import User
 from django.utils.translation import ugettext as _
 
 from control.control.err_msg import PARAMETER_CODE
+
+from control.apps.modu.models import DistriModel
+from control.apps.modu.models import PartableModel
+from control.apps.modu.models import TimetableModel
+from control.apps.modu.models import AisdataModel
+from control.apps.modu.models import SignalModel
+from control.apps.demod.models import DemodType
+
 from control.control.logger import getLogger
 
 logger = getLogger(__name__)
@@ -30,6 +38,34 @@ def user_temp():
         except Exception as exp:
             logger.error("Create User Failed！")
             return False
+
+
+def make_id(action):
+    while True:
+        if action == "distri":
+            distri_id = "%s-%s" % (settings.DISTRI_PREFIX, randomname_maker())
+            if not DistriModel.distri_exist_by_id(distri_id):
+                return distri_id
+        if action == "partable":
+            partable_id = "%s-%s" % (settings.PARTABLE_PREFIX, randomname_maker())
+            if not PartableModel.partable_exist_by_id(partable_id):
+                return partable_id
+        if action == "timetable":
+            timetable_id = "%s-%s" % (settings.TIMETABLE_PREFIX, randomname_maker())
+            if not TimetableModel.timetable_exist_by_id(timetable_id):
+                return timetable_id
+        if action == "aisdata":
+            aisdata_id = "%s-%s" % (settings.AISDATA_PREFIX, randomname_maker())
+            if not AisdataModel.aisdata_exist_by_id(aisdata_id):
+                return aisdata_id
+        if action == "signal":
+            signal_id = "%s-%s" % (settings.SIGNAL_PREFIX, randomname_maker())
+            if not SignalModel.signal_exist_by_id(signal_id):
+                return signal_id
+        if action == "demod_type":
+            demod_type_id = "%s-%s" % (settings.DEMOD_TYPE_PREFIX, randomname_maker())
+            if not DemodType.demodtype_exist_by_id(demod_type_id):
+                return demod_type_id
 
 
 def randomname_maker(num=settings.NAME_ID_LENGTH):
