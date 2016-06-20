@@ -1,4 +1,7 @@
 # coding=utf-8
+
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
@@ -463,14 +466,6 @@ class AisdataModel(BaseModel):
             logger.error("delete aisdata error: %s" % str(exp))
             return False
 
-    # @classmethod
-    # def get_aisdataid_by_id(cls, signal_id, deleted = False):
-    #     try:
-    #         aisdata = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id).aisdata
-    #         return aisdata.aisdata_id
-    #     except Exception as exp:
-    #         logger.error("get aisdata_id error: %s" % str(exp))
-    #         return False
 
 class SignalModel(BaseModel):
     class Meta:
@@ -486,7 +481,7 @@ class SignalModel(BaseModel):
     signal_id = models.CharField(
         max_length=20,
         null=False,
-        unique=True
+        unique=True,
     )
 
     name_signal = models.CharField(
@@ -563,6 +558,7 @@ class SignalModel(BaseModel):
         try:
             signal = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id)
             signal.deleted = True
+            signal.deleted_at = datetime.now()
             signal.save()
             return True, None
         except Exception as exp:

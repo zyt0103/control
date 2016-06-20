@@ -546,7 +546,7 @@ $(function(){
             },
             data: JSON.stringify(param),
             headers: {
-                'X-CSRFToken': 'JxH08rgyxxGyiH4TlmjCpPSjHrtHQAle',//?
+                'X-CSRFToken': 'DhbWdnwlobS4XTqd1Vg0oBPOAlyDy9aj',//?
                 'Content-Type': 'application/json'
             }
 	    });
@@ -590,7 +590,7 @@ $(function(){
             },
             data: JSON.stringify(param),
             headers: {
-                'X-CSRFToken': 'JxH08rgyxxGyiH4TlmjCpPSjHrtHQAle',
+                'X-CSRFToken': 'DhbWdnwlobS4XTqd1Vg0oBPOAlyDy9aj',
                 'Content-Type': 'application/json'
             }
         });

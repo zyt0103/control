@@ -46,7 +46,7 @@ def CreateDistri(payload):
     username = payload.get("owner")
     sub_payload = {
         "action": action,
-        "name_signal": name_signal + '_' + action,
+        "name_signal": name_signal,
         "packagenum": packagenum,
         "lon": lon,
         "lat": lat,
@@ -81,7 +81,7 @@ def CreatePartable(payload):
 
     sub_payload = {
         "action": action,
-        "name_signal": name_signal + '_' + action,
+        "name_signal": name_signal,
         "packagenum": packagenum,
         "height": height,
         "vesnum": vesnum,
@@ -91,7 +91,6 @@ def CreatePartable(payload):
         "channel_type": channel_type,
         "distri_id": distri_id,
     }
-    logger.info("patable_payload is %s" % sub_payload)
     ret_message = create_ves_parTalb(sub_payload)
     return ret_message
 
@@ -117,7 +116,7 @@ def CreateTimetable(payload):
 
     sub_payload = {
         "action": action ,
-        "name_signal": name_signal + '_' + action,
+        "name_signal": name_signal,
         "packagenum": packagenum,
         "obtime": obtime,
         "height": height,
@@ -148,7 +147,7 @@ def CreateAisdata(payload):
         distri_id = TimetableModel.get_distri_id_by_timetable_id(timetable_id)
     sub_payload = {
         "action": action,
-        "name_signal": name_signal + '_' + action,
+        "name_signal": name_signal,
         "packagenum": packagenum,
         "distri_id": distri_id,
         "timetable_id": timetable_id,
@@ -181,7 +180,7 @@ def CreateSignal(payload):
         partable_id = TimetableModel.get_partable_id_by_timetable_id(timetable_id)
     sub_payload = {
         "action": action,
-        "name_signal": name_signal + '_' + action,
+        "name_signal": name_signal,
         "packagenum": packagenum,
         "obtime": obtime,
         "vesnum": vesnum,

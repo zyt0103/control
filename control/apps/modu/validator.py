@@ -109,11 +109,11 @@ def distri_id_validator(distri_id):
     :param distri_id:
     :return:
     """
-    if isinstance(distri_id, list):
+    if isinstance(distri_id, (list, tuple)):
         for k in distri_id:
             if not DistriModel.distri_exist_by_id(k):
                 raise serializers.ValidationError(_(u"%s not exist in DistriModel" % k))
-    if not DistriModel.distri_exist_by_id(distri_id=distri_id):
+    elif not DistriModel.distri_exist_by_id(distri_id=distri_id):
         raise serializers.ValidationError(_(u"%s not exist in DistriModel" % distri_id))
         # return value
 
@@ -134,11 +134,11 @@ def partable_id_validator(partable_id):
     :param partable_id:
     :return:
     """
-    if isinstance(partable_id, list):
+    if isinstance(partable_id, (list, tuple)):
         for k in partable_id:
             if not PartableModel.partable_exist_by_id(k):
                 raise serializers.ValidationError(_(u"%s not exist in PartableModel" % k))
-    if not PartableModel.partable_exist_by_id(partable_id=partable_id):
+    elif not PartableModel.partable_exist_by_id(partable_id=partable_id):
         raise serializers.ValidationError(_(u"%s not exist in PartableModel" % partable_id))
 
 
@@ -148,11 +148,11 @@ def timetable_id_validator(timetable_id):
     :param timetable_id:
     :return:
     """
-    if isinstance(timetable_id, list):
+    if isinstance(timetable_id, (list, tuple)):
         for k in timetable_id:
             if not TimetableModel.timetable_exist_by_id(k):
                 raise serializers.ValidationError(_(u"%s not exist in TimetableModel" % k))
-    if not TimetableModel.timetable_exist_by_id(timetable_id=timetable_id):
+    elif not TimetableModel.timetable_exist_by_id(timetable_id=timetable_id):
         raise serializers.ValidationError(_(u"%s not exist in TimetableModel" % timetable_id))
 
 
@@ -162,11 +162,11 @@ def aisdata_id_validator(aisdata_id):
     :param aisdata_id:
     :return:
     """
-    if isinstance(aisdata_id, list):
+    if isinstance(aisdata_id, (list, tuple)):
         for k in aisdata_id:
             if not AisdataModel.aisdata_exist_by_id(k):
                 raise serializers.ValidationError(_(u"%s not exist in AisdataModel" % k))
-    if not AisdataModel.aisdata_exist_by_id(aisdata_id=aisdata_id):
+    elif not AisdataModel.aisdata_exist_by_id(aisdata_id=aisdata_id):
         raise serializers.ValidationError(_(u"%s not exist in AisdataModel" %aisdata_id))
 
 
@@ -176,7 +176,7 @@ def signal_id_validator(signal_id):
     :param signal_id:
     :return:
     """
-    if isinstance(signal_id, list):
+    if isinstance(signal_id, (list, tuple)):
         # logger.info("signal_id list is %s" % signal_id)
         for k in signal_id:
             if not SignalModel.signal_exist_by_id(k):
@@ -310,7 +310,7 @@ def filename_validator(filename):
     :param filename:
     :return:
     """
-    if isinstance(filename, list):
+    if isinstance(filename, (list, tuple)):
         for key_filename in filename:
             if not SignalModel.signal_exist_by_filename(key_filename):
                 raise serializers.ValidationError(u"filename is not exist in SignalModel!")
