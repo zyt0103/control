@@ -19,6 +19,8 @@ from .models import PartableModel
 from .models import SignalModel
 from .models import TimetableModel
 
+from control.apps.demod.models import DemodType
+
 
 from .models import ScheduleModel
 from .tasks import *
@@ -33,6 +35,7 @@ def make_id(action):
         timetable_id = "%s-%s" % (settings.TIMETABLE_PREFIX, randomname_maker())
         aisdata_id = "%s-%s" % (settings.AISDATA_PREFIX, randomname_maker())
         signal_id = "%s-%s" % (settings.SIGNAL_PREFIX, randomname_maker())
+        demod_type_id = "%s-%s" % (settings.DEMOD_TYPE_PREFIX, randomname_maker())
         if action == "distri":
             if not DistriModel.distri_exist_by_id(distri_id):
                 return distri_id
@@ -48,6 +51,9 @@ def make_id(action):
         if action == "signal":
             if not SignalModel.signal_exist_by_id(signal_id):
                 return signal_id
+        if action == "demod_type":
+            if not DemodType.demodtype_exist_by_id(demod_type_id):
+                return demod_type_id
 
 
 def create_ves_distri(payload):

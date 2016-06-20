@@ -4,13 +4,13 @@ from django.utils.translation import ugettext as _
 from rest_framework import serializers
 
 from control.apps.modu.models import SignalModel
+from control.apps.demod.models import DemodType
 
 
-
-ANT_TYPE = {
-    "single_ant": True,
-    "double_ant": True,
-    "four_ant": True
+ANT_NUM = {
+    1: 1,
+    2: 2,
+    4: 4
 }
 
 PROTOCOL_TYPE = {
@@ -35,13 +35,17 @@ def signal_id_validator(signal_id):
     if not SignalModel.signal_exist_by_id(signal_id):
         raise serializers.ValidationError(u"%s is not exist in SignalModel!" % signal_id)
 
-def ant_type_validator(ant_type):
-    if isinstance(ant_type, list):
-        for key_ant_type in ant_type:
-            if key_ant_type not in ANT_TYPE:
-                raise serializers.ValidationError(u"ant_type is invalid！")
-    if ant_type not in ANT_TYPE:
-        raise serializers.ValidationError(u"ant_type is invalid!")
+def demod_type_id_validator(demod_type_id):
+    if isinstance(demod_type_id, list):
+        for key_demod_type_id in demod_type_id:
+            if not DemodType.demodtype_exist_by_id(key_demod_type_id):
+                raise serializers.ValidationError(u"%s is not exist in DemodType!" % key_demod_type_id)
+    elif not DemodType.demodtype_exist_by_id(demod_type_id):
+        raise serializers.ValidationError(u"%s is not exist in DemodType!" % demod_type_id)
+
+def ant_num_validator(ant_num):
+    if ant_num not in ANT_NUM:
+        raise serializers.ValidationError(u"ant_num is invalid!")
 
 def protocol_validator(protocol_type):
     """

@@ -22,6 +22,5 @@ devops/checkprob_result/*
 devops/plot&Data/*
 后台接口.docx
 single_ant_demod/*
-
-
-
+double_ant_demod/*
+four_ant_demod/*
