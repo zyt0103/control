@@ -120,9 +120,9 @@ body{
     max-width: 100px;
     
 }
-.table-time {
+.table-with {
 	word-break: break-all;
-    max-width: 100px;
+    max-width: 80px;
 }
 .pagefooter{
 	position:fixed;
@@ -166,4 +166,10 @@ body{
 }
 html input[type="button"].noclick{
     cursor: no-drop;
+}
+html button[type="button"].noclick{
+    cursor: no-drop;
+}
+.chioce{
+    padding-top: 0;
 }
