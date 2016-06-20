@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -21,9 +21,9 @@
         			</div>
 	        		<div class="side-nav container"><!--左下-->
 			            <ul class="nav nav-stacked nav-pills">
-			                <li  id="modul_btn" class="active"><a href="newindex.html"><span class="fa fa-user"></span>调制</a></li>
-			                <li  id="demodul_btn"><a href="demodul.html"><span class="fa fa-user"></span>解调</a></li>
-			                <li  id="analy_btn"><a href="analysis.html"><span class="fa fa-user"></span>分析</a></li>
+			                <li  id="modul_btn" class="active"><a href="newindex"><span class="fa fa-user"></span>调制</a></li>
+			                <li  id="demodul_btn"><a href="demodul"><span class="fa fa-user"></span>解调</a></li>
+			                <li  id="analy_btn"><a href="analysis"><span class="fa fa-user"></span>分析</a></li>
 			            </ul>
 	        		</div>
     			</div>
@@ -44,11 +44,16 @@
                                         data-toggle="modal" data-target="#addModal1" id="add">创建信号</button>
 	                        </span>
 	                        <span class="myPanel ">
-	                            <input type="button" class=" handle btn btn-warning pull-right noclick" id="delete" value="删除信号" />
+	                            <input type="button" class=" handle btn btn-warning pull-right"
+                                       id="delete" value="删除信号" disabled="disabled">
+                                </input>
 	                        </span>
 	                        <span class="myPanel">
-	                            <input  type="button" class="handle btn btn-success pull-right noclick"
-                                       data-toggle="modal" data-target="#addModalType" id="demodul" value="解调信号"></input>
+	                            <input  type="button" class="handle btn btn-success pull-right"
+                                       data-toggle="modal" data-target="#addModalType"
+                                        id="demodul" value="解调信号" disabled="disabled">
+
+                                </input>
 	                        </span>
 						</div>
 						<div class="panel panel-default modul_contain ">
@@ -69,7 +74,9 @@
                                             <td>
                                                 <input type="checkbox">
                                             {{ infoIndex.name_signal }}</td>
-                                            <td>{{ infoIndex.signal_id }}</td>
+                                            <td><a href="paramAnalysis.html" target="_blank">
+                                                {{ infoIndex.signal_id }}</a>
+                                            </td>
                                             <td>{{ infoIndex.status}}%</td>
                                             <td>{{ infoIndex.size }} KB</td>
                                             <td>{{ infoIndex.create_time }}</td>
@@ -78,6 +85,14 @@
                                     {% endfor %}
 		                        </tbody>
 		                    </table>
+                        </div>
+                        <div class="panel-default control_button panel-body chioce">
+                            <span class=" myPanel">
+                                <button class="handle btn btn-info" id="checkbox">全选</button>
+                            </span>
+                            <span class=" myPanel">
+                                <button class="handle btn btn-info" id="nocheckbox">取消</button>
+                            </span>
                         </div>
                         <div class="text-center pagefooter">
                         	<ul class="pagination">
@@ -96,6 +111,7 @@
                      </div>
 				</div>
 			</div>
+
 		</div>
 <!----------------------------------------------addModal1--------------------------------------------------------------------->
 		<div id="addModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

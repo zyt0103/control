@@ -21,8 +21,8 @@
         			</div>
 	        		<div class="side-nav container"><!--左下-->
 			            <ul class="nav nav-stacked nav-pills">
-			                <li  id="modul_btn"><a href="newindex.html"><span class="fa fa-user"></span>调制</a></li>
-			                <li  id="demodul_btn"><a href="demodul.html"><span class="fa fa-user"></span>解调</a></li>
+			                <li  id="modul_btn"><a href="newindex"><span class="fa fa-user"></span>调制</a></li>
+			                <li  id="demodul_btn"><a href="demodul"><span class="fa fa-user"></span>解调</a></li>
 			                <li  id="analy_btn" class="active"><a href="analysis.html"><span class="fa fa-user"></span>分析</a></li>
 			            </ul>
 	        		</div>
@@ -41,17 +41,70 @@
 			        <div id="ais_analysis" >
                         <div class="panel-default control_button panel-body"><!--2016.5.16这里去掉了一个panel类-->
 	                        <span class=" myPanel">
-	                            <button onclick="" type="button"  class="handle btn btn-info pull-right"
-                                        data-toggle="modal" data-target="" id="">参数分析</button>
+	                            <a href="paramAnalysis.html" target="_blank" onclick="return newlink()">
+                                    <button type="button"  class="handle btn btn-info pull-right noclick"
+                                           id="paramAnalysis">参数分析</button>
+                                </a>
 	                        </span>
 	                        <span class="myPanel">
-	                            <input type="button" class="handle btn btn-info pull-right" id="" value="解调结果" />
+                                <a  href="demodulResult.html" target="_blank" onclick="return newlink()">
+	                                <input type="button" class="handle btn btn-info pull-right noclick"
+                                           id="demodulResult" value="解调结果" />
+                                </a>
 	                        </span>
 	                        <span class="myPanel">
-	                            <input onclick="" type="button" class="handle btn btn-info pull-right"
-                                       data-toggle="modal" data-target="" id="" value="检测概率"></input>
+                                <a  href="checkPro.html" target="_blank" onclick="return newlink()">
+	                                <input type="button" class="handle btn btn-info pull-right noclick"
+                                           id="checkPro" value="检测概率"></input>
+                                </a>
 	                        </span>
 						</div>
+                        <div class="panel panel-default modul_contain ">
+                    	    <table class="table table-bordered text-center" id="showTable">
+		                        <thead>
+		                            <tr>
+                                        <th class="text-center active"> signal_name</th>
+		                                <th class="text-center active"> signal_id</th>
+                                        <th class="text-center active">demodul_status</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+{#                                    {% for infoIndex in Info %}#}
+{#                                        <tr>#}
+{#                                            <td>#}
+{#                                                <input type="checkbox">#}
+{#                                            {{ infoIndex.name_signal }}</td>#}
+{#                                            <td>{{ infoIndex.signal_id }}</td>#}
+{#                                            <td>{{ infoIndex.status}}%</td>#}
+{#                                            <td>{{ infoIndex.size }} KB</td>#}
+{#                                            <td>{{ infoIndex.create_time }}</td>#}
+{#                                            <td>no</td>#}
+{#                                        </tr>#}
+{#                                    {% endfor %}#}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox">1
+                                        </td>
+                                        <td><a href="paramAnalysis.html" target="_blank">a</a></td>
+                                        <td>未解调</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox">2
+                                        </td>
+                                        <td>b</td>
+                                        <td>解调中</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox">3
+                                        </td>
+                                        <td>c</td>
+                                        <td>已解调</td>
+                                    </tr>
+		                        </tbody>
+		                    </table>
+                        </div>
 			        </div>
 				</div>
 			</div>
@@ -68,5 +121,6 @@
 <script type="application/javascript" src="{% static "bz/vendor/jquery/dist/jquery.js" %}"></script>
 <script type="application/javascript" src="{% static "bz/vendor/bootstrap/dist/js/bootstrap.js" %}"></script>
 <script type="application/javascript" src="{% static "bz/base.js" %}" charset="UTF-8"></script>
+<script type="application/javascript" src="{% static "bz/analysis.js" %}" charset="UTF-8"></script>
 	</body>
 </html>
