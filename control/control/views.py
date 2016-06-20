@@ -80,6 +80,7 @@ class newindex(View):
 
 
 class demodul(View):
+
     def get(self, request):
         user_id = request.REQUEST.get("user_id", "user-safoewfw")
         demod_type = DemodType.objects.filter(deleted=False).filter(user_id=user_id)
@@ -97,10 +98,10 @@ class demodul(View):
 
 
 class analysis(View):
+
     def get(self, request):
 
         return render(request, "index/analysis.html")
-
 
 class addmodal(View):
     def get(self, request):
@@ -125,3 +126,19 @@ class addmodalType(View):
                          'mod_type':'gmsk'})
             dict_obj['demo_list'].append(temp)
         return render(request, "index/addModalType.html", dict_obj)
+
+
+class paramAnalysis(View):
+    def get(self, request):
+
+        return render(request, "index/paramAnalysis.html")
+
+class demodulResult(View):
+    def get(self, request):
+
+        return render(request, "index/demodulResult.html")
+
+class checkPro(View):
+    def get(self, request):
+
+        return render(request, "index/checkPro.html")
