@@ -47,3 +47,15 @@ class DemodTypeSerializer(serializers.Serializer):
         required=False,
         validators=[sync_type_validator]
     )
+
+class DemodResultSerializer(serializers.Serializer):
+    """
+    解调结果序列化函数
+    """
+    signal_id = serializers.CharField(
+        max_length=20
+    )
+
+    demod_type_id = serializers.CharField(
+        max_length=20
+    )

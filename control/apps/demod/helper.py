@@ -5,7 +5,7 @@ from django.conf import settings
 from control.control.base import control_response
 from control.control.err_msg import DemodErrorCode
 
-from .models import DemodModel, DemodType
+from .models import DemodModel, DemodType, DemodResult
 from .tasks import Demod_single_ant
 from .tasks import Demod_double_ant
 from .tasks import Demod_four_ant
@@ -98,3 +98,13 @@ def create_demod_type(payload):
         return control_response(code=DemodErrorCode.DEMOD_TYPE_SAVE_FAILED, msg=error)
 
     return control_response(code=0, msg="Demod Type create succ")
+
+
+def list_demod_result(payload):
+    signal_id = payload.get("signal_id", None)
+    demod_type_id = payload.get("demod_type_id", None)
+    demodresut, exp = DemodResult.describe_demod_result_by_id(signal_id=signal_id, demod_type_id=demod_type_id)
+    if exp:
+        return control_response(code=DemodErrorCode.DEMOD_TYPE_DESCRIBE_FAILED, msg=exp)
+
+    return control_response(code=0, msg="Demod result describe succ")

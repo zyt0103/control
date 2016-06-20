@@ -106,15 +106,15 @@ class DemodModel(BaseModel):
     def delete_demod_result_by_id(cls, signal_id, demod_type_id):
         try:
             if signal_id and demod_type_id:
-                res = DemodResult.objects.filter(signal_id=signal_id).filter(demod_type_id=demod_type_id)
+                res = DemodModel.objects.filter(signal_id=signal_id).filter(demod_type_id=demod_type_id)
                 if res:
                     res.delete()
             elif signal_id and not demod_type_id:
-                res = DemodResult.objects.filter(signal_id=signal_id)
+                res = DemodModel.objects.filter(signal_id=signal_id)
                 if res:
                     res.delete()
             elif not signal_id and demod_type_id:
-                res = DemodResult.objects.filter(demod_type_id=demod_type_id)
+                res = DemodModel.objects.filter(demod_type_id=demod_type_id)
                 if res:
                     res.delete()
             return True, None
@@ -141,11 +141,11 @@ class DemodType(BaseModel):
         db_table = 'demodtype'
 
     PROTOCOL_TYPE = (
-        (0, u"GMSK"),
+        (1, u"GMSK"),
     )
 
     SYNC_TYPE = (
-        (0, u"时频联合同步")
+        (1, u"时频联合同步"),
     )
     user_id = models.CharField(
         max_length=20,
@@ -170,15 +170,14 @@ class DemodType(BaseModel):
         unique=False
     )
 
-    protocol = models.CharField(
+    protocol = models.IntegerField(
         choices=PROTOCOL_TYPE,
-        max_length=50,
         null=False,
         unique=False
     )
 
-    sync_type = models.CharField(
-        max_length=20,
+    sync_type = models.IntegerField(
+        choices=SYNC_TYPE,
         null=False,
         unique=False
     )
@@ -247,12 +246,12 @@ class DemodResult(BaseModel):
             logger.warning("delete demodResult error %s" % exp)
             return False, exp
 
+
     @classmethod
-    def update_fact_demod_result_by_id(cls, signal_id, demod_type_id, demod_prob_fact):
+    def describe_demod_result_by_id(cls, signal_id, demod_type_id):
         try:
-            res = DemodResult.objects.filter(signal_id=signal_id).get(demod_prob_fact=demod_prob_fact)
-            res.demod_prob_fact = demod_prob_fact
-            res.save()
+            res = DemodResult.objects.filter(signal_id=signal_id).filter(demod_type_id=demod_type_id).order_by('create_datetime')
+            return res, None
         except Exception as exp:
             logger.error("update fact demodResult error %s" % exp)
-            return False, exp
+            return None, exp
