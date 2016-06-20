@@ -13,6 +13,7 @@ from .helper import Getsignalsize
 from .helper import Getschedule
 from .helper import Getdescribe
 from .helper import Getdetail
+from .helper import Deletesignal
 from .helper import get_save_schedule
 from .helper import get_save_signalsize
 

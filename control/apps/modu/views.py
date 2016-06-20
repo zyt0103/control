@@ -136,14 +136,14 @@ class DescribeSignal(APIView):
         return Response(resp, status=status.HTTP_200_OK)
 
 
-class DeleteSiganl(APIView):
+class DeleteSignal(APIView):
     """
     删除信号信息
     """
     def post(self, request, *args, **kwargs):
-        req_data = request.data
+        req_data = parProcess(request.data)
         logger.info("request data is %s" % req_data)
-        validator = DeleteSignalSerializer(req_data)
+        validator = DeleteSignalSerializer(data=req_data)
         logger.info("validator valid is %s" % validator.is_valid())
         if not validator.is_valid():
             code, msg = control_code(validator)
@@ -158,6 +158,7 @@ class DeleteSiganl(APIView):
         }
         route = Router(payload=payload)
         resp = route.DeleteSignalRouter()
+        logger.info("resp is %s" % resp)
         return Response(resp, status=status.HTTP_200_OK)
 
 
@@ -197,5 +198,4 @@ def parProcess(payload):
             "signal_id": signal_id
         }
     )
-    logger.info(signal_id)
     return payload

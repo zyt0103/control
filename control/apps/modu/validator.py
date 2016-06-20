@@ -179,12 +179,9 @@ def signal_id_validator(signal_id):
     if isinstance(signal_id, list):
         # logger.info("signal_id list is %s" % signal_id)
         for k in signal_id:
-            logger.info("signal_id is %s" % k)
             if not SignalModel.signal_exist_by_id(k):
-                logger.info("signal_id is %s" % signal_id)
                 raise serializers.ValidationError(_(u"%s not exist in SignalModel" % k))
     elif not SignalModel.signal_exist_by_id(signal_id=signal_id):
-        logger.info("signal_id is %s" % signal_id)
         raise serializers.ValidationError(_(u"%s not exist in SignalModel" % signal_id))
 
 
