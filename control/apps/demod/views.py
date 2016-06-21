@@ -14,7 +14,6 @@ from .helper import create_demod_type
 
 from control.control.logger import getLogger
 from control.control.base import get_path, user_temp
-
 from control.apps.modu.helper import make_id
 
 logger = getLogger(__name__)

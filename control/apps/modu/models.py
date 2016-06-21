@@ -634,10 +634,7 @@ class ScheduleModel(models.Model):
         :return:
         """
         try:
-            logger.info("here!")
-            logger.info("schedule is %s" % ScheduleModel.objects.get(model_id=model_id).model_rate)
             schedule = ScheduleModel.objects.filter(deleted=deleted).get(model_id=model_id).model_rate
-            logger.info("schedule is %f" % schedule)
             return schedule
         except Exception as exp:
             return 0

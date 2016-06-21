@@ -5,8 +5,9 @@ from os.path import getsize
 from os.path import join
 
 from control.control import settings
+from control.control.base import randomname_maker
 from control.control.base import control_response
-from control.control.base import make_id
+# from control.control.base import make_id
 from control.control.err_msg import ModuErrorCode
 from control.control.err_msg import DESCRIBErrorCode
 from control.control.err_msg import DELETEErrorCode
@@ -27,7 +28,32 @@ from control.control.logger import getLogger
 logger = getLogger(__name__)
 
 
-
+def make_id(action):
+    while True:
+        if action == "distri":
+            distri_id = "%s-%s" % (settings.DISTRI_PREFIX, randomname_maker())
+            if not DistriModel.distri_exist_by_id(distri_id):
+                return distri_id
+        if action == "partable":
+            partable_id = "%s-%s" % (settings.PARTABLE_PREFIX, randomname_maker())
+            if not PartableModel.partable_exist_by_id(partable_id):
+                return partable_id
+        if action == "timetable":
+            timetable_id = "%s-%s" % (settings.TIMETABLE_PREFIX, randomname_maker())
+            if not TimetableModel.timetable_exist_by_id(timetable_id):
+                return timetable_id
+        if action == "aisdata":
+            aisdata_id = "%s-%s" % (settings.AISDATA_PREFIX, randomname_maker())
+            if not AisdataModel.aisdata_exist_by_id(aisdata_id):
+                return aisdata_id
+        if action == "signal":
+            signal_id = "%s-%s" % (settings.SIGNAL_PREFIX, randomname_maker())
+            if not SignalModel.signal_exist_by_id(signal_id):
+                return signal_id
+        if action == "demod_type":
+            demod_type_id = "%s-%s" % (settings.DEMOD_TYPE_PREFIX, randomname_maker())
+            if not DemodType.demodtype_exist_by_id(demod_type_id):
+                return demod_type_id
 
 def create_ves_distri(payload):
     """
@@ -133,7 +159,6 @@ def create_time_table(payload):
         "partable_id": partable_id,
         "timetable_id": timetable_id
     }
-    logger.info("payload is %s" % sub_payload)
     timetable_model, error = TimetableModel.objects.create(distri_id=distri_id,
                                                            partable_id=partable_id,
                                                            timetable_id=timetable_id,
@@ -239,7 +264,6 @@ def Getdescribe(payload):
     try:
         createtime = get_createtime(signal_id)
         signalsize = get_save_signalsize(signal_id)
-        logger.info("siganlsize is %d" % signalsize)
         schedule = get_save_schedule(signal_id)
         return control_response(code=0,
                                 msg="describe success!",

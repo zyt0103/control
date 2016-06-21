@@ -53,7 +53,7 @@ class drag(View):
 
 class newindex(View):
     def get(self, request):
-        user_id = request.REQUEST.get("user_id", "user-safoewfw")
+        user_id = request.GET.get("user_id", "user-safoewfw")
         signal = SignalModel.objects.filter(deleted=False).filter(partable__distri__user__username=user_id)
         paginator = Paginator(signal, 12)
         page = request.REQUEST.get("page", 1)
@@ -80,8 +80,9 @@ class newindex(View):
 
 
 class demodul(View):
+
     def get(self, request):
-        user_id = request.REQUEST.get("user_id", "user-safoewfw")
+        user_id = request.GET.get("user_id", "user-safoewfw")
         demod_type = DemodType.objects.filter(deleted=False).filter(user_id=user_id)
         paginator = Paginator(demod_type, 12)
         page = request.REQUEST.get("page", 1)
@@ -97,10 +98,10 @@ class demodul(View):
 
 
 class analysis(View):
+
     def get(self, request):
 
         return render(request, "index/analysis.html")
-
 
 class addmodal(View):
     def get(self, request):
@@ -125,3 +126,19 @@ class addmodalType(View):
                          'mod_type':'gmsk'})
             dict_obj['demo_list'].append(temp)
         return render(request, "index/addModalType.html", dict_obj)
+
+
+class paramAnalysis(View):
+    def get(self, request):
+
+        return render(request, "index/paramAnalysis.html")
+
+class demodulResult(View):
+    def get(self, request):
+
+        return render(request, "index/demodulResult.html")
+
+class checkPro(View):
+    def get(self, request):
+
+        return render(request, "index/checkPro.html")

@@ -18,6 +18,8 @@ class DemodModelManager(models.Manager):
                                        demod_type_id=demod_type_id,
                                        demod_prob_fact=demod_prob_fact,
                                        demod_prob_theory=demod_prob_theory)
+            logger.info("demod_result is %s" % demod_result)
+            demod_result.save()
         except Exception as exp:
             logger.error("DemodResult save error: %s" % exp)
             return None, exp
@@ -31,17 +33,19 @@ class DemodTypeManager(models.Manager):
                protocol,
                sync_type):
         try:
-            demod_type = DemodType(user_id = user_id,
-                                    demod_type_id=demod_type_id,
-                                    demod_type_name=demod_type_name,
-                                    ant_num=ant_num,
-                                    protocol=protocol,
-                                    sync_type=sync_type)
+            demod_type = DemodType(user_id=user_id,
+                                   demod_type_id=demod_type_id,
+                                   demod_type_name=demod_type_name,
+                                   ant_num=ant_num,
+                                   protocol=protocol,
+                                   sync_type=sync_type)
+
             demod_type.save()
             return demod_type, None
         except Exception as exp:
             logger.error("demodType save error: %s" % exp)
             return None, exp
+
 
 class DemodResultManager(models.Manager):
     def create(self,
@@ -57,6 +61,7 @@ class DemodResultManager(models.Manager):
         except Exception as exp:
             logger.error("demodResult save error: %s" % exp)
             return None, exp
+
 
 class DemodModel(BaseModel):
     """
@@ -165,7 +170,7 @@ class DemodType(BaseModel):
     )
 
     ant_num = models.IntegerField(
-        max_length=20,
+        # max_length=20,
         null=False,
         unique=False
     )

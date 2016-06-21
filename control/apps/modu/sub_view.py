@@ -206,7 +206,6 @@ def SaveSignalInfo(signal_id):
     try:
         get_save_schedule(signal_id=signal_id)
         get_save_signalsize(signal_id)
-        logger.info("%s is saved!" % signal_id)
         return True
     except Exception as exp:
         logger.error("%s info save error: %s" % (signal_id, exp))

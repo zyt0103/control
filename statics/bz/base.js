@@ -496,49 +496,50 @@ $(function(){
             url: '/modu/createsignal',
             success:function(res) {
                 if(res.ret_code==0){
-                    if(res.total_count==1){
-                        var signal_id = res.ret_set;
-                        var signal_name =$("#filename").val();
-                        var $showTableTh = $("#showTable").find("th");
-                        var addString={};
-                        for(var i=0; i<$showTableTh.length; i++){
-                            addString[i] = 0;
-                            addString[1] = signal_id;
-                            addString[0] = signal_name;
-                        }
-                        var strTip;
-                        strTip = "<tr><td class='table-time'><input type='checkbox'>"+addString[0]+
-                                 "</td><td class='table-time'>"+addString[1]+
-                                 "</td><td class='table-time'>"+addString[2]+
-                                 "</td><td class='table-time'>"+addString[3]+
-                                 "</td><td class='table-time'>"+addString[4]+
-                                 "</td><td class='table-time'>"+addString[5]+
-                                 "</td></tr>"
-                        $(strTip).appendTo($showTable);
-                    }
-                    else{
-                        var total_count = res.total_count;
-                        var signal_id = res.ret_set[0];
-                        var signal_name =$("#filename").val();
-                        var $showTableTh = $("#showTable").find("th");
-                        var addString={};
-                        for(var j=0;j<total_count;j++){
-                            for(var i=0; i<$showTableTh.length;i++){
-                                addString[i] = 0;
-                                addString[1] = signal_id[j];
-                                addString[0] = signal_name+"_"+j;
-                            }
-                            var strTip;
-                            strTip = "<tr><td class='table-time'><input type='checkbox'>"+addString[0]+
-                                     "</td><td class='table-time'>"+addString[1]+
-                                     "</td><td class='table-time'>"+addString[2]+
-                                     "</td><td class='table-time'>"+addString[3]+
-                                     "</td><td class='table-time'>"+addString[4]+
-                                     "</td><td class='table-time'>"+addString[5]+
-                                     "</td></tr>"
-                            $(strTip).appendTo($showTable);
-                        }
-                    }
+                    location.reload();
+                    //if(res.total_count==1){
+                    //    var signal_id = res.ret_set;
+                    //    var signal_name =$("#filename").val();
+                    //    var $showTableTh = $("#showTable").find("th");
+                    //    var addString={};
+                    //    for(var i=0; i<$showTableTh.length; i++){
+                    //        addString[i] = 0;
+                    //        addString[1] = signal_id;
+                    //        addString[0] = signal_name+"<br>"+"_signal";
+                    //    }
+                    //    var strTip;
+                    //    strTip = "<tr><td class='table-time'><input type='checkbox'>"+addString[0]+
+                    //             "</td><td class='table-time'>"+addString[1]+
+                    //             "</td><td class='table-time'>"+addString[2]+
+                    //             "</td><td class='table-time'>"+addString[3]+
+                    //             "</td><td class='table-time'>"+addString[4]+
+                    //             "</td><td class='table-time'>"+addString[5]+
+                    //             "</td></tr>"
+                    //    $(strTip).appendTo($showTable);
+                    //}
+                    //else{
+                    //    var total_count = res.total_count;
+                    //    var signal_id = res.ret_set[0];
+                    //    var signal_name =$("#filename").val();
+                    //    var $showTableTh = $("#showTable").find("th");
+                    //    var addString={};
+                    //    for(var j=0;j<total_count;j++){
+                    //        for(var i=0; i<$showTableTh.length;i++){
+                    //            addString[i] = 0;
+                    //            addString[1] = signal_id[j];
+                    //            addString[0] = signal_name+"_"+j;
+                    //        }
+                    //        var strTip;
+                    //        strTip = "<tr><td class='table-time'><input type='checkbox'>"+addString[0]+
+                    //                 "</td><td class='table-time'>"+addString[1]+
+                    //                 "</td><td class='table-time'>"+addString[2]+
+                    //                 "</td><td class='table-time'>"+addString[3]+
+                    //                 "</td><td class='table-time'>"+addString[4]+
+                    //                 "</td><td class='table-time'>"+addString[5]+
+                    //                 "</td></tr>"
+                    //        $(strTip).appendTo($showTable);
+                    //    }
+                    //}
                 }
                 else{
                     alert("创建信号不成功！")
@@ -546,7 +547,7 @@ $(function(){
             },
             data: JSON.stringify(param),
             headers: {
-                'X-CSRFToken': 'DhbWdnwlobS4XTqd1Vg0oBPOAlyDy9aj',//?
+                'X-CSRFToken': 'dlIPR6X4fjEKlVtvBiY1aC7hRX37viG5',//?
                 'Content-Type': 'application/json'
             }
 	    });
@@ -570,8 +571,10 @@ $(function(){
 
     function ajDe() {
         var elem= $('input:radio[name="type"]:checked').parent().siblings();
+        var signal=$('input:checkbox:checked').parent().next().children().html();
+                    //$('input:checkbox:checked').parent().next()[0].children;
         var param = {
-            "signal_id": "signal-26anue4b",
+            "signal_id":signal,
             "ant_type": elem[0].innerHTML,
             "protocol": elem[1].innerHTML,
             "sync_type": elem[2].innerHTML,
@@ -587,33 +590,44 @@ $(function(){
                 else {
                     alert("信号解调不成功！")
                 }
+                $('input:checkbox').removeAttr("checked");
+                //location.reload();
             },
             data: JSON.stringify(param),
             headers: {
-                'X-CSRFToken': 'DhbWdnwlobS4XTqd1Vg0oBPOAlyDy9aj',
+                'X-CSRFToken': 'dlIPR6X4fjEKlVtvBiY1aC7hRX37viG5',
                 'Content-Type': 'application/json'
             }
         });
     }
-    $(":checkbox").bind('mouseout',function(){
-        var val=$(':checkbox:checked').val();
+    function check1(){
+         var val=$(':checkbox:checked').val();
         if(val) {
-            $("#delete").removeClass("noclick");
-            $("#demodul").removeClass("noclick");
+            $("#delete").attr("disabled",false);
+            $("#demodul").attr("disabled",false);
+            $("#deleteDemodul").attr("disabled",false);
         }
         else{
-            $("#delete").addClass("noclick");
-            $("#demodul").addClass("noclick");
+            $("#demodul").attr("disabled",true);
+            $("#delete").attr("disabled",true);
+            $("#deleteDemodul").attr("disabled",true);
         }
-    });
+    }
+    $(":checkbox").on('mouseout',check1);
+    $("#demodul").bind('mouseover',check1);
     function addmodalType(){
         var val=$(':checkbox:checked').val();
         if(val){
             $('#addModalType').load('/addModalType.html');
         }
     }
-    $("#demodul").bind('click',function(){
-        addmodalType();
+    $("#demodul").bind('click',addmodalType);
+
+    $("#checkbox").on("click",function(){
+        $('input:checkbox').prop("checked",true);
+    });
+    $("#nocheckbox").on("click",function(){
+        $('input:checkbox').prop("checked",false);
     });
 
 
