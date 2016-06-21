@@ -86,12 +86,12 @@
 		                        </tbody>
 		                    </table>
                         </div>
-                        <div class="panel-default control_button panel-body chioce">
+                        <div class="panel-default control_button panel-body ">
                             <span class=" myPanel">
-                                <button class="handle btn btn-info" id="checkbox">全选</button>
+                                <button class="handle btn btn-info" id="allchioce">全选</button>
                             </span>
                             <span class=" myPanel">
-                                <button class="handle btn btn-info" id="nocheckbox">取消</button>
+                                <button class="handle btn btn-info" id="quitchioce">取消</button>
                             </span>
                         </div>
                         <div class="text-center pagefooter">
@@ -100,7 +100,7 @@
                                 {% if topics.has_previous %}
                                   <a href="?page={{ topics.previous_page_number }}">Previous</a>
                                   {% endif %}
-                                  {# topics.paginator.number_pages 返回总页数 #}
+                                   topics.paginator.number_pages 返回总页数
                                   Page {{ topics.number }} of {{ topics.paginator.num_pages }}.
                                 {% if topics.has_next %}
                                   <a href="?page={{ topics.next_page_number }}">Next</a>
