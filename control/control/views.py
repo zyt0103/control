@@ -4,6 +4,7 @@ from django.template import Context
 from django.shortcuts import render
 from django.views.generic import View
 from django.conf import settings
+from django.contrib.auth.admin import User
 
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
@@ -12,7 +13,7 @@ from django.core.paginator import PageNotAnInteger
 from control.apps.modu.models import SignalModel
 from control.apps.modu.sub_view import SaveSignalInfo
 
-from control.apps.demod.models import DemodType
+from control.apps.demod.models import DemodType, DemodModel
 
 from control.control.base import getLogger
 logger = getLogger(__name__)
@@ -49,10 +50,10 @@ class newindex(View):
 class demodul(View):
 
     def get(self, request):
-        user_id = request.REQUEST.get("user_id", "user-safoewfw")
+        user_id = request.GET.get("user_id", "user-safoewfw")
         demod_type = DemodType.objects.filter(deleted=False).filter(user_id=user_id)
         paginator = Paginator(demod_type, 12)
-        page = request.REQUEST.get("page", 1)
+        page = request.GET.get("page", 1)
 
         try:
             demod_type = paginator.page(page)
@@ -61,14 +62,39 @@ class demodul(View):
         except EmptyPage:
             demod_type = paginator.page(paginator.num_pages)
 
-        return render(request, "index/demodul.html", {"topics": demod_type})
+        dict_obj = {}
+        dict_obj['demo_list'] = []
+        for type in demod_type:
+            temp = {}
+            temp.update({'demod_type_name': type.demod_type_name, 'ant_num': type.ant_num,
+                         'protocol': type.PROTOCOL_TYPE[type.protocol-1][1], 'sync_type': type.SYNC_TYPE[type.sync_type-1][1],
+                         'demod_type_id': type.demod_type_id})
+            dict_obj['demo_list'].append(temp)
+        return render(request, "index/demodul.html", dict_obj)
 
 
 class analysis(View):
 
     def get(self, request):
+        analysis_list = DemodModel.objects.all()
+        paginator = Paginator(analysis_list, 12)
+        page = request.GET.get("page", 1)
 
-        return render(request, "index/analysis.html")
+        try:
+            analysis_list = paginator.page(page)
+        except PageNotAnInteger:
+            analysis_list = paginator.page(1)
+        except EmptyPage:
+            analysis_list = paginator.page(paginator.num_pages)
+
+        dict_obj = {}
+        dict_obj['analysis_list'] = []
+        for type in analysis_list:
+            temp = {}
+            temp.update({'signal_id': type.signal_id, 'demod_type_id': type.demod_type_id, 'status': type.status,
+                         'demod_prob_fact': type.demod_prob_fact, 'demod_prob_theory': type.demod_prob_theory})
+            dict_obj['analysis_list'].append(temp)
+        return render(request, "index/analysis.html", dict_obj)
 
 class addmodal(View):
     def get(self, request):
@@ -91,7 +117,7 @@ class addmodalType(View):
         for type in demodType:
             temp = {}
             temp.update({'demod_type_name': type.demod_type_name, 'ant_num': type.ant_num,
-                         'protocol': type.protocol, 'sync_type': type.sync_type,
+                         'protocol': type.PROTOCOL_TYPE[type.protocol-1][1], 'sync_type': type.SYNC_TYPE[type.sync_type-1][1],
                          'demod_type_id': type.demod_type_id})
             dict_obj['demo_list'].append(temp)
         return render(request, "index/addModalType.html", dict_obj)
@@ -104,7 +130,6 @@ class paramAnalysis(View):
 
 class demodulResult(View):
     def get(self, request):
-
         return render(request, "index/demodulResult.html")
 
 class checkPro(View):

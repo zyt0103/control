@@ -575,9 +575,10 @@ $(function(){
                     //$('input:checkbox:checked').parent().next()[0].children;
         var param = {
             "signal_id":signal,
-            "ant_type": elem[0].innerHTML,
-            "protocol": elem[1].innerHTML,
-            "sync_type": elem[2].innerHTML,
+			"demod_type_id": "demodtype-7mhn4rz3"
+            //"ant_type": elem[0].innerHTML,
+            //"protocol": elem[1].innerHTML,
+            //"sync_type": elem[2].innerHTML,
         }
         $.ajax({
             type: 'POST',
@@ -595,7 +596,7 @@ $(function(){
             },
             data: JSON.stringify(param),
             headers: {
-                'X-CSRFToken': 'qUgKcDvT6UcljCIfYvTyHNMMIGtGuqXu',
+                'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
                 'Content-Type': 'application/json',
             }
         });

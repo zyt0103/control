@@ -63,9 +63,11 @@
                     	    <table class="table table-bordered text-center" id="showTable">
 		                        <thead>
 		                            <tr>
-                                        <th class="text-center active"> signal_name</th>
-		                                <th class="text-center active"> signal_id</th>
-                                        <th class="text-center active">demodul_status</th>
+                                        <th class="text-center active"> signal_id</th>
+		                                <th class="text-center active"> demod_type_id</th>
+                                        <th class="text-center active"> status</th>
+                                        <th class="text-center active"> 实际解调概率</th>
+                                        <th class="text-center active"> 理论解调概率</th>
 		                            </tr>
 		                        </thead>
 		                        <tbody>
@@ -81,27 +83,17 @@
 {#                                            <td>no</td>#}
 {#                                        </tr>#}
 {#                                    {% endfor %}#}
+                                    {% for demo in analysis_list %}
                                     <tr>
                                         <td>
-                                            <input type="checkbox">1
+                                            <input type="checkbox">{{ demo.signal_id }}
                                         </td>
-                                        <td><a href="paramAnalysis.html" target="_blank">a</a></td>
-                                        <td>未解调</td>
+                                        <td><a href="paramAnalysis.html" target="_blank">{{ demo.demod_type_id }}</a></td>
+                                        <td>{% if demo.status %}{{ demo.status }}{% endif %}</td>
+                                        <td>{% if demo.demod_prob_fact %}{{ demo.demod_prob_fact }}{% endif %}</td>
+                                        <td>{% if demo.demod_prob_theory %}{{ demo.demod_prob_theory }}{% endif %}</td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox">2
-                                        </td>
-                                        <td>b</td>
-                                        <td>解调中</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox">3
-                                        </td>
-                                        <td>c</td>
-                                        <td>已解调</td>
-                                    </tr>
+                                    {% endfor %}
 		                        </tbody>
 		                    </table>
                         </div>

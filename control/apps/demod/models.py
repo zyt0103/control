@@ -14,10 +14,12 @@ class DemodModelManager(models.Manager):
                demod_prob_fact,
                demod_prob_theory):
         try:
-            demod_result = DemodResult(signal_id=signal_id,
+            demod = DemodModel(signal_id=signal_id,
                                        demod_type_id=demod_type_id,
                                        demod_prob_fact=demod_prob_fact,
                                        demod_prob_theory=demod_prob_theory)
+            demod.save()
+            return demod, None
         except Exception as exp:
             logger.error("DemodResult save error: %s" % exp)
             return None, exp
@@ -75,6 +77,10 @@ class DemodModel(BaseModel):
         null=False
     )
 
+    status = models.IntegerField(
+        verbose_name=u"解调状态",
+        null=True
+    )
     demod_prob_fact = models.IntegerField(
         verbose_name=u"实际检测概率",
         blank=False,
