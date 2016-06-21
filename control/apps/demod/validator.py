@@ -14,11 +14,11 @@ ANT_NUM = {
 }
 
 PROTOCOL_TYPE = {
-    "SOTDMA": True
+    "1": "GMSK"
 }
 
 SYNC_TYPE = {
-    "DEFAULT": True
+    "1": "时频联合同步"
 }
 
 

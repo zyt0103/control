@@ -12,7 +12,7 @@ $(function(){
 	//	}
 	//}
     $delete.bind("click", function () {
-        $(".modul_contain tbody input:checked").parent().parent().remove();//??????
+        $(".modul_contain tbody input:checked").parent().parent().remove();
     });
 
     //add function
@@ -564,20 +564,21 @@ $(function(){
     $('#addModalType').on('click','#addOK',function(){
         var val=$(':radio[name="type"]:checked').val();
         if(val){
-            ajDe();
+            ajDemodul();
             $("#addClose").click();
         }
     });
 
-    function ajDe() {
+    function ajDemodul() {
         var elem= $('input:radio[name="type"]:checked').parent().siblings();
         var signal=$('input:checkbox:checked').parent().next().children().html();
                     //$('input:checkbox:checked').parent().next()[0].children;
         var param = {
             "signal_id":signal,
-            "ant_type": elem[0].innerHTML,
-            "protocol": elem[1].innerHTML,
-            "sync_type": elem[2].innerHTML,
+			"demod_type_id": "demodtype-7mhn4rz3"
+            //"ant_type": elem[0].innerHTML,
+            //"protocol": elem[1].innerHTML,
+            //"sync_type": elem[2].innerHTML,
         }
         $.ajax({
             type: 'POST',
@@ -601,7 +602,8 @@ $(function(){
         });
     }
     function check1(){
-         var val=$(':checkbox:checked').val();
+        var val=$(':checkbox:checked').val();
+        //var val=$(':checkbox').is(":checked");
         if(val) {
             $("#delete").attr("disabled",false);
             $("#demodul").attr("disabled",false);
@@ -615,6 +617,8 @@ $(function(){
     }
     $(":checkbox").on('mouseout',check1);
     $("#demodul").bind('mouseover',check1);
+    $("#allchioce").on('mouseout',check1);
+    $("#quitchioce").bind('mouseout',check1);
     function addmodalType(){
         var val=$(':checkbox:checked').val();
         if(val){
@@ -623,10 +627,10 @@ $(function(){
     }
     $("#demodul").bind('click',addmodalType);
 
-    $("#checkbox").on("click",function(){
+    $("#allchioce").on("click",function(){
         $('input:checkbox').prop("checked",true);
     });
-    $("#nocheckbox").on("click",function(){
+    $("#quitchioce").on("click",function(){
         $('input:checkbox').prop("checked",false);
     });
 

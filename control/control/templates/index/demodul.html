@@ -1,5 +1,4 @@
 {% load staticfiles %}
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -54,22 +53,24 @@
 		                        <thead>
 		                            <tr>
 		                                <th class="text-center active">type_name_de</th>
-		                                <th class="text-center active">ant_type_de</th>
+                                        <th class="text-center active">type_id</th>
+		                                <th class="text-center active">ant_num_de</th>
 		                                <th class="text-center active">protocol_de</th>
 		                                <th class="text-center active">sync_type</th>
-                                        <th class="text-center active">mod_type</th>
 		                            </tr>
 		                        </thead>
 		                        <tbody>
+                                {% for demo in demo_list %}
 		                            <tr>
 		                                <td>
-		                                    <input type="checkbox">method_1
+		                                    <input type="checkbox">{{ demo.demod_type_name }}
 		                                </td>
-		                                <td>single_ant</td>
-		                                <td>SOTDMA</td>
-		                                <td>DEFAULT</td>
-                                        <td>gmask</td>
+                                        <td>{{ demo.demod_type_id }}</td>
+		                                <td>{{ demo.ant_num }}</td>
+		                                <td>{{ demo.protocol }}</td>
+		                                <td>{{ demo.sync_type }}</td>
 		                            </tr>
+                                {% endfor %}
 		                        </tbody>
 		                    </table>
                         </div>

@@ -27,14 +27,13 @@ def Demod_single_ant(payload):
     signal_id = payload.get("signal_id", None)
     protocol = payload.get("protocol", None)
     sync_type = payload.get("sync_type", None)
-    action = payload.get("action", None)
     os.chdir(matlab_single_ant_path)
     eng = matlab.engine.start_matlab()
     logger.info(os.getcwd())
     try:
-        logger.info("payload is %s, %s, %s, %s" % (signal_id, protocol, sync_type, action))
+        logger.info("payload is %s, %s, %s" % (signal_id, protocol, sync_type))
         logger.info("start matlab single_ant demode")
-        eng.Main(signal_id, protocol, sync_type, action)
+        eng.Main(signal_id, protocol, sync_type)
         eng.quit()
         os.chdir(celery_path)
         return True
@@ -55,13 +54,12 @@ def Demod_double_ant(payload):
     signal_id = payload.get("signal_id", None)
     protocol = payload.get("protocol", None)
     sync_type = payload.get("sync_type", None)
-    action = payload.get("action", None)
 
     os.chdir(matlab_double_ant_path)
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab double_ant demode")
-        eng.Main(signal_id, protocol, sync_type, action)
+        eng.Main(signal_id, protocol, sync_type)
         eng.quit()
         os.chdir(celery_path)
         return True
@@ -82,13 +80,12 @@ def Demod_four_ant(payload):
     signal_id = payload.get("signal_id", None)
     protocol = payload.get("protocol", None)
     sync_type = payload.get("sync_type", None)
-    action = payload.get("action", None)
 
     os.chdir(matlab_four_ant_path)
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab four_ant demode")
-        eng.Main(signal_id, protocol, sync_type, action)
+        eng.Main(signal_id, protocol, sync_type)
         eng.quit()
         os.chdir(celery_path)
         return True
