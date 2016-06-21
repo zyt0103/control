@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^paramAnalysis', views.paramAnalysis.as_view()),
     url(r'^demodulResult', views.demodulResult.as_view()),
     url(r'^checkPro', views.checkPro.as_view()),
+    url(r'^pic', views.pic.as_view()),
     url(r'^modu/', include('control.apps.modu.urls')),
     url(r'^demod/', include('control.apps.demod.urls')),
     # url(r'^account/', include('account.urls')),

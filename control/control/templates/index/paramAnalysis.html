@@ -2,25 +2,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">#}
+    <meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
+    <link rel='stylesheet' type='text/css' href='http://www.x3dom.org/x3dom/release/x3dom.css'>
+
     <link rel="stylesheet" href="{% static "bz/vendor/bootstrap/dist/css/bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "bz/vendor/fontawesome/css/font-awesome.min.css" %}">
     <link rel="stylesheet" href="{% static "bz/base.css" %}">
+    <link rel="stylesheet" href="{% static "bz/paramAnalysis.css" %}">
     <title>Title</title>
 </head>
 <body>
-    <div class="wrapper-ais "><!--总页面-->
-			<div class="left-container "><!--左边总侧栏-->
+    <div class="wrapper-ais ">
+			<div class="left-container ">
 				<div class="side-navbar">
-					<div class="side-heading text-center "><!--左上-->
+					<div class="side-heading text-center ">
 						<p>AIS平台</p>
         			</div>
-	        		<div class="side-nav container"><!--左下-->
+	        		<div class="side-nav ">
 			            <ul class="nav nav-stacked nav-pills">
-			                <li  id="modul_btn"><a href="newindex.html"><span class="fa fa-user"></span>调制</a></li>
-			                <li  id="demodul_btn" class="active"><a href="demodul.html"><span class="fa fa-user"></span>解调</a></li>
-			                <li  id="analy_btn"><a href="analysis.html"><span class="fa fa-user"></span>分析</a></li>
+			                <li  id="modul_btn"><a href="newindex"><span class="fa fa-user"></span>调制</a></li>
+			                <li  id="demodul_btn"><a href="demodul"><span class="fa fa-user"></span>解调</a></li>
+			                <li  id="analy_btn" class="active"><a href="analysis"><span class="fa fa-user"></span>分析</a></li>
 			            </ul>
 	        		</div>
     			</div>
@@ -33,38 +37,49 @@
                         <span ><a href="#"><span class="fa fa-cogs"></span>退出</a> </span>
                     </div>
 				</div>
-				<div class="main">
-                    <div class="panel panel-default modul_contain ">
-        <table class="table table-bordered text-center" id="showTable">
-            <thead>
-                <tr>
-                    <th class="text-center active"> signal_name</th>
-                    <th class="text-center active"> signal_id</th>
-                    <th class="text-center active">status</th>
-                    <th class="text-center active">size</th>
-                    <th class="text-center active">createTime</th>
-                    <th class="text-center active">demodul_status</th>
-                </tr>
-            </thead>
-            <tbody>
-{#                {% for infoIndex in Info %}#}
-{#                    <tr>#}
-{#                        <td>#}
-{#                            <input type="checkbox">#}
-{#                        {{ infoIndex.name_signal }}</td>#}
-{#                        <td><a href="paramAnalysis.html" target="_blank">#}
-{#                            {{ infoIndex.signal_id }}</a>#}
-{#                        </td>#}
-{#                        <td>{{ infoIndex.status}}%</td>#}
-{#                        <td>{{ infoIndex.size }} KB</td>#}
-{#                        <td>{{ infoIndex.create_time }}</td>#}
-{#                        <td></td>#}
-{#                    </tr>#}
-{#                {% endfor %}#}
-            </tbody>
-        </table>
-    </div>
-				</div>
+				<div class="main container-fluid">
+                    <div class="analysis">
+                       <div class="panel panel-default modul_contain paramMessage">
+                            <table class="table table-bordered text-center">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center active"> signal_name</th>
+                                        <th class="text-center active"> signal_id</th>
+                                        <th class="text-center active"> lat</th>
+                                        <th class="text-center active"> lon</th>
+                                        <th class="text-center active"> height</th>
+                                        <th class="text-center active"> vesnum</th>
+                                        <th class="text-center active"> obtime</th>
+                                        <th class="text-center active"> ant_type</th>
+                                        <th class="text-center active"> snr</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <td>aaa</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="side-nav">
+                        <ul class="nav">
+                            <li  id="ves_distribute" class="active" onclick="pic()"><button class="btn-link btn-lg"><span class=""></span>船舶分布图</button></li>
+                            <li  id="power_delay_fre"><button class="btn-link btn-lg"><span class=""></span>功率时延频偏DOA</button></li>
+                            <li  id="view"><button class="btn-link btn-lg"><span class=""></span>视场图</button></li>
+                            <li  id="ant_gain"><button class="btn-link btn-lg"><span class=""></span>天线增益</button></li>
+                        </ul>
+                    </div>
+                    <div id="hehe">
+
+                    </div>
+                </div>
 			</div>
 		</div>
 
@@ -72,5 +87,6 @@
 <script type="application/javascript" src="{% static "bz/vendor/jquery/dist/jquery.js" %}"></script>
 <script type="application/javascript" src="{% static "bz/vendor/bootstrap/dist/js/bootstrap.js" %}"></script>
 <script type="application/javascript" src="{% static "bz/base.js" %}" charset="UTF-8"></script>
+<script type='text/javascript' src='http://www.x3dom.org/x3dom/release/x3dom.js'></script>
 </body>
 </html>

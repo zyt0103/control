@@ -11,9 +11,9 @@ $(function(){
 	//		alert("aa")
 	//	}
 	//}
-    $delete.bind("click", function () {
-        $(".modul_contain tbody input:checked").parent().parent().remove();
-    });
+    //$delete.bind("click", function () {
+     //   $(".modul_contain tbody input:checked").parent().parent().remove();
+    //});
 
     //add function
     var $add = $("#add");
@@ -633,6 +633,45 @@ $(function(){
         $('input:checkbox').prop("checked",false);
     });
 
+     function ajDeleteSignal() {
+         var signal=$('input:checkbox:checked').parent().next().children();
+                    //$('input:checkbox:checked').parent().next()[0].children;
+         var length=signal.length;
+         if(length == 1){
+             var param = {"signal_id":signal,}
+         }
+         else{
+
+
+         }
+         $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/modu/delete',
+            success: function (res) {
+                if (res.ret_code == 0) {
+                    alert("成功！")
+                }
+                else {
+                    alert("不成功！")
+                }
+                $('input:checkbox').removeAttr("checked");
+                location.reload();
+            },
+            data: JSON.stringify(param),
+            headers: {
+                'X-CSRFToken': 'qUgKcDvT6UcljCIfYvTyHNMMIGtGuqXu',
+                'Content-Type': 'application/json',
+            }
+         });
+    }
+    $("#delete").bind("click",function(){
+        var val=$(':checkbox:checked').val();
+        if(val) {
+            ajDeleteSignal();
+        }
+    });
+
 
 });
 
@@ -644,5 +683,7 @@ function addmodal(){
 function addmodalDemodul(){
 	$('#addModalDemodul').load('/addModalDemodul.html');
 }
-
+function pic(){
+    $('#hehe').load("/pic.html");
+}
     

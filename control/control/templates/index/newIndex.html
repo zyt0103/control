@@ -46,14 +46,11 @@
 	                        <span class="myPanel ">
 	                            <input type="button" class=" handle btn btn-warning pull-right"
                                        id="delete" value="删除信号" disabled="disabled">
-                                </input>
 	                        </span>
 	                        <span class="myPanel">
 	                            <input  type="button" class="handle btn btn-success pull-right"
                                        data-toggle="modal" data-target="#addModalType"
                                         id="demodul" value="解调信号" disabled="disabled">
-
-                                </input>
 	                        </span>
 						</div>
 						<div class="panel panel-default modul_contain ">
@@ -72,10 +69,10 @@
                                     {% for infoIndex in Info %}
                                         <tr>
                                             <td>
-                                                <input type="checkbox">
-                                            {{ infoIndex.name_signal }}</td>
-                                            <td><a href="paramAnalysis.html" target="_blank">
-                                                {{ infoIndex.signal_id }}</a>
+                                                <input type="checkbox">{{ infoIndex.name_signal }}
+                                            </td>
+                                            <td>
+                                                <a href="paramAnalysis.html" target="_blank">{{ infoIndex.signal_id }}</a>
                                             </td>
                                             <td>{{ infoIndex.status}}%</td>
                                             <td>{{ infoIndex.size }} KB</td>
@@ -86,7 +83,7 @@
 		                        </tbody>
 		                    </table>
                         </div>
-                        <div class="panel-default control_button panel-body ">
+                        <div class="panel-default control_button panel-body chioce">
                             <span class=" myPanel">
                                 <button class="handle btn btn-info" id="allchioce">全选</button>
                             </span>
@@ -100,7 +97,7 @@
                                 {% if topics.has_previous %}
                                   <a href="?page={{ topics.previous_page_number }}">Previous</a>
                                   {% endif %}
-                                   topics.paginator.number_pages 返回总页数
+{#                                   topics.paginator.number_pages 返回总页数#}
                                   Page {{ topics.number }} of {{ topics.paginator.num_pages }}.
                                 {% if topics.has_next %}
                                   <a href="?page={{ topics.next_page_number }}">Next</a>

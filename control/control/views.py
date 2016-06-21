@@ -142,3 +142,8 @@ class checkPro(View):
     def get(self, request):
 
         return render(request, "index/checkPro.html")
+
+class pic(View):
+    def get(self, request):
+
+        return render(request, "index/pic.html")
