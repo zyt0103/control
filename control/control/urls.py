@@ -11,10 +11,6 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', views.Index.as_view()),
-    url(r'^test$', views.test.as_view()),
-    url(r'^plot$', views.plot.as_view()),
-    url(r'^drag$', views.drag.as_view()),
     url(r'^newindex', views.newindex.as_view()),
     url(r'^demodul$', views.demodul.as_view()),
     url(r'^analysis', views.analysis.as_view()),

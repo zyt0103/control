@@ -165,7 +165,6 @@ class DemodType(BaseModel):
     )
 
     ant_num = models.IntegerField(
-        max_length=20,
         null=False,
         unique=False
     )

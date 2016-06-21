@@ -1,14 +1,9 @@
 # coding = utf-8
 __author__ = 'houjincheng'
 from django.template import Context
-from django.conf import settings
-# from django.shortcuts import render_to_response
 from django.shortcuts import render
-from django.shortcuts import RequestContext
 from django.views.generic import View
-from django.views.decorators.cache import cache_page
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+from django.conf import settings
 
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
@@ -21,34 +16,6 @@ from control.apps.demod.models import DemodType
 
 from control.control.base import getLogger
 logger = getLogger(__name__)
-
-
-class Index(View):
-    def get(self, request, *args, **kwargs):
-        # return render_to_response("index/index.html",
-        #                           context_instance=RequestContext(request, locals()))
-        return render(request, "index/index.html")
-
-
-class test(View):
-    def get(self, request, *args, **kwargs):
-        # return render_to_response("index/index.html",
-        #                           context_instance=RequestContext(request, locals()))
-        return render(request, "index/test.html")
-
-
-class plot(View):
-    def get(self, request, *args, **kwargs):
-        # return render_to_response("index/index.html",
-        #                           context_instance=RequestContext(request, locals()))
-        return render(request, "index/plot.html")
-
-
-class drag(View):
-    def get(self, request, *args, **kwargs):
-        # return render_to_response("index/index.html",
-        #                           context_instance=RequestContext(request, locals()))
-        return render(request, "index/drag.html")
 
 
 class newindex(View):
@@ -117,13 +84,15 @@ class addmodalDemodul(View):
 
 class addmodalType(View):
     def get(self, request):
+        min_ant_num = request.GET.get('minAntNum', 4)
+        demodType = DemodType.filter_demodtype_by_antNum_lte(min_ant_num)
         dict_obj = {}
         dict_obj['demo_list'] = []
-        for i in range(0, 4):
+        for type in demodType:
             temp = {}
-            temp.update({'type_name_de': u'method_1', 'ant_type_de': 'single_ant',
-                         'protocol_de': 'SOTDMA', 'sync_type': 'DEFAULT',
-                         'mod_type':'gmsk'})
+            temp.update({'demod_type_name': type.demod_type_name, 'ant_num': type.ant_num,
+                         'protocol': type.protocol, 'sync_type': type.sync_type,
+                         'demod_type_id': type.demod_type_id})
             dict_obj['demo_list'].append(temp)
         return render(request, "index/addModalType.html", dict_obj)
 
