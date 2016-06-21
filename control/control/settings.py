@@ -186,3 +186,6 @@ IF_RUN_MATLAB = config.get("matlab", "runMatlab")
 
 ##################SAVE SIGNAL INFO PERIED ############
 SAVE_PERIED = 1
+
+
+maxDemodType = config.get("ais", "maxDemodType")

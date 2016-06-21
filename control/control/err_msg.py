@@ -87,6 +87,7 @@ class DemodErrorCode():
     ANT_TYPE_INVALID = 30000
     DEMOD_SAVE_FAILED = 30001
     DEMOD_TYPE_SAVE_FAILED = 30002
+    DEMOD_RESULT_DESCRIBE_FAILED = 30003
 
     ACTIN_MSG = {
         30000: _(u"action 丢失")
@@ -99,6 +100,11 @@ class DemodErrorCode():
     DEMOD_TYPE_MSG = {
         30002: _(u"保存 demodType 错误")
     }
+
+    DEMOD_RESULT_MSG = {
+        30003: _(u"获取 demodResult 错误")
+    }
+
 
 class CheckProbErrorCode():
 
