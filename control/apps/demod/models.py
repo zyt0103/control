@@ -193,10 +193,10 @@ class DemodType(BaseModel):
     def delete_demodtype_by_id(cls, demodType_id, deleted=False):
         try:
             DemodType.objects.filter(deleted=deleted).get(demod_type_id=demodType_id).delete()
-            return True
+            return True, None
         except Exception as exp:
             logger.error("delete demodtype error: %s" % exp)
-            return False
+            return False, exp
 
     @classmethod
     def get_demodtype_by_id(cls,demodType_id, deleted=False):
