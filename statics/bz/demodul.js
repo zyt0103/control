@@ -83,4 +83,45 @@ $(function() {
         $("#addClose").click();
     }
     $("#addModalDemodul").on("click","#addOKDemodul",CreateDemodulType);
+
+     function ajDeleteDemodulType() {
+         var type_id=$('input:checkbox:checked').parent().next();
+         var length=type_id.length;
+         if(length == 1){
+             var param = {"demod_type_id":type_id.html(),}
+         }
+         else{
+             var type_id = new Array();
+             for(var i=0; i<length; i++){
+                 type_id[i]=type_id[i].innerHTML;
+             }
+             var param = {"demod_type_id":type_id}
+         }
+         $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/demod/demodtypedelete',
+            success: function (res) {
+                if (res.ret_code == 0) {
+                    alert("删除方式成功！")
+                }
+                else {
+                    alert("删除方式不成功！")
+                }
+                $('input:checkbox').removeAttr("checked");
+                //location.reload();
+            },
+            data: JSON.stringify(param),
+            headers: {
+                //'X-CSRFToken': 'qUgKcDvT6UcljCIfYvTyHNMMIGtGuqXu',
+                'Content-Type': 'application/json',
+            }
+         });
+    }
+    $("#deleteDemodul").bind("click",function(){
+        var val=$(':checkbox:checked').val();
+        if(val) {
+            ajDeleteDemodulType();
+        }
+    });
 });

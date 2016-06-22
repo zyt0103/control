@@ -685,7 +685,8 @@ function addmodalDemodul(){
 	$('#addModalDemodul').load('/addModalDemodul.html');
 }
 function picture(){
-    $('#picture').load("/pic.html");
+    $('#picture').load("/pic.html",function(){
+    });
 }
 
 
@@ -727,3 +728,13 @@ $(document).ajaxSend(function(event, xhr, settings) {
     }
      //console.log("ajax send")
 });
+//$(document).ajaxStart(function() {
+//    $("#load").show();
+//
+//});
+//$(document).ajaxStop(function() {
+//    $("#load").hide();
+//
+//});
+
+
