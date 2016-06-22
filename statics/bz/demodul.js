@@ -88,7 +88,9 @@ $(function() {
          var type_id=$('input:checkbox:checked').parent().next();
          var length=type_id.length;
          if(length == 1){
-             var param = {"demod_type_id":type_id.html(),}
+             var type = new Array();
+             type[0]=type_id.html();
+             var param = {"demod_type_id":type}
          }
          else{
              var type_id = new Array();

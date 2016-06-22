@@ -54,6 +54,7 @@ class DemodTypeDeleteSerializer(serializers.Serializer):
     """
     demod_type_id = serializers.ListField(
         required=True,
+        child=serializers.CharField(max_length=20),
         validators=[demod_type_id_validator]
     )
 
