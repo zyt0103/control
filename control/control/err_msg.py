@@ -88,6 +88,7 @@ class DemodErrorCode():
     DEMOD_SAVE_FAILED = 30001
     DEMOD_TYPE_SAVE_FAILED = 30002
     DEMOD_RESULT_DESCRIBE_FAILED = 30003
+    DEMOD_TYPE_DELETE_FAILED = 30004
 
     ACTIN_MSG = {
         30000: _(u"action 丢失")
@@ -98,7 +99,8 @@ class DemodErrorCode():
     }
 
     DEMOD_TYPE_MSG = {
-        30002: _(u"保存 demodType 错误")
+        30002: _(u"保存 demodType 错误"),
+        30004: _(u"删除 demodType 错误")
     }
 
     DEMOD_RESULT_MSG = {

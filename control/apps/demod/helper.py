@@ -96,6 +96,27 @@ def create_demod_type(payload):
 
     return control_response(code=0, msg="Demod Type create succ")
 
+def delete_demod_type(payload):
+    """
+    删除解调方式
+    :param payload:
+    :return:
+    """
+    demod_type_id = payload.get("demod_type_id")
+    if not isinstance(demod_type_id, list):
+        demod_type_id = [demod_type_id]
+    err_msg = ""
+    for id in demod_type_id:
+        if not DemodType.demodtype_exist_by_id(id):
+            logger.info("Delete DemodType error, demod_type_id %s is not exist" % id)
+            err_msg += id + ": " + "the demod_type is not exist"
+            continue
+        code, err = DemodType.delete_demodtype_by_id(id)
+        if not code:
+            err_msg += id + ": " + "the demod_type_id can not be deleted, exp: " + err
+            continue
+    return control_response(code=0 if not err_msg else DemodErrorCode.DEMOD_TYPE_DELETE_FAILED,
+                            msg=err_msg if err_msg else "succ")
 
 def list_demod_result(payload):
     signal_id = payload.get("signal_id", None)
