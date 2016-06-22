@@ -6,7 +6,6 @@
 {#    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">#}
     <meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
     <link rel='stylesheet' type='text/css' href='http://www.x3dom.org/x3dom/release/x3dom.css'>
-
     <link rel="stylesheet" href="{% static "bz/vendor/bootstrap/dist/css/bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "bz/vendor/fontawesome/css/font-awesome.min.css" %}">
     <link rel="stylesheet" href="{% static "bz/base.css" %}">
@@ -38,46 +37,71 @@
                     </div>
 				</div>
 				<div class="main container-fluid">
-                    <div class="analysis">
-                       <div class="panel panel-default modul_contain paramMessage">
-                            <table class="table table-bordered text-center">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center active"> signal_name</th>
-                                        <th class="text-center active"> signal_id</th>
-                                        <th class="text-center active"> lat</th>
-                                        <th class="text-center active"> lon</th>
-                                        <th class="text-center active"> height</th>
-                                        <th class="text-center active"> vesnum</th>
-                                        <th class="text-center active"> obtime</th>
-                                        <th class="text-center active"> ant_type</th>
-                                        <th class="text-center active"> snr</th>
-                                    </tr>
-                                </thead>
+                    <div class="me">基本信息</div>
+                    <div class="analysisTable">
+                       <div class=" modul_contain paramMessage">
+                            <table  class="table-condensed text-center ">
                                 <tbody>
-                                    <td>aaa</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <tr>
+                                        <th class="text-center ">signal_id:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                        <th class="text-center ">lat:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                        <th class="text-center ">ant_type:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center ">height:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                        <th class="text-center ">lon:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                        <th class="text-center ">ant_pitch:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center ">vesnum:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                        <th class="text-center ">snr:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                        <th class="text-center ">ant_azimuth:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center ">obtime:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                        <th class="text-center ">protocol:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                        <th class="text-center ">channel_type:</th>
+                                        <td>aaa</td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="side-nav">
                         <ul class="nav">
-                            <li  id="ves_distribute" class="active" onclick="pic()"><button class="btn-link btn-lg"><span class=""></span>船舶分布图</button></li>
+                            <li  id="ves_distribute" class="active" onclick="picture()"><button class="btn-link btn-lg"><span class=""></span>船舶分布图</button></li>
                             <li  id="power_delay_fre"><button class="btn-link btn-lg"><span class=""></span>功率时延频偏DOA</button></li>
                             <li  id="view"><button class="btn-link btn-lg"><span class=""></span>视场图</button></li>
                             <li  id="ant_gain"><button class="btn-link btn-lg"><span class=""></span>天线增益</button></li>
                         </ul>
                     </div>
-                    <div id="hehe">
+                    <div id="pic">
+                        <div id="picture">
 
+                        </div>
                     </div>
                 </div>
 			</div>
@@ -87,6 +111,5 @@
 <script type="application/javascript" src="{% static "bz/vendor/jquery/dist/jquery.js" %}"></script>
 <script type="application/javascript" src="{% static "bz/vendor/bootstrap/dist/js/bootstrap.js" %}"></script>
 <script type="application/javascript" src="{% static "bz/base.js" %}" charset="UTF-8"></script>
-<script type='text/javascript' src='http://www.x3dom.org/x3dom/release/x3dom.js'></script>
 </body>
 </html>

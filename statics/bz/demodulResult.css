@@ -1,12 +1,19 @@
-.analysisTable{
+.resultMessage{
+    font-size: 18px;
+    color: #337ab7;
+    line-height: 1.3333333;
+    padding: 10px 16px;
+    float: left;
+    height: 100px;
+    width:25%;
+}.resultTable{
     padding-top: 10px;
     float: right;
-    height: 200px;
+    height: 100px;
     width:75%;
     text-align: center;
-
 }
-.paramMessage{
+.resultTableBody{
     display: inline-block;
 }
 .side-nav{
@@ -22,15 +29,7 @@
 #picture{
     display: inline-block;
 }
-.me{
-    font-size: 18px;
-    color: #337ab7;
-    line-height: 1.3333333;
-    padding: 10px 16px;
-    float: left;
-    height: 200px;
-    width:25%;
-}
+
 td{
     width: 50px;
 }

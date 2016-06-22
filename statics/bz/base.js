@@ -496,7 +496,7 @@ $(function(){
             url: '/modu/createsignal',
             success:function(res) {
                 if(res.ret_code==0){
-                    location.reload();
+                    //location.reload();
                     //if(res.total_count==1){
                     //    var signal_id = res.ret_set;
                     //    var signal_name =$("#filename").val();
@@ -547,7 +547,7 @@ $(function(){
             },
             data: JSON.stringify(param),
             headers: {
-                'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
+                //'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
                 'Content-Type': 'application/json'
             }
 	    });
@@ -570,15 +570,12 @@ $(function(){
     });
 
     function ajDemodul() {
-        var elem= $('input:radio[name="type"]:checked').parent().siblings();
+        var elem= $('input:radio[name="type"]:checked').parent().next().next().next().next().html()
         var signal=$('input:checkbox:checked').parent().next().children().html();
                     //$('input:checkbox:checked').parent().next()[0].children;
         var param = {
             "signal_id":signal,
-			"demod_type_id": "demodtype-7mhn4rz3"
-            //"ant_type": elem[0].innerHTML,
-            //"protocol": elem[1].innerHTML,
-            //"sync_type": elem[2].innerHTML,
+			"demod_type_id": elem,
         }
         $.ajax({
             type: 'POST',
@@ -596,7 +593,7 @@ $(function(){
             },
             data: JSON.stringify(param),
             headers: {
-                'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
+                //'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
                 'Content-Type': 'application/json',
             }
         });
@@ -639,11 +636,14 @@ $(function(){
                     //$('input:checkbox:checked').parent().next()[0].children;
          var length=signal.length;
          if(length == 1){
-             var param = {"signal_id":signal,}
+             var param = {"signal_id":signal.html(),}
          }
          else{
-
-
+             var signal_id = new Array();
+             for(var i=0; i<length; i++){
+                 signal_id[i]=signal[i].innerHTML;
+             }
+             var param = {"signal_id":signal_id}
          }
          $.ajax({
             type: 'POST',
@@ -651,17 +651,17 @@ $(function(){
             url: '/modu/delete',
             success: function (res) {
                 if (res.ret_code == 0) {
-                    alert("成功！")
+                    alert("删除信号成功！")
                 }
                 else {
-                    alert("不成功！")
+                    alert("删除信号不成功！")
                 }
                 $('input:checkbox').removeAttr("checked");
                 location.reload();
             },
             data: JSON.stringify(param),
             headers: {
-                'X-CSRFToken': 'qUgKcDvT6UcljCIfYvTyHNMMIGtGuqXu',
+                //'X-CSRFToken': 'qUgKcDvT6UcljCIfYvTyHNMMIGtGuqXu',
                 'Content-Type': 'application/json',
             }
          });
@@ -684,8 +684,8 @@ function addmodal(){
 function addmodalDemodul(){
 	$('#addModalDemodul').load('/addModalDemodul.html');
 }
-function pic(){
-    $('#hehe').load("/pic.html");
+function picture(){
+    $('#picture').load("/pic.html");
 }
 
 
@@ -725,5 +725,5 @@ $(document).ajaxSend(function(event, xhr, settings) {
     if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
-    // console.log("ajax send")
+     //console.log("ajax send")
 });

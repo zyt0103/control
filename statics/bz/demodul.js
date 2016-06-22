@@ -43,19 +43,19 @@ $(function() {
     //    }
     //});
     function ajCreateDemodulType(){
-        var protocol_num
-        var sync_type_num
+        var protocol_num;
+        var sync_type_num;
         if($('#protocol_de').val()=="GMSK"){
-            protocol_num=1;
+            protocol_num="1";
         }
         if($('#sync_type').val()=="DEFAULT"){
-            sync_type_num=1;
+            sync_type_num="1";
         }
         var param={
             "demod_type_name": $('#type_name_de').val(),
-            "ant_num":$('#ant_type_de').val(),
-            "protocol":"1",
-            "sync_type":"1",
+            "ant_num":$('#ant_num_de').val(),
+            "protocol":protocol_num,
+            "sync_type":sync_type_num,
         }
         $.ajax({
             type: 'POST',
