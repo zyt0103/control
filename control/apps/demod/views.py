@@ -92,7 +92,7 @@ class DemodTypeDelete(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         logger.info("Cur request data is %s" % data)
-        validator = DemodTypeDeleteSerializer(data)
+        validator = DemodTypeDeleteSerializer(data=data)
         if not validator.is_valid():
             code, msg = control_code(validator)
             return Response(control_response(code=code, msg=msg),

@@ -496,7 +496,7 @@ $(function(){
             url: '/modu/createsignal',
             success:function(res) {
                 if(res.ret_code==0){
-                    //location.reload();
+                    location.reload();
                     //if(res.total_count==1){
                     //    var signal_id = res.ret_set;
                     //    var signal_name =$("#filename").val();
@@ -583,10 +583,10 @@ $(function(){
             url: '/demod/demodsignal',
             success: function (res) {
                 if (res.ret_code == 0) {
-                    alert("信号解调成功！")
+                    alert("信号开始解调！")
                 }
                 else {
-                    alert("信号解调不成功！")
+                    alert("信号不能解调！")
                 }
                 $('input:checkbox').removeAttr("checked");
                 //location.reload();
