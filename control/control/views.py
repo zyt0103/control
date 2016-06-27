@@ -67,7 +67,7 @@ class demodul(View):
         for type in demod_type:
             temp = {}
             temp.update({'demod_type_name': type.demod_type_name, 'ant_num': type.ant_num,
-                         'protocol': type.PROTOCOL_TYPE[type.protocol-1][1], 'sync_type': type.SYNC_TYPE[type.sync_type-1][1],
+                         'protocol': type.PROTOCOL_TYPE[int(type.protocol)-1][1], 'sync_type': type.SYNC_TYPE[int(type.sync_type)-1][1],
                          'demod_type_id': type.demod_type_id})
             dict_obj['demo_list'].append(temp)
         return render(request, "index/demodul.html", dict_obj)
@@ -117,7 +117,7 @@ class addmodalType(View):
         for type in demodType:
             temp = {}
             temp.update({'demod_type_name': type.demod_type_name, 'ant_num': type.ant_num,
-                         'protocol': type.PROTOCOL_TYPE[type.protocol-1][1], 'sync_type': type.SYNC_TYPE[type.sync_type-1][1],
+                         'protocol': type.PROTOCOL_TYPE[int(type.protocol)-1][1], 'sync_type': type.SYNC_TYPE[int(type.sync_type)-1][1],
                          'demod_type_id': type.demod_type_id})
             dict_obj['demo_list'].append(temp)
         return render(request, "index/addModalType.html", dict_obj)
