@@ -48,6 +48,16 @@ class DemodTypeSerializer(serializers.Serializer):
         validators=[sync_type_validator]
     )
 
+class DemodTypeDeleteSerializer(serializers.Serializer):
+    """
+    解调方式删除
+    """
+    demod_type_id = serializers.ListField(
+        required=True,
+        child=serializers.CharField(max_length=20),
+        validators=[demod_type_id_validator]
+    )
+
 class DemodResultSerializer(serializers.Serializer):
     """
     解调结果序列化函数

@@ -10,13 +10,6 @@ from django.contrib.auth.admin import User
 from django.utils.translation import ugettext as _
 
 from control.control.err_msg import PARAMETER_CODE
-
-from control.apps.modu.models import DistriModel
-from control.apps.modu.models import PartableModel
-from control.apps.modu.models import TimetableModel
-from control.apps.modu.models import AisdataModel
-from control.apps.modu.models import SignalModel
-
 from control.control.logger import getLogger
 
 logger = getLogger(__name__)
@@ -37,9 +30,6 @@ def user_temp():
         except Exception as exp:
             logger.error("Create User Failed！")
             return False
-
-
-
 
 
 def randomname_maker(num=settings.NAME_ID_LENGTH):

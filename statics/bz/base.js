@@ -11,9 +11,9 @@ $(function(){
 	//		alert("aa")
 	//	}
 	//}
-    $delete.bind("click", function () {
-        $(".modul_contain tbody input:checked").parent().parent().remove();
-    });
+    //$delete.bind("click", function () {
+     //   $(".modul_contain tbody input:checked").parent().parent().remove();
+    //});
 
     //add function
     var $add = $("#add");
@@ -547,7 +547,7 @@ $(function(){
             },
             data: JSON.stringify(param),
             headers: {
-                'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
+                //'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
                 'Content-Type': 'application/json'
             }
 	    });
@@ -570,34 +570,45 @@ $(function(){
     });
 
     function ajDemodul() {
-        var elem= $('input:radio[name="type"]:checked').parent().siblings();
-        var signal=$('input:checkbox:checked').parent().next().children().html();
+        var elem= $('input:radio[name="type"]:checked').parent().next().next().next().next().html()
+        var signal=$('input:checkbox:checked').parent().next().children();
                     //$('input:checkbox:checked').parent().next()[0].children;
-        var param = {
-            "signal_id":signal,
-			"demod_type_id": "demodtype-7mhn4rz3"
-            //"ant_type": elem[0].innerHTML,
-            //"protocol": elem[1].innerHTML,
-            //"sync_type": elem[2].innerHTML,
+        var length =signal.length;
+        if(length==1){
+            var param = {
+            "signal_id":signal.html(),
+			"demod_type_id": elem,
+            }
         }
+        else{
+            var signal_id = new Array();
+            for(var i=0; i<length; i++){
+                 signal_id[i]=signal[i].innerHTML;
+            }
+            var param = {
+                "signal_id":signal_id,
+                "demod_type_id": elem,
+            }
+        }
+
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
             url: '/demod/demodsignal',
             success: function (res) {
                 if (res.ret_code == 0) {
-                    alert("信号解调成功！")
+                    alert("信号开始解调！")
                 }
                 else {
-                    alert("信号解调不成功！")
+                    alert("信号不能解调！")
                 }
                 $('input:checkbox').removeAttr("checked");
                 //location.reload();
             },
             data: JSON.stringify(param),
             headers: {
-                'X-CSRFToken': 'dlIPR6X4fjEKlVtvBiY1aC7hRX37viG5',
-                'Content-Type': 'application/json'
+                //'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
+                'Content-Type': 'application/json',
             }
         });
     }
@@ -621,8 +632,10 @@ $(function(){
     $("#quitchioce").bind('mouseout',check1);
     function addmodalType(){
         var val=$(':checkbox:checked').val();
+
         if(val){
-            $('#addModalType').load('/addModalType.html');
+            var minAntNum=1;
+            $('#addModalType').load('/addModalType.html?minAntNum='+minAntNum);
         }
     }
     $("#demodul").bind('click',addmodalType);
@@ -632,6 +645,48 @@ $(function(){
     });
     $("#quitchioce").on("click",function(){
         $('input:checkbox').prop("checked",false);
+    });
+
+     function ajDeleteSignal() {
+         var signal=$('input:checkbox:checked').parent().next().children();
+                    //$('input:checkbox:checked').parent().next()[0].children;
+         var length=signal.length;
+         if(length == 1){
+             var param = {"signal_id":signal.html(),}
+         }
+         else{
+             var signal_id = new Array();
+             for(var i=0; i<length; i++){
+                 signal_id[i]=signal[i].innerHTML;
+             }
+             var param = {"signal_id":signal_id}
+         }
+         $.ajax({
+            type: 'post',
+            dataType: 'JSON',
+            url: '/modu/delete',
+            success: function (res) {
+                if (res.ret_code == 0) {
+                    alert("删除信号成功！")
+                }
+                else {
+                    alert("删除信号不成功！")
+                }
+                $('input:checkbox').removeAttr("checked");
+                location.reload();
+            },
+            data: JSON.stringify(param),
+            headers: {
+                //'X-CSRFToken': 'qUgKcDvT6UcljCIfYvTyHNMMIGtGuqXu',
+                'Content-Type': 'application/json',
+            }
+         });
+    }
+    $("#delete").bind("click",function(){
+        var val=$(':checkbox:checked').val();
+        if(val) {
+            ajDeleteSignal();
+        }
     });
 
 
@@ -645,6 +700,11 @@ function addmodal(){
 function addmodalDemodul(){
 	$('#addModalDemodul').load('/addModalDemodul.html');
 }
+function picture(){
+    $('#picture').load("/pic.html",function(){
+    });
+}
+
 
 //post发送前加入cookie
 $(document).ajaxSend(function(event, xhr, settings) {
@@ -682,5 +742,20 @@ $(document).ajaxSend(function(event, xhr, settings) {
     if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
-    // console.log("ajax send")
+     //console.log("ajax send")
 });
+//$(document).ajaxStart(function() {
+//    $("#load").show();
+//
+//});
+//$(document).ajaxStop(function() {
+//    $("#load").hide();
+//
+//});
+//function myrefresh()
+//{
+//       parent.location.reload();
+//}
+//setTimeout('myrefresh()',10000);
+
+

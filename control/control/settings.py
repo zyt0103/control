@@ -187,8 +187,5 @@ IF_RUN_MATLAB = config.get("matlab", "runMatlab")
 ##################SAVE SIGNAL INFO PERIED ############
 SAVE_PERIED = 1
 
-##################DATABASE INFO ######################
-DATABASE_USER = config.get("database", "db_user")
-DATABASE_PWD = config.get("database", "db_password")
 
 maxDemodType = config.get("ais", "maxDemodType")

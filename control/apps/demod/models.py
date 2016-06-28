@@ -33,19 +33,17 @@ class DemodTypeManager(models.Manager):
                protocol,
                sync_type):
         try:
-            demod_type = DemodType(user_id=user_id,
-                                   demod_type_id=demod_type_id,
-                                   demod_type_name=demod_type_name,
-                                   ant_num=ant_num,
-                                   protocol=protocol,
-                                   sync_type=sync_type)
-
+            demod_type = DemodType(user_id = user_id,
+                                    demod_type_id=demod_type_id,
+                                    demod_type_name=demod_type_name,
+                                    ant_num=ant_num,
+                                    protocol=protocol,
+                                    sync_type=sync_type)
             demod_type.save()
             return demod_type, None
         except Exception as exp:
             logger.error("demodType save error: %s" % exp)
             return None, exp
-
 
 class DemodResultManager(models.Manager):
     def create(self,
@@ -61,7 +59,6 @@ class DemodResultManager(models.Manager):
         except Exception as exp:
             logger.error("demodResult save error: %s" % exp)
             return None, exp
-
 
 class DemodModel(BaseModel):
     """
@@ -196,10 +193,10 @@ class DemodType(BaseModel):
     def delete_demodtype_by_id(cls, demodType_id, deleted=False):
         try:
             DemodType.objects.filter(deleted=deleted).get(demod_type_id=demodType_id).delete()
-            return True
+            return True, None
         except Exception as exp:
             logger.error("delete demodtype error: %s" % exp)
-            return False
+            return False, exp
 
     @classmethod
     def get_demodtype_by_id(cls,demodType_id, deleted=False):

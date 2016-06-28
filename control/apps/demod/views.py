@@ -10,11 +10,13 @@ from rest_framework.response import Response
 from .serializer import DemodSignalSerializer
 from .serializer import DemodTypeSerializer
 from .serializer import DemodResultSerializer
+from .serializer import DemodTypeDeleteSerializer
 from .helper import Router
-from .helper import create_demod_type, list_demod_result
+from .helper import create_demod_type, list_demod_result, delete_demod_type
 
 from control.control.logger import getLogger
 from control.control.base import get_path, user_temp
+
 from control.apps.modu.helper import make_id
 
 logger = getLogger(__name__)
@@ -84,6 +86,23 @@ class DemodTypeCreate(APIView):
         }
         logger.info("payload is %s" % pay_load)
         resp = create_demod_type(pay_load)
+        return Response(resp, status=status.HTTP_200_OK)
+
+class DemodTypeDelete(APIView):
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        logger.info("Cur request data is %s" % data)
+        validator = DemodTypeDeleteSerializer(data=data)
+        if not validator.is_valid():
+            code, msg = control_code(validator)
+            return Response(control_response(code=code, msg=msg),
+                            status=status.HTTP_200_OK)
+        demod_type_id = validator.validated_data.get("demod_type_id", None)
+        payload = {
+            "demod_type_id": demod_type_id
+        }
+        logger.info("payload is %s" % payload)
+        resp = delete_demod_type(payload)
         return Response(resp, status=status.HTTP_200_OK)
 
 

@@ -1,7 +1,4 @@
 # coding=utf-8
-
-from datetime import datetime
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
@@ -157,6 +154,7 @@ class AisdataModelManager(models.Manager):
 class SignalModelManager(models.Manager):
     def create(self,
                name_signal,
+               channel_num,
                partable_id,
                timetable_id,
                aisdata_id,
@@ -167,6 +165,7 @@ class SignalModelManager(models.Manager):
             timetable = TimetableModel.get_timetable_by_id(timetable_id)
             aisdata = AisdataModel.get_aisdata_by_id(aisdata_id)
             signal_model = SignalModel(name_signal=name_signal,
+                                       channel_num=channel_num,
                                        partable=partable,
                                        timetable=timetable,
                                        aisdata=aisdata,
@@ -466,6 +465,14 @@ class AisdataModel(BaseModel):
             logger.error("delete aisdata error: %s" % str(exp))
             return False
 
+    # @classmethod
+    # def get_aisdataid_by_id(cls, signal_id, deleted = False):
+    #     try:
+    #         aisdata = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id).aisdata
+    #         return aisdata.aisdata_id
+    #     except Exception as exp:
+    #         logger.error("get aisdata_id error: %s" % str(exp))
+    #         return False
 
 class SignalModel(BaseModel):
     class Meta:
@@ -481,13 +488,18 @@ class SignalModel(BaseModel):
     signal_id = models.CharField(
         max_length=20,
         null=False,
-        unique=True,
+        unique=True
     )
 
     name_signal = models.CharField(
         max_length=30,
         null=False,
         unique=False
+    )
+
+    channel_num = models.IntegerField(
+        null=False,
+        unique=False,
     )
 
     snr = models.IntegerField(null=False)
@@ -558,7 +570,6 @@ class SignalModel(BaseModel):
         try:
             signal = SignalModel.objects.filter(deleted=deleted).get(signal_id=signal_id)
             signal.deleted = True
-            signal.deleted_at = datetime.now()
             signal.save()
             return True, None
         except Exception as exp:
@@ -634,7 +645,10 @@ class ScheduleModel(models.Model):
         :return:
         """
         try:
+            logger.info("here!")
+            logger.info("schedule is %s" % ScheduleModel.objects.get(model_id=model_id).model_rate)
             schedule = ScheduleModel.objects.filter(deleted=deleted).get(model_id=model_id).model_rate
+            logger.info("schedule is %f" % schedule)
             return schedule
         except Exception as exp:
             return 0

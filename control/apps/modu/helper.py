@@ -4,10 +4,11 @@ from __future__ import division
 from os.path import getsize
 from os.path import join
 
+from django.conf import settings
+
 from control.control import settings
-from control.control.base import randomname_maker
 from control.control.base import control_response
-# from control.control.base import make_id
+from control.control.base import randomname_maker
 from control.control.err_msg import ModuErrorCode
 from control.control.err_msg import DESCRIBErrorCode
 from control.control.err_msg import DELETEErrorCode
@@ -27,33 +28,33 @@ from .tasks import *
 from control.control.logger import getLogger
 logger = getLogger(__name__)
 
-
 def make_id(action):
     while True:
+        distri_id = "%s-%s" % (settings.DISTRI_PREFIX, randomname_maker())
+        partable_id = "%s-%s" % (settings.PARTABLE_PREFIX, randomname_maker())
+        timetable_id = "%s-%s" % (settings.TIMETABLE_PREFIX, randomname_maker())
+        aisdata_id = "%s-%s" % (settings.AISDATA_PREFIX, randomname_maker())
+        signal_id = "%s-%s" % (settings.SIGNAL_PREFIX, randomname_maker())
+        demod_type_id = "%s-%s" % (settings.DEMOD_TYPE_PREFIX, randomname_maker())
         if action == "distri":
-            distri_id = "%s-%s" % (settings.DISTRI_PREFIX, randomname_maker())
             if not DistriModel.distri_exist_by_id(distri_id):
                 return distri_id
         if action == "partable":
-            partable_id = "%s-%s" % (settings.PARTABLE_PREFIX, randomname_maker())
             if not PartableModel.partable_exist_by_id(partable_id):
                 return partable_id
         if action == "timetable":
-            timetable_id = "%s-%s" % (settings.TIMETABLE_PREFIX, randomname_maker())
             if not TimetableModel.timetable_exist_by_id(timetable_id):
                 return timetable_id
         if action == "aisdata":
-            aisdata_id = "%s-%s" % (settings.AISDATA_PREFIX, randomname_maker())
             if not AisdataModel.aisdata_exist_by_id(aisdata_id):
                 return aisdata_id
         if action == "signal":
-            signal_id = "%s-%s" % (settings.SIGNAL_PREFIX, randomname_maker())
             if not SignalModel.signal_exist_by_id(signal_id):
                 return signal_id
         if action == "demod_type":
-            demod_type_id = "%s-%s" % (settings.DEMOD_TYPE_PREFIX, randomname_maker())
             if not DemodType.demodtype_exist_by_id(demod_type_id):
                 return demod_type_id
+
 
 def create_ves_distri(payload):
     """
@@ -159,6 +160,7 @@ def create_time_table(payload):
         "partable_id": partable_id,
         "timetable_id": timetable_id
     }
+    logger.info("payload is %s" % sub_payload)
     timetable_model, error = TimetableModel.objects.create(distri_id=distri_id,
                                                            partable_id=partable_id,
                                                            timetable_id=timetable_id,
@@ -212,6 +214,7 @@ def create_aissig(payload):
     obtime = payload.get("obtime", None)
     vesnum = payload.get("vesnum", None)
     height = payload.get("height", None)
+    channel_num = payload.get("channel_num", None)
     partable_id = payload.get("partable_id", None)
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
@@ -221,6 +224,7 @@ def create_aissig(payload):
         "obtime": obtime,
         "vesnum": vesnum,
         "height": height,
+        "channel_num": channel_num,
         "partable_id": partable_id,
         "timetable_id": timetable_id,
         "aisdata_id": aisdata_id,
@@ -236,6 +240,7 @@ def create_aissig(payload):
         signal_id = make_id(action)
         sub_payload.update({"signal_id": signal_id})
         signal_model, error = SignalModel.objects.create(name_signal=name_signal_update,
+                                                         channel_num=channel_num,
                                                          timetable_id=timetable_id,
                                                          partable_id=partable_id,
                                                          aisdata_id=aisdata_id,
@@ -264,6 +269,7 @@ def Getdescribe(payload):
     try:
         createtime = get_createtime(signal_id)
         signalsize = get_save_signalsize(signal_id)
+        logger.info("siganlsize is %d" % signalsize)
         schedule = get_save_schedule(signal_id)
         return control_response(code=0,
                                 msg="describe success!",
@@ -311,6 +317,7 @@ def Getschedule(payload):
     signal_id = payload.get("signal_id")
     try:
         schedule = get_save_schedule(signal_id)
+        logger.info("schedule is %d" % schedule)
         return control_response(code=0, msg="get schedule success!", ret_set=[{"schedule": schedule}])
     except Exception as exp:
         return control_response(code=DESCRIBErrorCode.GET_SCHEDULE_FAILED, msg=str(exp))
@@ -327,7 +334,7 @@ def Getdetail(payload):
         detail_info = get_signal_detail(signal_id)
         return control_response(code=0, ret_set=detail_info)
     except Exception as exp:
-        logger.error("get signal detail info error:%s" % str(exp))
+        logger.info("get signal detail info error:%s" % str(exp))
         return control_response(code=DESCRIBErrorCode.GET_DETAIL_FAILED, msg=str(exp))
 
 
@@ -378,7 +385,9 @@ def get_save_signalsize(signal_id):
     """
     signalpath = os.path.join(get_path.MATLAB_FILE_PATH, "DATA/aisSig", signal_id)
     signalsize = getdirsize(signalpath)
+    logger.info("signal size is %d" % signalsize)
     status_model, error = SignalModel.status_size_save(signal_id=signal_id, signalsize=signalsize)
+    logger.info("status_model is %s" % status_model)
     if not status_model:
         return 0
     return signalsize
@@ -433,6 +442,7 @@ def getdirsize(dir):
     :param dir: 需要计算文件夹的完整路径
     :return: 文件夹下所有文件的大小， 以Kb为单位
     """
+    logger.info("the current dir is %s" % dir)
     size = 0L
     for root, dirs, files in os.walk(dir):
         size += sum([getsize(join(root, name)) for name in files])

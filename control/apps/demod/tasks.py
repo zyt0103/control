@@ -7,8 +7,6 @@ from celery import shared_task
 
 from control.control.base import get_path
 from control.control.logger import getLogger
-from control.control.settings import DATABASE_PWD
-from control.control.settings import DATABASE_USER
 
 logger = getLogger(__name__)
 
@@ -35,7 +33,7 @@ def Demod_single_ant(payload):
     try:
         logger.info("payload is %s, %s, %s" % (signal_id, protocol, sync_type))
         logger.info("start matlab single_ant demode")
-        eng.Main(signal_id, protocol, sync_type, DATABASE_USER, DATABASE_PWD)
+        eng.Main(signal_id, protocol, sync_type)
         eng.quit()
         os.chdir(celery_path)
         return True
@@ -61,7 +59,7 @@ def Demod_double_ant(payload):
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab double_ant demode")
-        eng.Main(signal_id, protocol, sync_type, DATABASE_USER, DATABASE_PWD)
+        eng.Main(signal_id, protocol, sync_type)
         eng.quit()
         os.chdir(celery_path)
         return True
@@ -87,7 +85,7 @@ def Demod_four_ant(payload):
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab four_ant demode")
-        eng.Main(signal_id, protocol, sync_type, DATABASE_USER, DATABASE_PWD)
+        eng.Main(signal_id, protocol, sync_type)
         eng.quit()
         os.chdir(celery_path)
         return True

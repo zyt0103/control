@@ -21,7 +21,7 @@ logger = getLogger(__name__)
 
 class newindex(View):
     def get(self, request):
-        user_id = request.GET.get("user_id", "user-safoewfw")
+        user_id = request.REQUEST.get("user_id", "user-safoewfw")
         signal = SignalModel.objects.filter(deleted=False).filter(partable__distri__user__username=user_id)
         paginator = Paginator(signal, 12)
         page = request.REQUEST.get("page", 1)
@@ -41,7 +41,8 @@ class newindex(View):
                            "signal_id": signal[i].signal_id,
                            "size": int(signal[i].signal_size),
                            "status": signal[i].schedule * 100,
-                           "create_time": signal[i].create_datetime
+                           "create_time": signal[i].create_datetime,
+                           "channel_num": signal[i].channel_num
                            }
             info.append(signal_info)
         return render(request, "index/newIndex.html", Context({"Info": info, "topics": signal}))
@@ -136,3 +137,8 @@ class checkPro(View):
     def get(self, request):
 
         return render(request, "index/checkPro.html")
+
+class pic(View):
+    def get(self, request):
+
+        return render(request, "index/pic.html")

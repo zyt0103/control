@@ -46,7 +46,7 @@ def CreateDistri(payload):
     username = payload.get("owner")
     sub_payload = {
         "action": action,
-        "name_signal": name_signal,
+        "name_signal": name_signal + '_' + action,
         "packagenum": packagenum,
         "lon": lon,
         "lat": lat,
@@ -81,7 +81,7 @@ def CreatePartable(payload):
 
     sub_payload = {
         "action": action,
-        "name_signal": name_signal,
+        "name_signal": name_signal + '_' + action,
         "packagenum": packagenum,
         "height": height,
         "vesnum": vesnum,
@@ -91,6 +91,7 @@ def CreatePartable(payload):
         "channel_type": channel_type,
         "distri_id": distri_id,
     }
+    logger.info("patable_payload is %s" % sub_payload)
     ret_message = create_ves_parTalb(sub_payload)
     return ret_message
 
@@ -116,7 +117,7 @@ def CreateTimetable(payload):
 
     sub_payload = {
         "action": action ,
-        "name_signal": name_signal,
+        "name_signal": name_signal + '_' + action,
         "packagenum": packagenum,
         "obtime": obtime,
         "height": height,
@@ -147,7 +148,7 @@ def CreateAisdata(payload):
         distri_id = TimetableModel.get_distri_id_by_timetable_id(timetable_id)
     sub_payload = {
         "action": action,
-        "name_signal": name_signal,
+        "name_signal": name_signal + '_' + action,
         "packagenum": packagenum,
         "distri_id": distri_id,
         "timetable_id": timetable_id,
@@ -168,6 +169,7 @@ def CreateSignal(payload):
     obtime = payload.get("obtime", None)
     vesnum = payload.get("vesnum", None)
     height = payload.get("height", None)
+    channel_num = payload.get("channel_num", None)
     partable_id = payload.get("partable_id", None)
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
@@ -180,11 +182,12 @@ def CreateSignal(payload):
         partable_id = TimetableModel.get_partable_id_by_timetable_id(timetable_id)
     sub_payload = {
         "action": action,
-        "name_signal": name_signal,
+        "name_signal": name_signal + '_' + action,
         "packagenum": packagenum,
         "obtime": obtime,
         "vesnum": vesnum,
         "height": height,
+        "channel_num": channel_num,
         "partable_id": partable_id,
         "timetable_id": timetable_id,
         "aisdata_id": aisdata_id,
@@ -206,6 +209,7 @@ def SaveSignalInfo(signal_id):
     try:
         get_save_schedule(signal_id=signal_id)
         get_save_signalsize(signal_id)
+        logger.info("%s is saved!" % signal_id)
         return True
     except Exception as exp:
         logger.error("%s info save error: %s" % (signal_id, exp))

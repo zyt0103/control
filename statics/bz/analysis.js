@@ -16,6 +16,12 @@ $(function() {
             $("#checkPro").addClass("noclick");
         }
     })
+    $(":checkbox").click(function () {
+        $(":checkbox").each(function () {
+            $(this).prop("checked",false);
+        });
+        $(this).prop("checked",true);
+    });
 });
 function newlink(){
     var val=$(':checkbox:checked').val();

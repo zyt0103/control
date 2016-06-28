@@ -27,7 +27,6 @@ class DistriModelAdmin(admin.ModelAdmin):
 @admin.register(PartableModel)
 class PartableModelAdmin(admin.ModelAdmin):
     list_display = ("id",
-                    "partable_id",
                     "distri",
                     "pitch",
                     "azimuth",
@@ -41,7 +40,6 @@ class PartableModelAdmin(admin.ModelAdmin):
 @admin.register(TimetableModel)
 class TimetableModelAdmin(admin.ModelAdmin):
     list_display = ("id",
-                    "timetable_id",
                     "distri",
                     "partable",
                     "obtime",
@@ -54,7 +52,6 @@ class TimetableModelAdmin(admin.ModelAdmin):
 @admin.register(AisdataModel)
 class AisdataModelAdmin(admin.ModelAdmin):
     list_display = ("id",
-                    "aisdata_id",
                     "distri",
                     "timetable",
                     "create_datetime",
@@ -64,7 +61,6 @@ class AisdataModelAdmin(admin.ModelAdmin):
 @admin.register(SignalModel)
 class SignalModelAdmin(admin.ModelAdmin):
     list_display = ("id",
-                    "signal_id",
                     "partable",
                     "timetable",
                     "snr",

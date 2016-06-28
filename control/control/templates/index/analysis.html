@@ -53,10 +53,8 @@
                                 </a>
 	                        </span>
 	                        <span class="myPanel">
-                                <a  href="checkPro.html" target="_blank" onclick="return newlink()">
 	                                <input type="button" class="handle btn btn-info pull-right noclick"
                                            id="checkPro" value="检测概率"></input>
-                                </a>
 	                        </span>
 						</div>
                         <div class="panel panel-default modul_contain ">
@@ -71,24 +69,12 @@
 		                            </tr>
 		                        </thead>
 		                        <tbody>
-{#                                    {% for infoIndex in Info %}#}
-{#                                        <tr>#}
-{#                                            <td>#}
-{#                                                <input type="checkbox">#}
-{#                                            {{ infoIndex.name_signal }}</td>#}
-{#                                            <td>{{ infoIndex.signal_id }}</td>#}
-{#                                            <td>{{ infoIndex.status}}%</td>#}
-{#                                            <td>{{ infoIndex.size }} KB</td>#}
-{#                                            <td>{{ infoIndex.create_time }}</td>#}
-{#                                            <td>no</td>#}
-{#                                        </tr>#}
-{#                                    {% endfor %}#}
                                     {% for demo in analysis_list %}
                                     <tr>
                                         <td>
                                             <input type="checkbox">{{ demo.signal_id }}
                                         </td>
-                                        <td><a href="paramAnalysis.html" target="_blank">{{ demo.demod_type_id }}</a></td>
+                                        <td>{{ demo.demod_type_id }}</td>
                                         <td>{% if demo.status %}{{ demo.status }}{% endif %}</td>
                                         <td>{% if demo.demod_prob_fact %}{{ demo.demod_prob_fact }}{% endif %}</td>
                                         <td>{% if demo.demod_prob_theory %}{{ demo.demod_prob_theory }}{% endif %}</td>

@@ -21,7 +21,7 @@ body{
 	float: right;
 	background: #DDF0F3;
 	width: 80%;
-	height: 725px;
+	height: 785px;
 }
 .wrapper-ais  .top-navbar{
     padding-left: 165px;
@@ -126,7 +126,7 @@ body{
 }
 .pagefooter{
 	position:absolute;
-	bottom: -100px;
+	bottom: -130px;
 	width:75%;
 }
  .check{
@@ -171,5 +171,5 @@ html button[type="button"].noclick{
     cursor: no-drop;
 }
 .chioce{
-    padding-top: 0;
+    padding: 0 15px 5px 15px;
 }

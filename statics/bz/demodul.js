@@ -43,19 +43,19 @@ $(function() {
     //    }
     //});
     function ajCreateDemodulType(){
-        var protocol_num
-        var sync_type_num
+        var protocol_num;
+        var sync_type_num;
         if($('#protocol_de').val()=="GMSK"){
-            protocol_num=1;
+            protocol_num="1";
         }
         if($('#sync_type').val()=="DEFAULT"){
-            sync_type_num=1;
+            sync_type_num="1";
         }
         var param={
             "demod_type_name": $('#type_name_de').val(),
-            "ant_num":$('#ant_type_de').val(),
-            "protocol":"1",
-            "sync_type":"1",
+            "ant_num":$('#ant_num_de').val(),
+            "protocol":protocol_num,
+            "sync_type":sync_type_num,
         }
         $.ajax({
             type: 'POST',
@@ -69,7 +69,7 @@ $(function() {
                     alert("创建解调方式不成功！")
                 }
                 //$('input:checkbox').removeAttr("checked");
-                //location.reload();
+                location.reload();
             },
             data: JSON.stringify(param),
             headers: {
@@ -83,4 +83,47 @@ $(function() {
         $("#addClose").click();
     }
     $("#addModalDemodul").on("click","#addOKDemodul",CreateDemodulType);
+
+     function ajDeleteDemodulType() {
+         var type_id=$('input:checkbox:checked').parent().next();
+         var length=type_id.length;
+         if(length == 1){
+             var type = new Array();
+             type[0]=type_id.html();
+             var param = {"demod_type_id":type}
+         }
+         else{
+             var type = new Array();
+             for(var i=0; i<length; i++){
+                 type[i]=type_id[i].innerHTML;
+             }
+             var param = {"demod_type_id":type}
+         }
+         $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/demod/demodtypedelete',
+            success: function (res) {
+                if (res.ret_code == 0) {
+                    alert("删除方式成功！")
+                }
+                else {
+                    alert("删除方式不成功！")
+                }
+                $('input:checkbox').removeAttr("checked");
+                location.reload();
+            },
+            data: JSON.stringify(param),
+            headers: {
+                //'X-CSRFToken': 'qUgKcDvT6UcljCIfYvTyHNMMIGtGuqXu',
+                'Content-Type': 'application/json',
+            }
+         });
+    }
+    $("#deleteDemodul").bind("click",function(){
+        var val=$(':checkbox:checked').val();
+        if(val) {
+            ajDeleteDemodulType();
+        }
+    });
 });
