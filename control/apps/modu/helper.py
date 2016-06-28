@@ -214,6 +214,7 @@ def create_aissig(payload):
     obtime = payload.get("obtime", None)
     vesnum = payload.get("vesnum", None)
     height = payload.get("height", None)
+    channel_num = payload.get("channel_num", None)
     partable_id = payload.get("partable_id", None)
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
@@ -223,6 +224,7 @@ def create_aissig(payload):
         "obtime": obtime,
         "vesnum": vesnum,
         "height": height,
+        "channel_num": channel_num,
         "partable_id": partable_id,
         "timetable_id": timetable_id,
         "aisdata_id": aisdata_id,
@@ -238,6 +240,7 @@ def create_aissig(payload):
         signal_id = make_id(action)
         sub_payload.update({"signal_id": signal_id})
         signal_model, error = SignalModel.objects.create(name_signal=name_signal_update,
+                                                         channel_num=channel_num,
                                                          timetable_id=timetable_id,
                                                          partable_id=partable_id,
                                                          aisdata_id=aisdata_id,

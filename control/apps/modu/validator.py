@@ -284,6 +284,15 @@ def channel_type_validator(channel_type):
         raise serializers.ValidationError(_(u"channel_type 参数错误！"))
 
 
+def channel_num_validator(channel_num):
+    """
+    validate channel_num
+    :param channel_num:
+    :return:
+    """
+    if channel_num < 1:
+        raise serializers.ValidationError(_(u"channel_num 参数错误！"))
+
 def protocol_validator(protocol):
     """
     validate protocol

@@ -64,6 +64,7 @@ class CreateSignal(APIView):
         ant_azimuth = validator.validated_data.get("ant_azimuth", 0)
         ant_type = validator.validated_data.get("ant_type", "yagi")
         channel_tpye = validator.validated_data.get("channel_type", "free space loss")
+        channel_num = validator.validated_data.get("channel_num", 4)
         protocol = validator.validated_data.get("protocol", "SOTDMA")
         snr = validator.validated_data.get("snr", 0)
         distri_mode = validator.validated_data.get("distri_mode", "random")
@@ -93,6 +94,7 @@ class CreateSignal(APIView):
             "ant_azimuth": ant_azimuth,
             "ant_type": ant_type,
             "channel_type": channel_tpye,
+            "channel_num": channel_num,
             "protocol": protocol,
             "snr": snr,
             "distri_mode": distri_mode,
