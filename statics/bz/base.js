@@ -571,12 +571,26 @@ $(function(){
 
     function ajDemodul() {
         var elem= $('input:radio[name="type"]:checked').parent().next().next().next().next().html()
-        var signal=$('input:checkbox:checked').parent().next().children().html();
+        var signal=$('input:checkbox:checked').parent().next().children();
                     //$('input:checkbox:checked').parent().next()[0].children;
-        var param = {
-            "signal_id":signal,
+        var length =signal.length;
+        if(length==1){
+            var param = {
+            "signal_id":signal.html(),
 			"demod_type_id": elem,
+            }
         }
+        else{
+            var signal_id = new Array();
+            for(var i=0; i<length; i++){
+                 signal_id[i]=signal[i].innerHTML;
+            }
+            var param = {
+                "signal_id":signal_id,
+                "demod_type_id": elem,
+            }
+        }
+
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
@@ -618,8 +632,10 @@ $(function(){
     $("#quitchioce").bind('mouseout',check1);
     function addmodalType(){
         var val=$(':checkbox:checked').val();
+
         if(val){
-            $('#addModalType').load('/addModalType.html');
+            var minAntNum=1;
+            $('#addModalType').load('/addModalType.html?minAntNum='+minAntNum);
         }
     }
     $("#demodul").bind('click',addmodalType);
@@ -646,7 +662,7 @@ $(function(){
              var param = {"signal_id":signal_id}
          }
          $.ajax({
-            type: 'POST',
+            type: 'post',
             dataType: 'JSON',
             url: '/modu/delete',
             success: function (res) {
@@ -736,5 +752,10 @@ $(document).ajaxSend(function(event, xhr, settings) {
 //    $("#load").hide();
 //
 //});
+//function myrefresh()
+//{
+//       parent.location.reload();
+//}
+//setTimeout('myrefresh()',10000);
 
 

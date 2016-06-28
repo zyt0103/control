@@ -41,7 +41,7 @@ class newindex(View):
                            "signal_id": signal[i].signal_id,
                            "size": int(signal[i].signal_size),
                            "status": signal[i].schedule * 100,
-                           "create_time": signal[i].create_datetime
+                           "create_time": signal[i].create_datetime,
                            }
             info.append(signal_info)
         return render(request, "index/newIndex.html", Context({"Info": info, "topics": signal}))

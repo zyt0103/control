@@ -63,6 +63,7 @@
 		                                <th class="text-center active">size</th>
 		                                <th class="text-center active">createTime</th>
                                         <th class="text-center active">demodul_status</th>
+                                        <th style="display: none" class="text-center active">ant_type</th>
 		                            </tr>
 		                        </thead>
 		                        <tbody>
@@ -77,6 +78,7 @@
                                             <td>{{ infoIndex.size }} KB</td>
                                             <td>{{ infoIndex.create_time }}</td>
                                             <td></td>
+                                            <td >{{ infoIndex.ant_type }}</td>
                                         </tr>
                                     {% endfor %}
 		                        </tbody>
