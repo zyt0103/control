@@ -69,8 +69,7 @@
 		                        <tbody>
                                     {% for infoIndex in Info %}
                                         <tr>
-                                            <td>
-                                                <input type="checkbox">{{ infoIndex.name_signal }}</td>
+                                            <td><input type="checkbox">{{ infoIndex.name_signal }}</td>
                                             <td>
                                                 <a href="paramAnalysis.html" target="_blank">{{ infoIndex.signal_id }}</a>
                                             </td>
@@ -78,7 +77,7 @@
                                             <td>{{ infoIndex.size }} KB</td>
                                             <td>{{ infoIndex.create_time }}</td>
                                             <td></td>
-                                            <td>{{ infoIndex.channel_num }}</td>
+                                            <td style="display: none">{{ infoIndex.channel_num }}</td>
                                         </tr>
                                     {% endfor %}
 		                        </tbody>
