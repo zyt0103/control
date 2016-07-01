@@ -154,6 +154,7 @@ class AisdataModelManager(models.Manager):
 class SignalModelManager(models.Manager):
     def create(self,
                name_signal,
+               channel_num,
                partable_id,
                timetable_id,
                aisdata_id,
@@ -164,6 +165,7 @@ class SignalModelManager(models.Manager):
             timetable = TimetableModel.get_timetable_by_id(timetable_id)
             aisdata = AisdataModel.get_aisdata_by_id(aisdata_id)
             signal_model = SignalModel(name_signal=name_signal,
+                                       channel_num=channel_num,
                                        partable=partable,
                                        timetable=timetable,
                                        aisdata=aisdata,
@@ -493,6 +495,11 @@ class SignalModel(BaseModel):
         max_length=30,
         null=False,
         unique=False
+    )
+
+    channel_num = models.IntegerField(
+        null=False,
+        unique=False,
     )
 
     snr = models.IntegerField(null=False)

@@ -69,7 +69,7 @@ $(function() {
                     alert("创建解调方式不成功！")
                 }
                 //$('input:checkbox').removeAttr("checked");
-                //location.reload();
+                location.reload();
             },
             data: JSON.stringify(param),
             headers: {
@@ -93,11 +93,11 @@ $(function() {
              var param = {"demod_type_id":type}
          }
          else{
-             var type_id = new Array();
+             var type = new Array();
              for(var i=0; i<length; i++){
-                 type_id[i]=type_id[i].innerHTML;
+                 type[i]=type_id[i].innerHTML;
              }
-             var param = {"demod_type_id":type_id}
+             var param = {"demod_type_id":type}
          }
          $.ajax({
             type: 'POST',
@@ -111,7 +111,7 @@ $(function() {
                     alert("删除方式不成功！")
                 }
                 $('input:checkbox').removeAttr("checked");
-                //location.reload();
+                location.reload();
             },
             data: JSON.stringify(param),
             headers: {

@@ -162,6 +162,7 @@ def matlab_create_aisSig(payload):
     vesnum = payload.get("vesnum", None)
     height = payload.get("height", None)
     snr = payload.get("snr", None)
+    channel_num = payload.get("channel_num", None)
     partable_id = payload.get("partable_id", None)
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
@@ -172,7 +173,7 @@ def matlab_create_aisSig(payload):
     try:
         logger.info("start matlab_signal")
         logger.info("payload is %s" % payload)
-        eng.F_genAISSig(obtime, vesnum, height, snr, partable_id, timetable_id, aisdata_id, signal_id)
+        eng.F_genAISSig(obtime, vesnum, height, snr, channel_num, partable_id, timetable_id, aisdata_id, signal_id)
         eng.quit()
         os.chdir(celery_path)
         return True

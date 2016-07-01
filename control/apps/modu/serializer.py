@@ -112,6 +112,11 @@ class CreateSignalSerializer(serializers.Serializer):
         validators=[channel_type_validator]
     )
 
+    channel_num = serializers.IntegerField(
+        required=False,
+        validators=[channel_num_validator]
+    )
+
     protocol = serializers.CharField(
         required=False,
         validators=[protocol_validator]

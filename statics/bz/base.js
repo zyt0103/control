@@ -1,7 +1,9 @@
 /**
  * Created by baishengmei on 2016/5/13.
  */
+
 $(function(){
+
 
     //delete function
     var $modul_contain = $("#modul_contain");
@@ -468,12 +470,12 @@ $(function(){
     $('#addModal1').on('click','#addOK',function(){
         var flag = validateForm();
         if(flag){
-            aj();
+            ajCreateSignal();
             $("#addClose").click();
         }
     });
 
-    function aj(){
+    function ajCreateSignal(){
         var param={
         "name_signal":$("#filename").val(),
         "lat":$("#lat").val(),
@@ -485,6 +487,7 @@ $(function(){
         "ant_azimuth":$("#ant_azimuth").val(),
         "ant-type":$("#ant_type").val(),
         "channel_type":$("#channel_type").val(),
+        "channel_num":$("#channel_num").val(),
         "protocol":$("#protocol").val(),
         "snr":$("#snr").val(),
         "packagenum":$("#packagenum").val(),
@@ -496,7 +499,7 @@ $(function(){
             url: '/modu/createsignal',
             success:function(res) {
                 if(res.ret_code==0){
-                    //location.reload();
+                    location.reload();
                     //if(res.total_count==1){
                     //    var signal_id = res.ret_set;
                     //    var signal_name =$("#filename").val();
@@ -547,7 +550,6 @@ $(function(){
             },
             data: JSON.stringify(param),
             headers: {
-                //'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
                 'Content-Type': 'application/json'
             }
 	    });
@@ -571,29 +573,42 @@ $(function(){
 
     function ajDemodul() {
         var elem= $('input:radio[name="type"]:checked').parent().next().next().next().next().html()
-        var signal=$('input:checkbox:checked').parent().next().children().html();
+        var signal=$('input:checkbox:checked').parent().next().children();
                     //$('input:checkbox:checked').parent().next()[0].children;
-        var param = {
-            "signal_id":signal,
+        var length =signal.length;
+        if(length==1){
+            var param = {
+            "signal_id":signal.html(),
 			"demod_type_id": elem,
+            }
         }
+        else{
+            var signal_id = new Array();
+            for(var i=0; i<length; i++){
+                 signal_id[i]=signal[i].innerHTML;
+            }
+            var param = {
+                "signal_id":signal_id,
+                "demod_type_id": elem,
+            }
+        }
+
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
             url: '/demod/demodsignal',
             success: function (res) {
                 if (res.ret_code == 0) {
-                    alert("信号解调成功！")
+                    alert("信号开始解调！")
                 }
                 else {
-                    alert("信号解调不成功！")
+                    alert("信号不能解调！")
                 }
                 $('input:checkbox').removeAttr("checked");
                 //location.reload();
             },
             data: JSON.stringify(param),
             headers: {
-                //'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
                 'Content-Type': 'application/json',
             }
         });
@@ -618,8 +633,15 @@ $(function(){
     $("#quitchioce").bind('mouseout',check1);
     function addmodalType(){
         var val=$(':checkbox:checked').val();
+        var antnumArrey=$('input:checkbox:checked').parent().next().next().next().next().next().next();
+        var antnum=new Array();
+        $.each(antnumArrey,function(i,item){
+            antnum[i]=item.innerHTML;
+        });
+        console.log(antnum);
+        var minAntNum=Math.min.apply(Math,antnum);
         if(val){
-            $('#addModalType').load('/addModalType.html');
+            $('#addModalType').load('/addModalType.html?minAntNum='+minAntNum);
         }
     }
     $("#demodul").bind('click',addmodalType);
@@ -646,7 +668,7 @@ $(function(){
              var param = {"signal_id":signal_id}
          }
          $.ajax({
-            type: 'POST',
+            type: 'post',
             dataType: 'JSON',
             url: '/modu/delete',
             success: function (res) {
@@ -685,8 +707,14 @@ function addmodalDemodul(){
 	$('#addModalDemodul').load('/addModalDemodul.html');
 }
 function picture(){
-    $('#picture').load("/pic.html",function(){
-    });
+    if($('#picture').text()){
+        return false;
+    }
+    else{
+        $('#picture').load("/pic.html",function(){
+            $.getScript('statics/bz/x3dom.js')
+        });
+    }
 }
 
 
@@ -736,5 +764,10 @@ $(document).ajaxSend(function(event, xhr, settings) {
 //    $("#load").hide();
 //
 //});
+//function myrefresh()
+//{
+//       parent.location.reload();
+//}
+//setTimeout('myrefresh()',10000);
 
 
