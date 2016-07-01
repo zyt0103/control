@@ -123,6 +123,6 @@ def list_demod_result(payload):
     demod_type_id = payload.get("demod_type_id", None)
     demodresut, exp = DemodResult.describe_demod_result_by_id(signal_id=signal_id, demod_type_id=demod_type_id)
     if exp:
-        return control_response(code=DemodErrorCode.DEMOD_TYPE_DESCRIBE_FAILED, msg=exp)
+        return control_response(code=DemodErrorCode.DEMOD_RESULT_DESCRIBE_FAILED, msg=exp)
 
     return control_response(code=0, msg="Demod result describe succ")

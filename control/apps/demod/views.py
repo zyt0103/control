@@ -91,8 +91,9 @@ class DemodTypeCreate(APIView):
 class DemodTypeDelete(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
+        logger.info(type(data.get("demod_type_id")))
         logger.info("Cur request data is %s" % data)
-        validator = DemodTypeDeleteSerializer(data)
+        validator = DemodTypeDeleteSerializer(data=data)
         if not validator.is_valid():
             code, msg = control_code(validator)
             return Response(control_response(code=code, msg=msg),
@@ -101,7 +102,6 @@ class DemodTypeDelete(APIView):
         payload = {
             "demod_type_id": demod_type_id
         }
-        logger.info("payload is %s" % payload)
         resp = delete_demod_type(payload)
         return Response(resp, status=status.HTTP_200_OK)
 
