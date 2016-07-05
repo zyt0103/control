@@ -11,6 +11,7 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 
 from control.apps.modu.models import SignalModel
+from control.apps.modu.helper import get_signal_detail
 from control.apps.modu.sub_view import SaveSignalInfo
 
 from control.apps.demod.models import DemodType, DemodModel
@@ -23,6 +24,7 @@ class newindex(View):
     def get(self, request):
         user_id = request.REQUEST.get("user_id", "user-safoewfw")
         signal = SignalModel.objects.filter(deleted=False).filter(partable__distri__user__username=user_id)
+        # demod = DemodModel.objects.filter(deleted=False).filter(user_id=user_id)
         paginator = Paginator(signal, 12)
         page = request.REQUEST.get("page", 1)
         try:
@@ -42,7 +44,8 @@ class newindex(View):
                            "size": int(signal[i].signal_size),
                            "status": signal[i].schedule * 100,
                            "create_time": signal[i].create_datetime,
-                           "channel_num": signal[i].channel_num
+                           "channel_num": signal[i].channel_num,
+                           # "demod_status": get_demod_status_by_signal_id(signal[i].signal_id)
                            }
             info.append(signal_info)
         return render(request, "index/newIndex.html", Context({"Info": info, "topics": signal}))
@@ -126,8 +129,9 @@ class addmodalType(View):
 
 class paramAnalysis(View):
     def get(self, request):
-
-        return render(request, "index/paramAnalysis.html")
+        signal_id = request.GET.get("signal_id", None)
+        ret_info = get_signal_detail(signal_id=signal_id)
+        return render(request, "index/paramAnalysis.html", ret_info)
 
 class demodulResult(View):
     def get(self, request):

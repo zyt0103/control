@@ -173,6 +173,7 @@ def CreateSignal(payload):
     partable_id = payload.get("partable_id", None)
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
+    distri_id = payload.get("distri_id", None)
     snr = payload.get("snr")
     if aisdata_id is None:
         return control_response(code=ModuErrorCode.AISDATA_ID_MISSING, msg="aisdata_id is needed!")
@@ -180,6 +181,8 @@ def CreateSignal(payload):
         timetable_id = AisdataModel.get_timetable_id_by_aisdata_id(aisdata_id)
     if partable_id is None:
         partable_id = TimetableModel.get_partable_id_by_timetable_id(timetable_id)
+    if distri_id is None:
+        distri_id = PartableModel.get_distri_id_by_partable_id(partable_id)
     sub_payload = {
         "action": action,
         "name_signal": name_signal + '_' + action,
@@ -188,6 +191,7 @@ def CreateSignal(payload):
         "vesnum": vesnum,
         "height": height,
         "channel_num": channel_num,
+        "distri_id": distri_id,
         "partable_id": partable_id,
         "timetable_id": timetable_id,
         "aisdata_id": aisdata_id,

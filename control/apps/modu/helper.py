@@ -215,6 +215,7 @@ def create_aissig(payload):
     vesnum = payload.get("vesnum", None)
     height = payload.get("height", None)
     channel_num = payload.get("channel_num", None)
+    distri_id = payload.get("distri_id", None)
     partable_id = payload.get("partable_id", None)
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
@@ -225,6 +226,7 @@ def create_aissig(payload):
         "vesnum": vesnum,
         "height": height,
         "channel_num": channel_num,
+        "distri_id": distri_id,
         "partable_id": partable_id,
         "timetable_id": timetable_id,
         "aisdata_id": aisdata_id,
@@ -334,7 +336,7 @@ def Getdetail(payload):
         detail_info = get_signal_detail(signal_id)
         return control_response(code=0, ret_set=detail_info)
     except Exception as exp:
-        logger.info("get signal detail info error:%s" % str(exp))
+        logger.error("get signal detail info error:%s" % str(exp))
         return control_response(code=DESCRIBErrorCode.GET_DETAIL_FAILED, msg=str(exp))
 
 

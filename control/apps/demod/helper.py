@@ -26,49 +26,53 @@ class Router():
         """
         payload = self.payload
         demod_type_id = payload.get("demod_type_id")
-        signal_id = payload.get("signal_id")
-        logger.info("payload is %s" % payload)
-        demod_model, error = DemodModel.objects.create(signal_id=signal_id,
-                                                       demod_type_id=demod_type_id,
-                                                       demod_prob_theory=None,
-                                                       demod_prob_fact=None)
-        if not demod_model:
-            return control_response(code=DemodErrorCode.DEMOD_SAVE_FAILED, msg=error)
+        signal_id_list = payload.get("signal_id")
+        if isinstance(signal_id_list, list):
+            for signal_id in signal_id_list:
+                logger.info("payload is %s" % payload)
+                demod_model, error = DemodModel.objects.create(signal_id=signal_id,
+                                                               demod_type_id=demod_type_id,
+                                                               demod_prob_theory=None,
+                                                               demod_prob_fact=None)
+                if not demod_model:
+                    return control_response(code=DemodErrorCode.DEMOD_SAVE_FAILED, msg=error)
 
-        demod_type = DemodType.get_demodtype_by_id(demodType_id=demod_type_id)
-        ant_num = demod_type.ant_num
-        protocol = demod_type.protocol
-        sync_type = demod_type.sync_type
+                demod_type = DemodType.get_demodtype_by_id(demodType_id=demod_type_id)
+                ant_num = demod_type.ant_num
+                protocol = demod_type.protocol
+                sync_type = demod_type.sync_type
 
-        # 根据天线数量选择解调方式
-        if ant_num == 1:
-            sub_payload = {
-                "signal_id": signal_id,
-                "protocol": protocol,
-                "sync_type": sync_type
-            }
-            logger.info("The sub_payload is %s" % sub_payload)
-            if settings.IF_RUN_MATLAB == 'True':
-                Demod_single_ant.apply_async([sub_payload])
+                # 根据天线数量选择解调方式
+                if ant_num == 1:
+                    sub_payload = {
+                        "signal_id": signal_id,
+                        "protocol": protocol,
+                        "sync_type": sync_type,
+                        "demod_type_id": demod_type_id
+                    }
+                    logger.info("The sub_payload is %s" % sub_payload)
+                    if settings.IF_RUN_MATLAB == 'True':
+                        Demod_single_ant.apply_async([sub_payload])
+                if ant_num == 2:
+                    sub_payload = {
+                        "signal_id": signal_id,
+                        "protocol": protocol,
+                        "sync_type": sync_type,
+                        "demod_type_id": demod_type_id
+                    }
+                    if settings.IF_RUN_MATLAB == 'True':
+                        Demod_double_ant.apply_async([sub_payload])
 
-        if ant_num == 2:
-            sub_payload = {
-                "signal_id": signal_id,
-                "protocol": protocol,
-                "sync_type": sync_type
-            }
-            if settings.IF_RUN_MATLAB == 'True':
-                Demod_double_ant.apply_async([sub_payload])
-
-        if ant_num == 4:
-            sub_payload = {
-                "signal_id": signal_id,
-                "protocol": protocol,
-                "sync_type": sync_type
-            }
-            if settings.IF_RUN_MATLAB == 'True':
-                Demod_four_ant.apply_async([sub_payload])
-        return control_response(code=0, msg="Demod is running!")
+                if ant_num == 4:
+                    sub_payload = {
+                        "signal_id": signal_id,
+                        "protocol": protocol,
+                        "sync_type": sync_type,
+                        "demod_type_id": demod_type_id
+                    }
+                    if settings.IF_RUN_MATLAB == 'True':
+                        Demod_four_ant.apply_async([sub_payload])
+            return control_response(code=0, msg="Demod is running!")
 
 
 def create_demod_type(payload):

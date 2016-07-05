@@ -32,7 +32,7 @@ def signal_id_validator(signal_id):
         for key_signal_id in signal_id:
             if not SignalModel.signal_exist_by_id(key_signal_id):
                 raise serializers.ValidationError(u"%s is not exist in SignalModel!" % key_signal_id)
-    if not SignalModel.signal_exist_by_id(signal_id):
+    elif not SignalModel.signal_exist_by_id(signal_id):
         raise serializers.ValidationError(u"%s is not exist in SignalModel!" % signal_id)
 
 def demod_type_id_validator(demod_type_id):
@@ -56,7 +56,7 @@ def protocol_validator(protocol_type):
         for key_protocol_type in protocol_type:
             if key_protocol_type not in PROTOCOL_TYPE:
                 raise serializers.ValidationError(u"protocol_type is invalid!")
-    if protocol_type not in PROTOCOL_TYPE:
+    elif protocol_type not in PROTOCOL_TYPE:
         raise serializers.ValidationError(u"protocol_type is invalid")
 
 def sync_type_validator(sync_type):
@@ -69,5 +69,5 @@ def sync_type_validator(sync_type):
         for key_sync_type in sync_type:
             if key_sync_type not in SYNC_TYPE:
                 raise serializers.ValidationError(u"sync_type is invalid!")
-    if sync_type not in SYNC_TYPE:
+    elif sync_type not in SYNC_TYPE:
         raise serializers.ValidationError(u"sync_type is invalid!")

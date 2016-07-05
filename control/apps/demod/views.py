@@ -2,6 +2,7 @@
 
 from control.control.base import control_code
 from control.control.base import control_response
+from control.control.base import get_path
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -34,10 +35,11 @@ class DemodSignal(APIView):
         :param kwargs:
         :return:
         """
-        req_data = request.data
+        req_data = toList(request.data)
         logger.info(req_data)
         validator = DemodSignalSerializer(data=req_data)
         logger.info("validator is valid: %s" % validator.is_valid())
+        logger.info("the demod_single_ant path is %s" % get_path.MATLAB_DEMOD_SINGLE_ANT_PATH)
         if not validator.is_valid():
             code, msg = control_code(validator)
             logger.debug(str(validator.errors))
@@ -125,3 +127,22 @@ class DemodResultList(APIView):
         logger.info("payload is %s" % pay_load)
         resp = list_demod_result(pay_load)
         return Response(resp, status=status.HTTP_200_OK)
+
+
+def toList(payload):
+    """
+    数据验证前的数据处理
+    :param payload:
+    :return:
+    """
+
+    signal_id = payload.get("signal_id")
+    if signal_id:
+        if not isinstance(signal_id, list):
+            signal_id = [signal_id]
+    payload.update(
+        {
+            "signal_id": signal_id
+        }
+    )
+    return payload
