@@ -619,6 +619,7 @@ class SignalModel(BaseModel):
             logger.error("schedule save error: %s" % str(exp))
             return None, exp
 
+
 class ScheduleModel(models.Model):
     class Meta:
         db_table = "schedule"
