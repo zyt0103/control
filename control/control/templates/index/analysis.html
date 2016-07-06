@@ -41,10 +41,10 @@
 			        <div id="ais_analysis" >
                         <div class="panel-default control_button panel-body"><!--2016.5.16这里去掉了一个panel类-->
 	                        <span class=" myPanel">
-	                            <a href="paramAnalysis.html" target="_blank" onclick="return newlink()">
+{#	                            <a href="paramAnalysis.html" target="_blank" onclick="return newlink()">#}
                                     <button type="button"  class="handle btn btn-info pull-right noclick"
-                                           id="paramAnalysis">参数分析</button>
-                                </a>
+                                           id="paramAnalysis" onclick="newlink()">参数分析</button>
+{#                                </a>#}
 	                        </span>
 	                        <span class="myPanel">
                                 <a  href="demodulResult.html" target="_blank" onclick="return newlink()">
@@ -71,9 +71,7 @@
 		                        <tbody>
                                     {% for demo in analysis_list %}
                                     <tr>
-                                        <td>
-                                            <input type="checkbox">{{ demo.signal_id }}
-                                        </td>
+                                        <td><input type="checkbox">{{ demo.signal_id }}</td>
                                         <td>{{ demo.demod_type_id }}</td>
                                         <td>{% if demo.status %}{{ demo.status }}{% endif %}</td>
                                         <td>{% if demo.demod_prob_fact %}{{ demo.demod_prob_fact }}{% endif %}</td>
