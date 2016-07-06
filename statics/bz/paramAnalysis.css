@@ -1,0 +1,36 @@
+.analysisTable{
+    padding-top: 10px;
+    float: right;
+    height: 200px;
+    width:75%;
+    text-align: center;
+
+}
+.paramMessage{
+    display: inline-block;
+}
+.side-nav{
+    width:25%;
+    height: 500px;
+    float: left;
+}
+#pic {
+    float: right;
+    width: 75%;
+    text-align: center;
+}
+#picture{
+    display: inline-block;
+}
+.me{
+    font-size: 18px;
+    color: #337ab7;
+    line-height: 1.3333333;
+    padding: 10px 16px;
+    float: left;
+    height: 200px;
+    width:25%;
+}
+td{
+    width: 50px;
+}

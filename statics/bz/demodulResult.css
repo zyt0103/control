@@ -1,0 +1,35 @@
+.resultMessage{
+    font-size: 18px;
+    color: #337ab7;
+    line-height: 1.3333333;
+    padding: 10px 16px;
+    float: left;
+    height: 100px;
+    width:25%;
+}.resultTable{
+    padding-top: 10px;
+    float: right;
+    height: 100px;
+    width:75%;
+    text-align: center;
+}
+.resultTableBody{
+    display: inline-block;
+}
+.side-nav{
+    width:25%;
+    height: 500px;
+    float: left;
+}
+#pic {
+    float: right;
+    width: 75%;
+    text-align: center;
+}
+#picture{
+    display: inline-block;
+}
+
+td{
+    width: 50px;
+}
