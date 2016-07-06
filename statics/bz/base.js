@@ -1,7 +1,9 @@
 /**
  * Created by baishengmei on 2016/5/13.
  */
+
 $(function(){
+
 
     //delete function
     var $modul_contain = $("#modul_contain");
@@ -468,12 +470,12 @@ $(function(){
     $('#addModal1').on('click','#addOK',function(){
         var flag = validateForm();
         if(flag){
-            aj();
+            ajCreateSignal();
             $("#addClose").click();
         }
     });
 
-    function aj(){
+    function ajCreateSignal(){
         var param={
         "name_signal":$("#filename").val(),
         "lat":$("#lat").val(),
@@ -485,6 +487,7 @@ $(function(){
         "ant_azimuth":$("#ant_azimuth").val(),
         "ant-type":$("#ant_type").val(),
         "channel_type":$("#channel_type").val(),
+        "channel_num":$("#channel_num").val(),
         "protocol":$("#protocol").val(),
         "snr":$("#snr").val(),
         "packagenum":$("#packagenum").val(),
@@ -547,7 +550,6 @@ $(function(){
             },
             data: JSON.stringify(param),
             headers: {
-                //'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
                 'Content-Type': 'application/json'
             }
 	    });
@@ -607,7 +609,6 @@ $(function(){
             },
             data: JSON.stringify(param),
             headers: {
-                //'X-CSRFToken': 'QcFwvyXxVBI3LttqXJSgu1ryRJasZBYp',
                 'Content-Type': 'application/json',
             }
         });
@@ -632,9 +633,14 @@ $(function(){
     $("#quitchioce").bind('mouseout',check1);
     function addmodalType(){
         var val=$(':checkbox:checked').val();
-
+        var antnumArrey=$('input:checkbox:checked').parent().next().next().next().next().next().next();
+        var antnum=new Array();
+        $.each(antnumArrey,function(i,item){
+            antnum[i]=item.innerHTML;
+        });
+        console.log(antnum);
+        var minAntNum=Math.min.apply(Math,antnum);
         if(val){
-            var minAntNum=1;
             $('#addModalType').load('/addModalType.html?minAntNum='+minAntNum);
         }
     }
@@ -701,8 +707,14 @@ function addmodalDemodul(){
 	$('#addModalDemodul').load('/addModalDemodul.html');
 }
 function picture(){
-    $('#picture').load("/pic.html",function(){
-    });
+    if($('#picture').text()){
+        return false;
+    }
+    else{
+        $('#picture').load("/pic.html",function(){
+            $.getScript('statics/bz/x3dom.js')
+        });
+    }
 }
 
 

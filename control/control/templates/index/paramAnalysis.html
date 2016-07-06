@@ -44,46 +44,46 @@
                                 <tbody>
                                     <tr>
                                         <th class="text-center ">signal_id:</th>
-                                        <td>aaa</td>
+                                        <td>{{ signal_id }}</td>
                                         <td></td>
                                         <th class="text-center ">lat:</th>
-                                        <td>aaa</td>
+                                        <td>{{ lat }}</td>
                                         <td></td>
                                         <th class="text-center ">ant_type:</th>
-                                        <td>aaa</td>
+                                        <td>{{ ant_type }}</td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <th class="text-center ">height:</th>
-                                        <td>aaa</td>
+                                        <td>{{ height }}</td>
                                         <td></td>
                                         <th class="text-center ">lon:</th>
-                                        <td>aaa</td>
+                                        <td>{{ lon }}</td>
                                         <td></td>
                                         <th class="text-center ">ant_pitch:</th>
-                                        <td>aaa</td>
+                                        <td>{{ ant_pitch }}</td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <th class="text-center ">vesnum:</th>
-                                        <td>aaa</td>
+                                        <td>{{ vesnum }}</td>
                                         <td></td>
                                         <th class="text-center ">snr:</th>
-                                        <td>aaa</td>
+                                        <td>{{ snr }}</td>
                                         <td></td>
                                         <th class="text-center ">ant_azimuth:</th>
-                                        <td>aaa</td>
+                                        <td>{{ ant_azimuth }}</td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <th class="text-center ">obtime:</th>
-                                        <td>aaa</td>
+                                        <td>{{ obtime }}</td>
                                         <td></td>
                                         <th class="text-center ">protocol:</th>
-                                        <td>aaa</td>
+                                        <td>{{ protocol }}</td>
                                         <td></td>
                                         <th class="text-center ">channel_type:</th>
-                                        <td>aaa</td>
+                                        <td>{{ channel_type }}</td>
                                         <td></td>
                                     </tr>
                                 </tbody>
@@ -100,10 +100,7 @@
                     </div>
                     <div id="pic">
                         <div id="load"><h6>提示：左边点击之后请稍等几秒钟</h6></div>
-                        <div id="picture">
-
-
-                        </div>
+                        <div id="picture"></div>
                     </div>
                 </div>
 			</div>
@@ -113,5 +110,6 @@
 <script type="application/javascript" src="{% static "bz/vendor/jquery/dist/jquery.js" %}"></script>
 <script type="application/javascript" src="{% static "bz/vendor/bootstrap/dist/js/bootstrap.js" %}"></script>
 <script type="application/javascript" src="{% static "bz/base.js" %}" charset="UTF-8"></script>
+{#<script type='text/javascript' src='http://www.x3dom.org/x3dom/release/x3dom.js'></script>#}
 </body>
 </html>
