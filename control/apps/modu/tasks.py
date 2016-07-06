@@ -170,10 +170,11 @@ def matlab_create_aisSig(payload):
     eng = matlab.engine.start_matlab()
     try:
         logger.info("start matlab_signal")
-        logger.debug("distri_id is %s" % distri_id)
         eng.F_genAISSig(obtime, vesnum, height, snr, channel_num, distri_id, partable_id, timetable_id, aisdata_id, signal_id)
+        getPicHtml(signal_id=signal_id, eng=eng)
         eng.quit()
         os.chdir(celery_path)
+
         return True
     except Exception as exp:
         logger.error("signal running error: %s" % str(exp))
@@ -181,3 +182,49 @@ def matlab_create_aisSig(payload):
         os.chdir(celery_path)
         return False
 
+
+def getPicHtml(signal_id, eng):
+    """
+    获取html文件
+    :return:
+    """
+    actionList = ["power", "doppler", "delay", "DOA"]
+    for action in actionList:
+        path_plot = get_plot_data_file(action, signal_id)
+        # os.chdir(matlab_path)
+        try:
+            logger.info("start matlab_plot")
+            logger.info(action + path_plot + signal_id)
+            eng.matlab_to_html(action, path_plot, signal_id)
+            # os.chdir(celery_path)
+        except Exception as exp:
+            logger.error("get plot data error: %s" % str(exp))
+            return False
+    return True
+
+
+def get_plot_data_file(action, signal_id):
+    """
+    获取画图所需数据的文件名
+    :param action:
+    :param siganl_id:
+    :return:
+    """
+    if action == "distri":
+        try:
+            partable_id = SignalModel.get_partable_id_by_signal_id(signal_id=signal_id)
+            distri_id = PartableModel.get_distri_id_by_partable_id(partable_id=partable_id)
+            ret_path = os.path.join(matlab_path, "DATA", "distribution", "%s.mat" % distri_id)
+            return ret_path
+        except Exception as exp:
+            logger.error("get plot data distri error: %s" % str(exp))
+            return None
+    if action == "power" or action == "doppler" or action == "delay" or action == "DOA":
+        try:
+            partable_id = SignalModel.get_partable_id_by_signal_id(signal_id=signal_id)
+            ret_path = os.path.join(matlab_path, "DATA", "parTable", "%s.mat" % partable_id)
+            logger.info("ret_path is %s" % ret_path)
+            return ret_path
+        except Exception as exp:
+            logger.error("get plot data partable error: %s" % str(exp))
+            return None

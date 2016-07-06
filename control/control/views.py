@@ -13,6 +13,7 @@ from django.core.paginator import PageNotAnInteger
 from control.apps.modu.models import SignalModel
 from control.apps.modu.helper import get_signal_detail
 from control.apps.modu.sub_view import SaveSignalInfo
+from control.apps.modu.helper import getPicHtml
 
 from control.apps.demod.models import DemodType, DemodModel
 
@@ -38,7 +39,7 @@ class newindex(View):
             if signal_index.schedule != 1 or signal_index.signal_size == 0:
                 SaveSignalInfo(signal_index.signal_id)
         info = []
-        for i in range(len(signal)):
+        for i in range(len(signal)-1, -1, -1):
             signal_info = {"name_signal": signal[i].name_signal,
                            "signal_id": signal[i].signal_id,
                            "size": int(signal[i].signal_size),
@@ -100,6 +101,7 @@ class analysis(View):
             dict_obj['analysis_list'].append(temp)
         return render(request, "index/analysis.html", dict_obj)
 
+
 class addmodal(View):
     def get(self, request):
 
@@ -133,16 +135,20 @@ class paramAnalysis(View):
         ret_info = get_signal_detail(signal_id=signal_id)
         return render(request, "index/paramAnalysis.html", ret_info)
 
+
 class demodulResult(View):
     def get(self, request):
         return render(request, "index/demodulResult.html")
+
 
 class checkPro(View):
     def get(self, request):
 
         return render(request, "index/checkPro.html")
 
+
 class pic(View):
     def get(self, request):
-
-        return render(request, "index/pic.html")
+        signal_id = request.GET.get("signal_id", "signal-12113123")
+        param = self.request.GET.get("param", "power.html")
+        return render(request, "htmlfigs/%s/%s" % (signal_id, param))

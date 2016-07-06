@@ -185,7 +185,7 @@ def CreateSignal(payload):
         distri_id = PartableModel.get_distri_id_by_partable_id(partable_id)
     sub_payload = {
         "action": action,
-        "name_signal": name_signal + '_' + action,
+        "name_signal": name_signal,
         "packagenum": packagenum,
         "obtime": obtime,
         "vesnum": vesnum,

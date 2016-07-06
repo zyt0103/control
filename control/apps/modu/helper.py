@@ -523,3 +523,5 @@ def get_par_by_signal_id(signal_id):
     except Exception as exp:
         logger.error("get parameter from database error: %s" % str(exp))
         return False
+
+
