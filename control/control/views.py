@@ -2,6 +2,7 @@
 __author__ = 'houjincheng'
 from django.template import Context
 from django.shortcuts import render
+from django.http import HttpResponseBadRequest
 from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth.admin import User
@@ -13,7 +14,7 @@ from django.core.paginator import PageNotAnInteger
 from control.apps.modu.models import SignalModel
 from control.apps.modu.sub_view import SaveSignalInfo
 
-from control.apps.demod.models import DemodType, DemodModel
+from control.apps.demod.models import DemodType, DemodModel, DemodResult
 
 from control.control.base import getLogger
 logger = getLogger(__name__)
@@ -126,19 +127,49 @@ class addmodalType(View):
 
 class paramAnalysis(View):
     def get(self, request):
+        signalid = self.request.GET.get('signal_id', 'signal-sbhpy39w')
+        if not signalid:
+            return HttpResponseBadRequest()
+        signal = SignalModel.get_signal_by_id(signal_id=signalid)
+        logger.info(signal.partable)
+        dict_obj = {
+            "signal_id": signalid,
+            "height": signal.partable.distri.distri_height,
+            "lon": signal.partable.distri.distri_lon,
+            "lat": signal.partable.distri.distri_lat,
+            "vesnum": signal.partable.distri.distri_ves_num,
+            "obtime": signal.timetable.obtime,
+            "snr": signal.snr,
+            "protocol": signal.timetable.protocol,
+            "ant_type": signal.partable.antenna_type,
+            "ant_pitch": signal.partable.pitch,
+            "ant_azimuth": signal.partable.azimuth,
+            "channel_type": signal.partable.channel_type
+        }
+        return render(request, "index/paramAnalysis.html", dict_obj)
 
-        return render(request, "index/paramAnalysis.html")
 
 class demodulResult(View):
     def get(self, request):
-        return render(request, "index/demodulResult.html")
+        signalid = self.request.GET.get('signal_id', 'signal-sbhpy39w')
+        demodtypeid = self.request.GET.get('demod_type_id', 'demodtype-8b5qwp6c')
+        if not signalid or not demodtypeid:
+            return HttpResponseBadRequest()
+
+        dict_obj = {
+            "signal_id": signalid,
+            "protocol_de": DemodType.get_demodtype_by_id(demodType_id=demodtypeid).protocol,
+            "ant_num_de": DemodType.get_demodtype_by_id(demodType_id=demodtypeid).ant_num,
+            "sync_type": DemodType.get_demodtype_by_id(demodType_id=demodtypeid).sync_type
+        }
+        return render(request, "index/demodulResult.html", dict_obj)
+
 
 class checkPro(View):
     def get(self, request):
-
         return render(request, "index/checkPro.html")
+
 
 class pic(View):
     def get(self, request):
-
         return render(request, "index/pic.html")
