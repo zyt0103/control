@@ -2,10 +2,7 @@
 __author__ = 'houjincheng'
 from django.template import Context
 from django.shortcuts import render
-<<<<<<< HEAD
 from django.http import HttpResponseBadRequest
-=======
->>>>>>> febe
 from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth.admin import User
@@ -17,11 +14,7 @@ from django.core.paginator import PageNotAnInteger
 from control.apps.modu.models import SignalModel
 from control.apps.modu.sub_view import SaveSignalInfo
 
-<<<<<<< HEAD
 from control.apps.demod.models import DemodType, DemodModel, DemodResult
-=======
-from control.apps.demod.models import DemodType, DemodModel
->>>>>>> febe
 
 from control.control.base import getLogger
 logger = getLogger(__name__)
