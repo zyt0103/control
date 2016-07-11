@@ -33,8 +33,6 @@ def CreateDistri(payload):
     :param payload:  创建信号所需数据
     :return:
     """
-    # payload = self.payload
-    # logger.info("payload is %s", payload)
     action = payload.get("action", None)
     name_signal = payload.get("name_signal", None)
     packagenum= payload.get("packagenum", None)
@@ -91,7 +89,6 @@ def CreatePartable(payload):
         "channel_type": channel_type,
         "distri_id": distri_id,
     }
-    logger.info("patable_payload is %s" % sub_payload)
     ret_message = create_ves_parTalb(sub_payload)
     return ret_message
 
@@ -213,7 +210,6 @@ def SaveSignalInfo(signal_id):
     try:
         get_save_schedule(signal_id=signal_id)
         get_save_signalsize(signal_id)
-        logger.info("%s is saved!" % signal_id)
         return True
     except Exception as exp:
         logger.error("%s info save error: %s" % (signal_id, exp))
@@ -244,7 +240,6 @@ class Router():
         action = payload.get("action", None)
 
         if action is not None:
-            logger.info("action is %s" % action)
             if action == "distri":
                 return CreateDistri(payload)
             if action == "partable":
@@ -272,7 +267,6 @@ class Router():
             return ret_signal
         return control_response(code=ModuErrorCode.ACTION_GET_FAILED, msg="action_all 获取失败")
         # if action is not None:
-        #     logger.info("Current action is: %s" % action)
         #     ret_message = self.ACTION[action](payload)
         #     return ret_message
 

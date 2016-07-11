@@ -188,15 +188,19 @@ def getPicHtml(signal_id, eng):
     获取html文件
     :return:
     """
-    actionList = ["power", "doppler", "delay", "DOA"]
+    actionList = ["distri", "power", "doppler", "delay", "DOA", "antgain"]
     for action in actionList:
         path_plot = get_plot_data_file(action, signal_id)
-        # os.chdir(matlab_path)
         try:
             logger.info("start matlab_plot")
             logger.info(action + path_plot + signal_id)
-            eng.matlab_to_html(action, path_plot, signal_id)
-            # os.chdir(celery_path)
+            if action == "distri":
+                eng.F_gen_distri_modu_plot(path_plot, signal_id)
+            elif action == "antgain":
+                antType = SignalModel.get_signal_by_id(signal_id=signal_id).partable.antenna_type
+                eng.matlab_to_html(action, antType, signal_id)
+            else:
+                eng.matlab_to_html(action, path_plot, signal_id)
         except Exception as exp:
             logger.error("get plot data error: %s" % str(exp))
             return False

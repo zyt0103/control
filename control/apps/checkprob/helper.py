@@ -4,9 +4,11 @@ from django.conf import settings
 
 from control.control.base import control_response
 from control.control.err_msg import CheckProbErrorCode
+from control.control.err_msg import TheoryCheckProbErrorCode
 
 from .models import CheckProbModel
 from .tasks import CheckProb
+from .tasks import TheoryCheckProb
 
 
 from control.control.logger import getLogger
@@ -27,7 +29,7 @@ class Router():
 
         checkprob_model, error = CheckProbModel(demodSignal_id=demodSignal_id)
         if not checkprob_model:
-            return control_response(code=CheckProbErrorCode.CHEKPROB_SAVE_FAILED, msg = error)
+            return control_response(code=CheckProbErrorCode.CHEKPROB_SAVE_FAILED, msg=error)
 
         if action == "checkprob":
             sub_payload = {
@@ -36,4 +38,13 @@ class Router():
             }
             if settings.IF_RUN_MATLAB == 'True':
                 CheckProb.apply_async([sub_payload])
+        elif action == "theorycheckprob":
+            sub_payload = {
+                "signal_id": demodSignal_id,
+                "action": action
+            }
+            try:
+                TheoryCheckProb.apply_async([sub_payload])
+            except Exception as exp:
+                return control_response(code=TheoryCheckProbErrorCode, msg=str(exp))
         return control_response(code=0, msg="checkprob is running!")

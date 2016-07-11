@@ -160,7 +160,6 @@ def create_time_table(payload):
         "partable_id": partable_id,
         "timetable_id": timetable_id
     }
-    logger.info("payload is %s" % sub_payload)
     timetable_model, error = TimetableModel.objects.create(distri_id=distri_id,
                                                            partable_id=partable_id,
                                                            timetable_id=timetable_id,
@@ -271,7 +270,6 @@ def Getdescribe(payload):
     try:
         createtime = get_createtime(signal_id)
         signalsize = get_save_signalsize(signal_id)
-        logger.info("siganlsize is %d" % signalsize)
         schedule = get_save_schedule(signal_id)
         return control_response(code=0,
                                 msg="describe success!",
@@ -319,7 +317,6 @@ def Getschedule(payload):
     signal_id = payload.get("signal_id")
     try:
         schedule = get_save_schedule(signal_id)
-        logger.info("schedule is %d" % schedule)
         return control_response(code=0, msg="get schedule success!", ret_set=[{"schedule": schedule}])
     except Exception as exp:
         return control_response(code=DESCRIBErrorCode.GET_SCHEDULE_FAILED, msg=str(exp))
@@ -387,9 +384,7 @@ def get_save_signalsize(signal_id):
     """
     signalpath = os.path.join(get_path.MATLAB_FILE_PATH, "DATA/aisSig", signal_id)
     signalsize = getdirsize(signalpath)
-    logger.info("signal size is %d" % signalsize)
     status_model, error = SignalModel.status_size_save(signal_id=signal_id, signalsize=signalsize)
-    logger.info("status_model is %s" % status_model)
     if not status_model:
         return 0
     return signalsize
@@ -444,7 +439,6 @@ def getdirsize(dir):
     :param dir: 需要计算文件夹的完整路径
     :return: 文件夹下所有文件的大小， 以Kb为单位
     """
-    logger.info("the current dir is %s" % dir)
     size = 0L
     for root, dirs, files in os.walk(dir):
         size += sum([getsize(join(root, name)) for name in files])
@@ -461,7 +455,6 @@ def getfilenum(signal_id):
     filenum = 0
     for root, dirs, files in os.walk(signalpath):
         filelength = len(files)
-        logger.info(filelength)
         if filelength != 0:
             filenum = filenum + filelength
     return filenum

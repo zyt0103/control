@@ -19,6 +19,8 @@ from control.apps.modu.helper import getPicHtml
 from control.apps.demod.models import DemodType, DemodModel, DemodResult
 
 from control.control.base import getLogger
+
+import os
 logger = getLogger(__name__)
 
 
@@ -132,7 +134,7 @@ class addmodalType(View):
 
 class paramAnalysis(View):
     def get(self, request):
-        signalid = self.request.GET.get('signal_id', 'signal-sbhpy39w')
+        signalid = self.request.GET.get('signal_id', 'signal-cxbpt3zw')
         if not signalid:
             return HttpResponseBadRequest()
         signal = SignalModel.get_signal_by_id(signal_id=signalid)
@@ -156,8 +158,8 @@ class paramAnalysis(View):
 
 class demodulResult(View):
     def get(self, request):
-        signalid = self.request.GET.get('signal_id', 'signal-sbhpy39w')
-        demodtypeid = self.request.GET.get('demod_type_id', 'demodtype-8b5qwp6c')
+        signalid = self.request.GET.get('signal_id', 'signal-cxbpt3zw')
+        demodtypeid = self.request.GET.get('demod_type_id', 'demodtype-qpkn62i8')
         if not signalid or not demodtypeid:
             return HttpResponseBadRequest()
 
@@ -178,6 +180,14 @@ class checkPro(View):
 
 class pic(View):
     def get(self, request):
-        signal_id = request.GET.get("signal_id", "signal-12113123")
-        param = self.request.GET.get("param", "power.html")
+        signal_id = request.GET.get("signal_id", "signal-cxbpt3zw")
+        param = self.request.GET.get("param", "antgain.html")
+        pathtohtml = os.path.join('.', 'control/control/templates/htmlfigs/%s' % signal_id)
+        if param == "distri":
+            pic_path = os.path.join(',', 'control/control/pic/%s' % signal_id)
+            return render(request, "index/pic.html", (pic_path, '/', 'distri_modu.jpg'))
+        if not os.path.exists(pathtohtml):
+            return HttpResponseBadRequest()
+        if not os.path.isfile(os.path.join(pathtohtml, param)):
+            return HttpResponseBadRequest()
         return render(request, "htmlfigs/%s/%s" % (signal_id, param))

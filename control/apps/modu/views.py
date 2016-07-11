@@ -62,7 +62,7 @@ class CreateSignal(APIView):
         obtime = validator.validated_data.get("obtime", 60)
         ant_pitch = validator.validated_data.get("ant_pitch", 0)
         ant_azimuth = validator.validated_data.get("ant_azimuth", 0)
-        ant_type = validator.validated_data.get("ant_type", "yagi")
+        ant_type = validator.validated_data.get("ant_type", "spiral_small")
         channel_tpye = validator.validated_data.get("channel_type", "free space loss")
         channel_num = validator.validated_data.get("channel_num", 4)
         protocol = validator.validated_data.get("protocol", "SOTDMA")
