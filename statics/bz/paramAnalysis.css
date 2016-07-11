@@ -19,7 +19,10 @@
     width: 75%;
     text-align: center;
 }
-#picture{
+#picture1{
+    display: inline-block;
+}
+#picture2{
     display: inline-block;
 }
 .me{

@@ -706,16 +706,6 @@ function addmodal(){
 function addmodalDemodul(){
 	$('#addModalDemodul').load('/addModalDemodul.html');
 }
-function picture(){
-    if($('#picture').text()){
-        return false;
-    }
-    else{
-        $('#picture').load("/pic.html",function(){
-            $.getScript('statics/bz/x3dom.js')
-        });
-    }
-}
 
 
 //post发送前加入cookie

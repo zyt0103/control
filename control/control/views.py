@@ -127,7 +127,7 @@ class addmodalType(View):
 
 class paramAnalysis(View):
     def get(self, request):
-        signalid = self.request.GET.get('signal_id', 'signal-sbhpy39w')
+        signalid = self.request.GET.get('signal_id')
         if not signalid:
             return HttpResponseBadRequest()
         signal = SignalModel.get_signal_by_id(signal_id=signalid)
@@ -151,8 +151,8 @@ class paramAnalysis(View):
 
 class demodulResult(View):
     def get(self, request):
-        signalid = self.request.GET.get('signal_id', 'signal-sbhpy39w')
-        demodtypeid = self.request.GET.get('demod_type_id', 'demodtype-8b5qwp6c')
+        signalid = self.request.GET.get('signal_id')
+        demodtypeid = self.request.GET.get('demod_type_id')
         if not signalid or not demodtypeid:
             return HttpResponseBadRequest()
 
@@ -173,3 +173,6 @@ class checkPro(View):
 class pic(View):
     def get(self, request):
         return render(request, "index/pic.html")
+class pic1(View):
+    def get(self, request):
+        return render(request, "index/pic1.html")

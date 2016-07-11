@@ -92,15 +92,19 @@
                     </div>
                     <div class="side-nav">
                         <ul class="nav">
-                            <li  id="ves_distribute " class="active" onclick="picture()"><a href="#" class=""><span class=""></span>船舶分布图</a></li>
-                            <li  id="power_delay_fre"><a href="#" class=""><span class=""></span>功率时延频偏DOA</a></li>
+                            <li  ><button id="ves_distribute" class="btn-link btn-lg"><span class=""></span>船舶分布图</button></li>
+                            <li  ><button id="power" class="btn-link btn-lg"><span class=""></span>功率</button></li>
+                            <li  ><button id="delay" class="btn-link btn-lg"><span class=""></span>时延</button></li>
+                            <li  ><button id="fre" class="btn-link btn-lg"><span class=""></span>频偏</button></li>
+                            <li  ><button id="doa" class="btn-link btn-lg"><span class=""></span>DOA</button></li>
                             <li  id="view"><button class="btn-link btn-lg"><span class=""></span>视场图</button></li>
                             <li  id="ant_gain"><button class="btn-link btn-lg"><span class=""></span>天线增益</button></li>
                         </ul>
                     </div>
                     <div id="pic">
                         <div id="load"><h6>提示：左边点击之后请稍等几秒钟</h6></div>
-                        <div id="picture"></div>
+                        <div id="picture1"></div>
+                        <div id="picture2"></div>
                     </div>
                 </div>
 			</div>
@@ -110,6 +114,7 @@
 <script type="application/javascript" src="{% static "bz/vendor/jquery/dist/jquery.js" %}"></script>
 <script type="application/javascript" src="{% static "bz/vendor/bootstrap/dist/js/bootstrap.js" %}"></script>
 <script type="application/javascript" src="{% static "bz/base.js" %}" charset="UTF-8"></script>
+<script type="application/javascript" src="{% static "bz/paramAnalysis.js" %}"></script>
 {#<script type='text/javascript' src='http://www.x3dom.org/x3dom/release/x3dom.js'></script>#}
 </body>
 </html>
