@@ -12,11 +12,15 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 
 from control.apps.modu.models import SignalModel
+from control.apps.modu.helper import get_signal_detail
 from control.apps.modu.sub_view import SaveSignalInfo
+from control.apps.modu.helper import getPicHtml
 
 from control.apps.demod.models import DemodType, DemodModel, DemodResult
 
 from control.control.base import getLogger
+
+import os
 logger = getLogger(__name__)
 
 
@@ -24,6 +28,7 @@ class newindex(View):
     def get(self, request):
         user_id = request.REQUEST.get("user_id", "user-safoewfw")
         signal = SignalModel.objects.filter(deleted=False).filter(partable__distri__user__username=user_id)
+        # demod = DemodModel.objects.filter(deleted=False).filter(user_id=user_id)
         paginator = Paginator(signal, 12)
         page = request.REQUEST.get("page", 1)
         try:
@@ -37,13 +42,14 @@ class newindex(View):
             if signal_index.schedule != 1 or signal_index.signal_size == 0:
                 SaveSignalInfo(signal_index.signal_id)
         info = []
-        for i in range(len(signal)):
+        for i in range(len(signal)-1, -1, -1):
             signal_info = {"name_signal": signal[i].name_signal,
                            "signal_id": signal[i].signal_id,
                            "size": int(signal[i].signal_size),
                            "status": signal[i].schedule * 100,
                            "create_time": signal[i].create_datetime,
-                           "channel_num": signal[i].channel_num
+                           "channel_num": signal[i].channel_num,
+                           # "demod_status": get_demod_status_by_signal_id(signal[i].signal_id)
                            }
             info.append(signal_info)
         return render(request, "index/newIndex.html", Context({"Info": info, "topics": signal}))
@@ -97,6 +103,7 @@ class analysis(View):
                          'demod_prob_fact': type.demod_prob_fact, 'demod_prob_theory': type.demod_prob_theory})
             dict_obj['analysis_list'].append(temp)
         return render(request, "index/analysis.html", dict_obj)
+
 
 class addmodal(View):
     def get(self, request):
@@ -165,6 +172,7 @@ class demodulResult(View):
         return render(request, "index/demodulResult.html", dict_obj)
 
 
+
 class checkPro(View):
     def get(self, request):
         return render(request, "index/checkPro.html")
@@ -172,7 +180,22 @@ class checkPro(View):
 
 class pic(View):
     def get(self, request):
-        return render(request, "index/pic.html")
+        paramDict = {'1':"distri?_modu.jpg", '2':"power.html", '4':"doppler.html", '3':"delay.html",'5':"DOA.html"}
+        signal_id = request.GET.get("signal_id", "signal-iaythb8m")
+        param = self.request.GET.get("param", '3')
+        logger.info("param is %s" % param)
+        pathtohtml = os.path.join('.', 'control/control/templates/htmlfigs/%s' % signal_id)
+        param = paramDict.get(param)
+        # param = "power.html"
+        logger.info("param is %s" % param)
+        if param == "distri":
+            pic_path = os.path.join(',', 'control/control/pic/%s' % signal_id)
+            return render(request, "index/pic.html", (pic_path, '/', 'distri_modu.jpg'))
+        if not os.path.exists(pathtohtml):
+            return HttpResponseBadRequest()
+        if not os.path.isfile(os.path.join(pathtohtml, param)):
+            return HttpResponseBadRequest()
+        return render(request, "htmlfigs/%s/%s" % (signal_id, param))
 class pic1(View):
     def get(self, request):
         return render(request, "index/pic1.html")

@@ -48,11 +48,12 @@ class get_path():
     """
     MATLAB_FILE_PATH = os.path.abspath(os.path.join("./AIS"))
 
-    MATLAB_DEMOD_SINGLE_ANT_PATH = os.path.abspath(os.path.join("./sing_ant_demod"))
-    MATLAB_DEMOD_DOUBLE_ANT_PATH = os.path.abspath(os.path.join("./sing_ant_demod"))
-    MATLAB_DEMOD_FOUR_ANT_PATH = os.path.abspath(os.path.join("./sing_ant_demod"))
+    MATLAB_DEMOD_SINGLE_ANT_PATH = os.path.abspath(os.path.join("./single_ant_demod"))
+    MATLAB_DEMOD_DOUBLE_ANT_PATH = os.path.abspath(os.path.join("./double_ant_demod"))
+    MATLAB_DEMOD_FOUR_ANT_PATH = os.path.abspath(os.path.join("./four_ant_demod"))
 
-    MATALB_CHECKPROB_PATH = os.path.abspath(os.path.join("./checkprob"))
+    MATALB_CHECKPROB_PATH = os.path.abspath(os.path.join("./checkprob/conflictcheck"))
+    MATLAB_METHOD_CHECKPROB_PATH = os.path.abspath(os.path.join("./checkprob/theoryCheckProb"))
 
     CELERY_PATH = os.path.abspath(os.path.join("../"))
 
@@ -152,3 +153,5 @@ def control_response(code=0,
     ret.update(kwargs)
 
     return ret
+
+

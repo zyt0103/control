@@ -33,8 +33,6 @@ def CreateDistri(payload):
     :param payload:  创建信号所需数据
     :return:
     """
-    # payload = self.payload
-    # logger.info("payload is %s", payload)
     action = payload.get("action", None)
     name_signal = payload.get("name_signal", None)
     packagenum= payload.get("packagenum", None)
@@ -91,7 +89,6 @@ def CreatePartable(payload):
         "channel_type": channel_type,
         "distri_id": distri_id,
     }
-    logger.info("patable_payload is %s" % sub_payload)
     ret_message = create_ves_parTalb(sub_payload)
     return ret_message
 
@@ -173,6 +170,7 @@ def CreateSignal(payload):
     partable_id = payload.get("partable_id", None)
     timetable_id = payload.get("timetable_id", None)
     aisdata_id = payload.get("aisdata_id", None)
+    distri_id = payload.get("distri_id", None)
     snr = payload.get("snr")
     if aisdata_id is None:
         return control_response(code=ModuErrorCode.AISDATA_ID_MISSING, msg="aisdata_id is needed!")
@@ -180,14 +178,17 @@ def CreateSignal(payload):
         timetable_id = AisdataModel.get_timetable_id_by_aisdata_id(aisdata_id)
     if partable_id is None:
         partable_id = TimetableModel.get_partable_id_by_timetable_id(timetable_id)
+    if distri_id is None:
+        distri_id = PartableModel.get_distri_id_by_partable_id(partable_id)
     sub_payload = {
         "action": action,
-        "name_signal": name_signal + '_' + action,
+        "name_signal": name_signal,
         "packagenum": packagenum,
         "obtime": obtime,
         "vesnum": vesnum,
         "height": height,
         "channel_num": channel_num,
+        "distri_id": distri_id,
         "partable_id": partable_id,
         "timetable_id": timetable_id,
         "aisdata_id": aisdata_id,
@@ -209,7 +210,6 @@ def SaveSignalInfo(signal_id):
     try:
         get_save_schedule(signal_id=signal_id)
         get_save_signalsize(signal_id)
-        logger.info("%s is saved!" % signal_id)
         return True
     except Exception as exp:
         logger.error("%s info save error: %s" % (signal_id, exp))
@@ -240,7 +240,6 @@ class Router():
         action = payload.get("action", None)
 
         if action is not None:
-            logger.info("action is %s" % action)
             if action == "distri":
                 return CreateDistri(payload)
             if action == "partable":
@@ -268,7 +267,6 @@ class Router():
             return ret_signal
         return control_response(code=ModuErrorCode.ACTION_GET_FAILED, msg="action_all 获取失败")
         # if action is not None:
-        #     logger.info("Current action is: %s" % action)
         #     ret_message = self.ACTION[action](payload)
         #     return ret_message
 

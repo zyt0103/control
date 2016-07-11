@@ -22,7 +22,7 @@
 #picture1{
     display: inline-block;
 }
-#picture2{
+#picture2,#picture3,#picture4,#picture5,#picture6,#picture7{
     display: inline-block;
 }
 .me{
@@ -37,3 +37,9 @@
 td{
     width: 50px;
 }
+.color{
+   color:palevioletred;
+}
+/*.iframe{*/
+    /*border-width:0;*/
+/*}*/

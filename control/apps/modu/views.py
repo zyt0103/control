@@ -62,7 +62,7 @@ class CreateSignal(APIView):
         obtime = validator.validated_data.get("obtime", 60)
         ant_pitch = validator.validated_data.get("ant_pitch", 0)
         ant_azimuth = validator.validated_data.get("ant_azimuth", 0)
-        ant_type = validator.validated_data.get("ant_type", "yagi")
+        ant_type = validator.validated_data.get("ant_type", "spiral_small")
         channel_tpye = validator.validated_data.get("channel_type", "free space loss")
         channel_num = validator.validated_data.get("channel_num", 4)
         protocol = validator.validated_data.get("protocol", "SOTDMA")
@@ -116,7 +116,7 @@ class DescribeSignal(APIView):
     查询信号信息
     """
     def post(self, request, *args, **kwargs):
-        req_data = parProcess(request.data)
+        req_data = toList(request.data)
         logger.info("payload is %s" % req_data)
         validator = DescribeSignalSerializer(data=req_data)
         logger.info("validator valid is %s" % validator.is_valid())
@@ -143,7 +143,7 @@ class DeleteSignal(APIView):
     删除信号信息
     """
     def post(self, request, *args, **kwargs):
-        req_data = parProcess(request.data)
+        req_data = toList(request.data)
         logger.info("request data is %s" % req_data)
         validator = DeleteSignalSerializer(data=req_data)
         logger.info("validator valid is %s" % validator.is_valid())
@@ -164,7 +164,7 @@ class DeleteSignal(APIView):
         return Response(resp, status=status.HTTP_200_OK)
 
 
-def parProcess(payload):
+def toList(payload):
     """
     数据验证前的数据处理
     :param payload:
@@ -201,3 +201,4 @@ def parProcess(payload):
         }
     )
     return payload
+

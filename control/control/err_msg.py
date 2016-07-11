@@ -112,9 +112,15 @@ class CheckProbErrorCode():
 
     CHEKPROB_SAVE_FAILED = 40001
     CHECKPROB_MSG = {
-        40001:_(u"保存 checkprob 数据错误！")
+        40001: _(u"保存 checkprob 数据错误！")
     }
 
+
+class TheoryCheckProbErrorCode():
+    THEORYCHECKPROB_GET_FAILD = 50001
+    THEORYCHECKPROB_MSG = {
+        50002: _(u"获取理论检测概率错误!")
+    }
 
 class DESCRIBErrorCode():
 

@@ -33,7 +33,7 @@ class DemodTypeManager(models.Manager):
                protocol,
                sync_type):
         try:
-            demod_type = DemodType(user_id = user_id,
+            demod_type = DemodType(user_id=user_id,
                                     demod_type_id=demod_type_id,
                                     demod_type_name=demod_type_name,
                                     ant_num=ant_num,

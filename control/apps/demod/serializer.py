@@ -10,8 +10,7 @@ class DemodSignalSerializer(serializers.Serializer):
     """
     解调序列化函数
     """
-    signal_id = serializers.CharField(
-        max_length=20,
+    signal_id = serializers.ListField(
         required=True,
         validators=[signal_id_validator]
     )

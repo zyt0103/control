@@ -26,7 +26,7 @@ $(function() {
         var val=$(':checkbox:checked').val();
         var signal_id=$('input:checkbox:checked').parent().text();
         if(val){
-            window.open("paramAnalysis.html?signal_id="+signal_id,"_blank");
+            window.open("paramAnalysis.html?signal_id="+signal_id+"&"+"param=3","_blank");
             return true;
         }
         else{
