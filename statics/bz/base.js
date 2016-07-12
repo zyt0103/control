@@ -638,7 +638,6 @@ $(function(){
         $.each(antnumArrey,function(i,item){
             antnum[i]=item.innerHTML;
         });
-        console.log(antnum);
         var minAntNum=Math.min.apply(Math,antnum);
         if(val){
             $('#addModalType').load('/addModalType.html?minAntNum='+minAntNum);

@@ -14,65 +14,92 @@
 </head>
 <body>
     <div class="wrapper-ais ">
-			<div class="left-container ">
-				<div class="side-navbar">
-					<div class="side-heading text-center ">
-						<p>AIS平台</p>
-        			</div>
-	        		<div class="side-nav ">
-			            <ul class="nav nav-stacked nav-pills">
-			                <li  id="modul_btn"><a href="newindex"><span class="fa fa-user"></span>调制</a></li>
-			                <li  id="demodul_btn"><a href="demodul"><span class="fa fa-user"></span>解调</a></li>
-			                <li  id="analy_btn" class="active"><a href="analysis"><span class="fa fa-user"></span>分析</a></li>
-			            </ul>
-	        		</div>
-    			</div>
-			</div>
-			<div class="right-container">
-				<div class="top-nav">
-					 <div class="nav navbar-nav myNav">
-                        <span ><a href="#"><span class="fa fa-user"></span>Super</a> </span>
-                        <!--<span ><a href="#"><span class="fa fa-flag "></span>注册</a> </span>-->
-                        <span ><a href="#"><span class="fa fa-cogs"></span>退出</a> </span>
-                    </div>
-				</div>
-				<div class="main container-fluid">
-                    <div class="resultMessage">基本信息</div>
-                    <div class="resultTable">
-                       <div class=" modul_contain resultTableBody">
-                            <table  class="table-condensed text-center ">
-                                <tbody>
-                                    <tr>
-                                        <th class="text-center "> signal_id:</th>
-                                        <td>{{ signal_id }}</td>
-                                        <td></td>
-                                        <th class="text-center "> ant_num-de:</th>
-                                        <td>{{ ant_num_de }}</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center "> protocol_de：</th>
-                                        <td>{{ protocol_de }}</td>
-                                        <td></td>
-                                        <th class="text-center "> sync_type：</th>
-                                        <td>{{ sync_type }}</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="side-nav">
-                        <ul class="nav">
-                            <li  id="ves_distribute" class="active" onclick="picture()"><button class="btn-link btn-lg"><span class=""></span>解调前后对比图</button></li>
-                        </ul>
-                    </div>
-                    <div id="pic">
-                        <div id="picture"></div>
+        <div class="left-container ">
+            <div class="side-navbar">
+                <div class="side-heading text-center ">
+                    <p>AIS平台</p>
+                </div>
+                <div class="side-nav ">
+                    <ul class="nav nav-stacked nav-pills">
+                        <li  id="modul_btn"><a href="newindex"><span class="fa fa-user"></span>调制</a></li>
+                        <li  id="demodul_btn"><a href="demodul"><span class="fa fa-user"></span>解调</a></li>
+                        <li  id="analy_btn" class="active"><a href="analysis"><span class="fa fa-user"></span>分析</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right-container">
+            <div class="top-nav">
+                 <div class="nav navbar-nav myNav">
+                    <span ><a href="#"><span class="fa fa-user"></span>Super</a> </span>
+                    <!--<span ><a href="#"><span class="fa fa-flag "></span>注册</a> </span>-->
+                    <span ><a href="#"><span class="fa fa-cogs"></span>退出</a> </span>
+                </div>
+            </div>
+            <div class="main container-fluid">
+                <div class="resultMessage">基本信息</div>
+                <div class="messageTable">
+                    <div class=" messageTableBody">
+                        <table  class="table-condensed text-center ">
+                            <tbody>
+                                <tr>
+                                    <th class="text-center "> signal_id:</th>
+                                    <td>{{ signal_id }}</td>
+                                    <td></td>
+                                    <th class="text-center "> ant_num-de:</th>
+                                    <td>{{ ant_num_de }}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th class="text-center "> protocol_de：</th>
+                                    <td>{{ protocol_de }}</td>
+                                    <td></td>
+                                    <th class="text-center "> sync_type：</th>
+                                    <td>{{ sync_type }}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-			</div>
-		</div>
+                <div class="resultTable">
+                    <div class=" resultTableBody">
+                        <table class="table-condensed">
+                            <tbody>
+                                <tr>
+                                    <th class="text-center ">1</th>
+                                    <th class="text-center ">1</th>
+                                    <th class="text-center ">1</th>
+                                    <th class="text-center ">1</th>
+                                    <th class="text-center ">1</th>
+                                    <th class="text-center ">1</th>
+                                    <th class="text-center ">1</th>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td>2</td>
+                                    <td>2</td>
+                                    <td>2</td>
+                                    <td>2</td>
+                                    <td>2</td>
+                                    <td>2</td>
+                                    <td>2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="side-nav">
+                    <span class="resultPic">对比图</span>
+                </div>
+                <div id="pic">
+                    <div id="picture"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
 <script type="application/javascript" src="{% static "bz/vendor/jquery/dist/jquery.js" %}"></script>

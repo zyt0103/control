@@ -4,22 +4,29 @@
     line-height: 1.3333333;
     padding: 10px 16px;
     float: left;
-    height: 100px;
+    height: 165px;
     width:25%;
-}.resultTable{
+}
+.messageTable{
     padding-top: 10px;
     float: right;
     height: 100px;
     width:75%;
     text-align: center;
 }
-.resultTableBody{
+.messageTableBody{
     display: inline-block;
 }
 .side-nav{
     width:25%;
     height: 500px;
     float: left;
+    padding: 10px 16px;
+}
+.resultPic{
+    font-size: 18px;
+    color: #337ab7;
+    line-height: 1.3333333;
 }
 #pic {
     float: right;
@@ -27,6 +34,14 @@
     text-align: center;
 }
 #picture{
+    display: inline-block;
+}
+.resultTable{
+    float: right;
+    width:75%;
+    text-align: center;
+}
+.resultTableBody{
     display: inline-block;
 }
 
