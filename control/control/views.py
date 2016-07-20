@@ -180,7 +180,7 @@ class checkPro(View):
 
 class pic(View):
     def get(self, request):
-        paramDict = {'1':"distri?_modu.jpg", '2':"power.html", '4':"doppler.html", '3':"delay.html",'5':"DOA.html"}
+        paramDict = {'1':"distri?_modu.jpg", '2':"power.html", '4':"doppler.html", '3':"delay.html", '5':"DOA.html"}
         signal_id = request.GET.get("signal_id", "signal-iaythb8m")
         param = self.request.GET.get("param", '3')
         logger.info("param is %s" % param)

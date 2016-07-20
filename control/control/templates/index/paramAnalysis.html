@@ -101,17 +101,15 @@
                             <li ><button class="btn-link btn-lg"><span id="ant_gain">天线增益</span></button></li>
                         </ul>
                     </div>
-{#                    {% if param == 1 or param == 2 %}#}
-                    <div id="pic">
-                        <div id="load"><h6>提示：左边点击之后请稍等几秒钟</h6></div>
-                        <div id="picture"><iframe class="iframe" frameborder=0 height="470px" width="470px" src="/pic?param=2"></iframe></div>
+                    <div class="pic">
+                        <div class="load"><h6>提示：左边点击之后请稍等几秒钟</h6></div>
+{#                        {% if param == "2" or param == "3" %}#}
+                        <div class="picture"><iframe class="iframe" frameborder=0 height="470px" width="470px" src=""></iframe></div>
+{#                        {% endif %}#}
+{#                        {% if param == "1" %}#}
+                        <div class="jpg"><img src="{{ url }}"></div>
+{#                        {% endif %}#}
                     </div>
-{#                    {% endif %}#}
-{#                    {% if param == 0 or param == 3 %}#}
-                    <div class="jpg">
-                        <img src="{{ url }}">
-                    </div>
-{#                    {% endif %}#}
                 </div>
 			</div>
 		</div>

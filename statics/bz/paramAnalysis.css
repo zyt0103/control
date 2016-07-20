@@ -14,16 +14,20 @@
     height: 500px;
     float: left;
 }
-#pic {
+.pic {
     float: right;
     width: 75%;
     text-align: center;
 }
-#picture1{
+.picture{
     display: inline-block;
 }
-#picture2,#picture3,#picture4,#picture5,#picture6,#picture7{
+.jpg{
     display: inline-block;
+}
+img{
+    width: 400px;
+    height: 400px;
 }
 .me{
     font-size: 18px;

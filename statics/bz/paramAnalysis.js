@@ -21,13 +21,13 @@ $(function() {
     $.each(param_Array,function(i,item){
         param_name[i]="#"+item.id;
         param_num[i]=i+1;
-        $("body").on("click", param_name[i], function () {
-        window.location.href="paramAnalysis.html?signal_id="+signal_id+"&param="+param_num[i];
-        //$.getScript('statics/bz/x3dom.js');
-         });
         if(i==param-1){
             $(param_name[i]).attr("class","color");
         }
+        $("body").on("click", param_name[i], function () {
+            window.location.href="paramAnalysis.html?signal_id="+signal_id+"&param="+param_num[i];
+        //$.getScript('statics/bz/x3dom.js');
+         });
     });
 });
 
